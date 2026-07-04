@@ -3,91 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomeBite - Login & Sign Up</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>HomeBite Premium - Login & Sign Up</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #fdfbf7; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        
+        /* === VARIABLES & RESET (PREMIUM DARK THEME) === */
         :root {
-            --primary: #ff6b00;
-            --secondary: #ff3c00;
-            --dark: #121212;
-            --light-bg: #fff5eb;
-            --border: #eaeaea;
+            --primary-color: #e28743; 
+            --secondary-color: #f4c150;
+            --dark-bg: #050505; 
+            --card-bg: rgba(21, 21, 21, 0.92); /* Classy semi-transparent dark */
+            --input-bg: rgba(255, 255, 255, 0.03);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            /* Luxury Dark Food Texture Background with Tint Overlay */
+            background: linear-gradient(rgba(5, 5, 5, 0.82), rgba(5, 5, 5, 0.92)), 
+                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+            color: var(--text-light);
+        }
+
+        /* === AUTH CONTAINER === */
         .auth-container {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            background: var(--card-bg);
+            backdrop-filter: blur(15px); /* Smooth premium blur effect */
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(226, 135, 67, 0.05);
+            border: 1px solid rgba(255,255,255,0.07);
             display: flex;
-            max-width: 1000px;
+            max-width: 1050px;
             width: 100%;
             overflow: hidden;
             position: relative;
-            min-height: 600px;
+            min-height: 650px;
         }
 
         /* Left Side - Image */
         .auth-image {
-            flex: 1;
+            flex: 1.2;
             background: url('https://images.unsplash.com/photo-1543339308-43e59d6b73a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 40px;
+            padding: 50px 40px;
             color: white;
         }
         .auth-image::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1));
+            background: linear-gradient(to top, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.1) 100%);
         }
         .auth-image-content { position: relative; z-index: 1; }
-        .auth-image h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
-        .auth-image p { font-size: 1rem; color: #f0f0f0; }
+        .auth-image h2 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3rem; 
+            font-weight: 700; 
+            margin-bottom: 15px; 
+            line-height: 1.1; 
+            text-shadow: 2px 4px 15px rgba(0,0,0,0.8);
+        }
+        .auth-image p { 
+            font-size: 1.05rem; 
+            color: var(--text-muted); 
+            line-height: 1.6;
+        }
 
         /* Right Side - Form Area */
         .auth-form-area {
             flex: 1;
-            padding: 50px;
+            padding: 60px 50px;
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .logo { font-size: 28px; font-weight: 800; color: var(--dark); text-decoration: none; text-align: center; margin-bottom: 30px; display: block; }
-        .logo span { color: var(--primary); }
+        /* Logo */
+        .logo { 
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem; 
+            font-weight: 800; 
+            color: var(--text-light); 
+            text-decoration: none; 
+            text-align: center; 
+            margin-bottom: 40px; 
+            display: block; 
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--primary-color); font-style: italic; }
 
-        .auth-toggle { display: flex; background: var(--light-bg); border-radius: 50px; margin-bottom: 30px; position: relative; }
-        .toggle-btn { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 600; color: #666; transition: 0.3s; z-index: 1; border: none; background: transparent; font-size: 1rem;}
-        .toggle-btn.active { color: white; }
-        .toggle-slider { position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50px; transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3); }
+        /* Toggle Button */
+        .auth-toggle { 
+            display: flex; 
+            background: rgba(255,255,255,0.03); 
+            border-radius: 50px; 
+            margin-bottom: 40px; 
+            position: relative; 
+            border: 1px solid var(--border-light);
+            padding: 4px;
+        }
+        .toggle-btn { 
+            flex: 1; 
+            padding: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            font-weight: 500; 
+            color: var(--text-muted); 
+            transition: var(--transition); 
+            z-index: 1; 
+            border: none; 
+            background: transparent; 
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .toggle-btn.active { color: #fff; font-weight: 600; }
+        .toggle-slider { 
+            position: absolute; 
+            top: 4px; 
+            left: 4px; 
+            width: calc(50% - 4px); 
+            height: calc(100% - 8px); 
+            background: var(--primary-color); 
+            border-radius: 50px; 
+            transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            box-shadow: 0 4px 15px rgba(226, 135, 67, 0.3); 
+        }
 
         /* Forms */
         .form-section { display: none; animation: fadeIn 0.5s ease; }
         .form-section.active { display: block; }
         
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #555; margin-bottom: 8px; }
-        .input-group input { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.3s; background: #fafafa; }
-        .input-group input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1); }
+        .input-group { margin-bottom: 25px; }
+        .input-group label { 
+            display: block; 
+            font-size: 0.85rem; 
+            font-weight: 400; 
+            color: var(--text-muted); 
+            margin-bottom: 10px; 
+            letter-spacing: 0.5px;
+        }
+        .input-group input { 
+            width: 100%; 
+            padding: 15px 20px; 
+            border: 1px solid var(--border-light); 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            outline: none; 
+            transition: var(--transition); 
+            background: var(--input-bg); 
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+        }
+        .input-group input::placeholder { color: #666; }
+        .input-group input:focus { 
+            border-color: var(--primary-color); 
+            background: rgba(255,255,255,0.06); 
+            box-shadow: 0 0 15px rgba(226, 135, 67, 0.15); 
+        }
 
-        .submit-btn { width: 100%; padding: 14px; border: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; font-size: 1rem; font-weight: 700; border-radius: 12px; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(255, 107, 0, 0.25); margin-top: 10px; }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(255, 107, 0, 0.35); }
+        /* Submit Button */
+        .submit-btn { 
+            width: 100%; 
+            padding: 16px; 
+            border: 1px solid var(--primary-color); 
+            background: var(--primary-color); 
+            color: white; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            box-shadow: 0 8px 20px rgba(226, 135, 67, 0.2); 
+            margin-top: 15px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .submit-btn:hover { 
+            background: transparent;
+            color: var(--primary-color);
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 25px rgba(226, 135, 67, 0.4); 
+        }
 
-        .forgot-pass { text-align: right; display: block; font-size: 0.85rem; color: var(--primary); text-decoration: none; margin-top: -10px; margin-bottom: 20px; font-weight: 500; }
+        .forgot-pass { 
+            text-align: right; 
+            display: block; 
+            font-size: 0.85rem; 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            margin-top: -10px; 
+            margin-bottom: 25px; 
+            transition: var(--transition);
+        }
+        .forgot-pass:hover { color: var(--primary-color); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .auth-container { flex-direction: column; }
-            .auth-image { min-height: 250px; flex: none; }
-            .auth-form-area { padding: 30px 20px; }
+        @media (max-width: 900px) {
+            .auth-container { flex-direction: column; max-width: 500px; background: rgba(15, 15, 15, 0.96); }
+            .auth-image { min-height: 250px; flex: none; padding: 30px; }
+            .auth-image h2 { font-size: 2.2rem; }
+            .auth-form-area { padding: 40px 30px; }
         }
     </style>
 </head>
@@ -97,12 +233,12 @@
         <div class="auth-image">
             <div class="auth-image-content">
                 <h2>Craving Ghar ka Khana?</h2>
-                <p>Join Patna's largest home-chef network and get fresh, healthy meals delivered to your hostel.</p>
+                <p>Join Patna's most premium home-chef network and get fresh, healthy meals delivered directly to your doorstep.</p>
             </div>
         </div>
 
         <div class="auth-form-area">
-            <a href="index.html" class="logo">Home<span>Bite</span></a>
+            <a href="index.html" class="logo">Home<span>Bite</span>.</a>
 
             <div class="auth-toggle">
                 <div class="toggle-slider" id="toggleSlider"></div>
@@ -134,7 +270,7 @@
                 </div>
                 <div class="input-group">
                     <label>Hostel / Room Address</label>
-                    <input type="text" placeholder="e.g. Room 102, Shivam Hostel, Boring Road" required>
+                    <input type="text" placeholder="e.g. Room 102, Shivam Hostel" required>
                 </div>
                 <div class="input-group">
                     <label>Password</label>
@@ -156,13 +292,13 @@
             if (tab === 'login') {
                 loginForm.classList.add('active');
                 signupForm.classList.remove('active');
-                slider.style.left = '0';
+                slider.style.left = '4px';
                 btns[0].classList.add('active');
                 btns[1].classList.remove('active');
             } else {
                 signupForm.classList.add('active');
                 loginForm.classList.remove('active');
-                slider.style.left = '50%';
+                slider.style.left = 'calc(50% + 2px)';
                 btns[1].classList.add('active');
                 btns[0].classList.remove('active');
             }
@@ -217,10 +353,7 @@
 
                 if (response.ok) {
                     alert('Login Successful! Welcome to HomeBite, ' + data.fullName);
-                    
-                    // 👉 YAHAN MAINE CHANGE KIYA HAI: Login ke baad home.html par bhej dega
                     window.location.href = 'home.html';
-                    
                 } else {
                     alert('Error: ' + data.message); 
                 }
