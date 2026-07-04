@@ -6,10 +6,10 @@ const path = require('path');
 // 1. Dotenv ko batana ki .env file 'backend' folder ke andar hai
 dotenv.config({ path: './backend/.env' });
 
-// 2. Paths update kar diye gaye hain (taaki backend folder ke andar dekhe)
+// 2. Paths update kar diye gaye hain
 const connectDB = require('./backend/config/db');
 const authRoutes = require('./backend/routes/authRoutes');
-const contactRoutes = require('./backend/routes/contactRoutes'); // <-- Naya: Contact route import kiya
+const contactRoutes = require('./backend/routes/contactRoutes');
 
 // MongoDB se connect karna
 connectDB();
@@ -23,9 +23,9 @@ app.use(express.json());
 // Frontend ki files ab 'public' folder se load hongi
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-// Routes
+// Routes (Yahan route match ho jayega)
 app.use('/api/auth', authRoutes);
-app.use('/api/contact', contactRoutes); // <-- Naya: Contact API ko server par chalu kiya
+app.use('/api/contact', contactRoutes); 
 
 // Jab koi localhost:5000 par aayega, toh public folder ka index.html khulega
 app.get('/', (req, res) => {
