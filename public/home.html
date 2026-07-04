@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeBite - Where Taste Meets Elegance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: #111111; /* Dark theme exactly like the image */
+            color: #ffffff; 
+            font-family: 'Poppins', sans-serif; 
+            overflow-x: hidden;
+        }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: normal; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* Navbar */
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 25px 80px; 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; 
+            z-index: 100;
+        }
+        .logo { font-size: 28px; font-weight: 700; font-style: italic; color: #d4a373; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 40px; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+        .nav-links a:hover { color: #d4a373; }
+        .nav-icons { display: flex; gap: 20px; font-size: 12px; letter-spacing: 1px;}
+
+        /* Hero Section */
+        .hero { 
+            position: relative; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            /* Premium Food Image Background */
+            background: url('https://images.unsplash.com/photo-1544025162-8111149c402f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; 
+        }
+        /* Dark overlay to make text pop */
+        .hero::before { 
+            content: ''; 
+            position: absolute; inset: 0; 
+            background: linear-gradient(to bottom, rgba(17,17,17,0.4), rgba(17,17,17,0.9)); 
+            z-index: 1; 
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 800px; padding-top: 100px; }
+        .hero h1 { font-size: 5.5rem; margin-bottom: 25px; line-height: 1.1; font-weight: 600; }
+        .btn-primary { 
+            background: #d48a42; /* The exact golden-orange color */
+            color: #fff; 
+            padding: 14px 40px; 
+            font-size: 13px; 
+            letter-spacing: 2px;
+            font-weight: 500; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            transition: background 0.3s; 
+            text-transform: uppercase; 
+        }
+        .btn-primary:hover { background: #b87535; }
+
+        /* Middle Section (Like "Rabowed Kindls" in image) */
+        .intro-section { padding: 80px 20px; text-align: center; border-bottom: 1px solid #222; max-width: 800px; margin: 0 auto;}
+        .intro-section h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .intro-section p { font-size: 0.9rem; color: #a0a0a0; line-height: 1.8; margin-bottom: 30px; font-weight: 300; }
+
+        /* Grid Sections */
+        .section-title { text-align: center; font-size: 2.5rem; margin: 80px 0 40px; }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .menu-item { text-align: center; }
+        .menu-item img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; margin-bottom: 20px; transition: transform 0.5s;}
+        .menu-item:hover img { transform: scale(1.03); }
+        .menu-item h3 { font-size: 1.2rem; margin-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .menu-item p { font-size: 0.8rem; color: #888; margin-bottom: 15px; line-height: 1.6; }
+        .stars { color: #d48a42; letter-spacing: 3px; font-size: 14px; }
+
+        .menu-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a0a0a;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: 50px;
+        }
+        .footer-credit {
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 1px;
+        }
+        .footer-credit span {
+            color: #d48a42;
+        }
+
+        /* Basic responsive */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 3.5rem; }
+            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+            header { flex-direction: column; padding: 20px; gap: 15px; }
+        }
+        @media (max-width: 600px) {
+            .menu-grid, .menu-grid-2 { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">HomeBite</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Menu</a>
+            <a href="#">About</a>
+            <a href="#">Chefs</a>
+            <a href="#">Reviews</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="nav-icons">
+            <a href="#">CART (0)</a>
+            <a href="#" id="logoutBtn">LOGOUT</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Where Taste<br>Meets Elegance.</h1>
+            <button class="btn-primary">ORDER NOW</button>
+        </div>
+    </section>
+
+    <section class="intro-section">
+        <h2>The Finest Kitchens</h2>
+        <p>Experience the most authentic and premium home-cooked meals delivered straight to your door. We partner with top culinary experts in your city to ensure every bite is a masterpiece of flavor, health, and hygiene.</p>
+        <button class="btn-primary" style="background: transparent; border: 1px solid #d48a42; color: #d48a42;">EXPLORE MENU</button>
+    </section>
+
+    <h2 class="section-title">Premium</h2>
+    <div class="menu-grid">
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish 1">
+            <h3>Roasted Herb Salmon</h3>
+            <p>Fresh caught salmon slow-roasted with wild herbs, served with a side of organic asparagus and lemon butter sauce.</p>
+            <div class="stars">★★★★</div>
+        </div>
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1544025162-8111149c402f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish 2">
+            <h3>Prime Filet Mignon</h3>
+            <p>Perfectly seared center-cut filet mignon paired with creamy garlic mashed potatoes and roasted cherry tomatoes.</p>
+            <div class="stars">★★★★</div>
+        </div>
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish 3">
+            <h3>Truffle Mushroom Risotto</h3>
+            <p>Creamy Arborio rice slow-cooked with wild mushrooms, finished with parmesan cheese and black truffle oil.</p>
+            <div class="stars">★★★★</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Signature Dishes</h2>
+    <div class="menu-grid-2">
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish 4">
+            <div class="stars" style="margin: 15px 0;">★★★★★★★</div>
+        </div>
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish 5">
+            <div class="stars" style="margin: 15px 0;">★★★★★★★</div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="footer-credit">© 2026 HomeBite. All rights reserved. <br><br> Designed & Developed by <span>Sonam Kumari</span></p>
+    </footer>
+
+    <script>
+        // Simple logout logic
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            // Yahan token clear karne ka code aayega future mein
+            window.location.href = 'index.html'; // Wapas login page par bhejna
+        });
+    </script>
+</body>
+</html>
