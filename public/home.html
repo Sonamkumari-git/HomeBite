@@ -89,6 +89,40 @@
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
 
+        /* === NAV ACTIONS (Cart, Profile, Button) === */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            color: var(--text-light);
+            font-size: 1.25rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-icon:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+
         .btn-main {
             padding: 12px 35px; background-color: var(--primary-color);
             color: #fff; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
@@ -231,6 +265,9 @@
             .hero-text h1 { font-size: 3.5rem; }
             .section-title { font-size: 2.8rem; }
             .top-bar { display: none; }
+            /* Hide the Order Now button on very small screens to save space, but keep icons */
+            .btn-main { display: none; }
+            .hero-text .btn-main { display: inline-block; } /* Keep hero button */
         }
     </style>
 </head>
@@ -254,8 +291,18 @@
             <li><a href="#menu">Menu</a></li>
             <li><a href="#footer">Contact</a></li>
         </ul>
-        <a href="#menu" class="btn-main">Order Now</a>
-        <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+        
+        <div class="nav-actions">
+            <a href="#" class="nav-icon" title="Shopping Cart">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge">2</span>
+            </a>
+            <a href="#" class="nav-icon" title="User Profile">
+                <i class="fas fa-user"></i>
+            </a>
+            <a href="#menu" class="btn-main">Order Now</a>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+        </div>
     </nav>
 
     <section class="hero">
