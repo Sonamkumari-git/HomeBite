@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeBite Premium - Your Cart</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* === VARIABLES & RESET === */
+        :root {
+            --primary-color: #e28743; 
+            --secondary-color: #f4c150;
+            --dark-bg: #050505; 
+            --card-bg: rgba(21, 21, 21, 0.92);
+            --item-bg: rgba(255, 255, 255, 0.03);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.95)), 
+                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* === NAVBAR === */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--text-light); 
+            text-decoration: none; 
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--primary-color); font-style: italic; }
+        
+        .back-btn {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        .back-btn:hover { color: var(--primary-color); }
+
+        /* === CART CONTAINER === */
+        .cart-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 5%;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .cart-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        /* Left Side: Cart Items */
+        .cart-items {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            gap: 20px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .item-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .item-details { flex: 1; }
+        .item-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 5px; }
+        .item-chef { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+        .item-price { font-size: 1.1rem; color: var(--primary-color); font-weight: 600; }
+
+        /* Quantity Controls */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--item-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        .qty-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .qty-btn:hover { color: var(--primary-color); }
+        .qty-val { font-weight: 600; font-size: 1rem; width: 20px; text-align: center; }
+
+        /* Remove Button */
+        .remove-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 50, 50, 0.1);
+            color: #ff4d4d;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .remove-btn:hover { background: #ff4d4d; color: white; transform: scale(1.1); }
+
+        /* Right Side: Order Summary */
+        .cart-summary {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+        .summary-row.total {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 600;
+            border-top: 1px dashed var(--border-light);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        .summary-row.total span:last-child { color: var(--primary-color); }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 8px 20px rgba(226, 135, 67, 0.2);
+            margin-top: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .checkout-btn:hover {
+            background: transparent;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(226, 135, 67, 0.4);
+        }
+
+        /* === RESPONSIVE (PHONE BHI RAKHA HAI) === */
+        @media (max-width: 900px) {
+            .cart-wrapper { flex-direction: column; }
+            .cart-summary { width: 100%; position: static; }
+        }
+
+        @media (max-width: 600px) {
+            .cart-item { flex-direction: column; text-align: center; position: relative; padding-top: 40px; }
+            .quantity-control { justify-content: center; width: 100%; margin-top: 10px; }
+            .remove-btn { top: 15px; right: 15px; }
+            .item-img { width: 100%; height: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="home.html" class="logo">Home<span>Bite</span>.</a>
+        <a href="home.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Menu</a>
+    </header>
+
+    <div class="cart-container">
+        <h1 class="page-title">Your Premium Box</h1>
+
+        <div class="cart-wrapper">
+            
+            <div class="cart-items" id="cart-items-container">
+                <div class="cart-item" id="item1">
+                    <button class="remove-btn" onclick="removeItem('item1')"><i class="fa-solid fa-trash"></i></button>
+                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93cb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Biryani" class="item-img">
+                    <div class="item-details">
+                        <h3 class="item-title">Authentic Chicken Biryani</h3>
+                        <p class="item-chef">By Chef Sharma</p>
+                        <p class="item-price">₹<span class="price-val">250</span></p>
+                    </div>
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="updateQty('qty1', -1, 'item1')"><i class="fa-solid fa-minus"></i></button>
+                        <span class="qty-val" id="qty1">1</span>
+                        <button class="qty-btn" onclick="updateQty('qty1', 1, 'item1')"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="cart-item" id="item2">
+                    <button class="remove-btn" onclick="removeItem('item2')"><i class="fa-solid fa-trash"></i></button>
+                    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Paneer" class="item-img">
+                    <div class="item-details">
+                        <h3 class="item-title">Special Paneer Butter Masala</h3>
+                        <p class="item-chef">By Aunty Ki Rasoi</p>
+                        <p class="item-price">₹<span class="price-val">180</span></p>
+                    </div>
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="updateQty('qty2', -1, 'item2')"><i class="fa-solid fa-minus"></i></button>
+                        <span class="qty-val" id="qty2">2</span>
+                        <button class="qty-btn" onclick="updateQty('qty2', 1, 'item2')"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h3 class="summary-title">Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹<span id="subtotal">610</span></span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Fee</span>
+                    <span>₹<span id="delivery">40</span></span>
+                </div>
+                <div class="summary-row">
+                    <span>Taxes (5%)</span>
+                    <span>₹<span id="tax">30.5</span></span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Amount</span>
+                    <span>₹<span id="totalAmt">680.5</span></span>
+                </div>
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Total calculate karne ka function
+        function calculateTotal() {
+            let subtotal = 0;
+            const items = document.querySelectorAll('.cart-item');
+            
+            items.forEach(item => {
+                const price = parseFloat(item.querySelector('.price-val').innerText);
+                const qty = parseInt(item.querySelector('.qty-val').innerText);
+                subtotal += (price * qty);
+            });
+
+            const delivery = subtotal > 0 ? 40 : 0; // Agar cart empty hai to delivery 0
+            const tax = subtotal * 0.05;
+            const total = subtotal + delivery + tax;
+
+            document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+            document.getElementById('delivery').innerText = delivery;
+            document.getElementById('tax').innerText = tax.toFixed(2);
+            document.getElementById('totalAmt').innerText = total.toFixed(2);
+        }
+
+        // Quantity Update karne ka logic
+        function updateQty(elementId, change, itemId) {
+            const qtyElement = document.getElementById(elementId);
+            let currentQty = parseInt(qtyElement.innerText);
+            
+            let newQty = currentQty + change;
+            if(newQty >= 1) { // Minimum 1 item hona chahiye
+                qtyElement.innerText = newQty;
+                calculateTotal();
+            }
+        }
+
+        // Item Remove karne ka logic
+        function removeItem(itemId) {
+            const item = document.getElementById(itemId);
+            item.style.opacity = '0'; // Smooth hide animation
+            setTimeout(() => {
+                item.remove();
+                calculateTotal(); // Delete hone ke baad total update
+                
+                // Agar cart khaali ho jaye
+                const container = document.getElementById('cart-items-container');
+                if(container.children.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color: var(--text-muted); padding: 50px;">Your premium box is empty.</p>';
+                }
+            }, 300);
+        }
+
+        // Checkout Button Click
+        function checkout() {
+            const total = document.getElementById('totalAmt').innerText;
+            if(parseFloat(total) === 0) {
+                alert("Your cart is empty! Please add some meals.");
+                return;
+            }
+            alert("Redirecting to secure payment gateway. Total amount: ₹" + total);
+            // window.location.href = 'checkout.html'; 
+        }
+
+        // Initial Calculation jab page load ho
+        window.onload = calculateTotal;
+    </script>
+</body>
+</html>
