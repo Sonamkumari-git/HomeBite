@@ -1,29 +1,19 @@
-const Contact = require('../models/Contact');
+const Contact = require('../models/Contact'); // Path check kar lein
 
-// User ka message save karne ke liye
 exports.submitContact = async (req, res) => {
     try {
+        // Frontend se bheja gaya data extract karna
         const { name, email, subject, message } = req.body;
 
-        // Validation
-        if (!name || !email || !subject || !message) {
-            return res.status(400).json({ success: false, message: "All fields are required" });
-        }
+        // Naya document create karna
+        const newContact = new Contact({ name, email, subject, message });
 
-        // Database mein save karna
-        const newContact = new Contact({
-            name,
-            email,
-            subject,
-            message
-        });
+        // Database mein save karna (Ye line miss hone se data save nahi hota)
+        await newContact.save(); 
 
-        await newContact.save();
-
-        res.status(201).json({ success: true, message: "Your message has been sent successfully!" });
-
+        res.status(201).json({ message: "Message sent successfully!" });
     } catch (error) {
-        console.error("Contact submission error:", error);
-        res.status(500).json({ success: false, message: "Server error. Please try again later." });
+        console.error("Database save error:", error);
+        res.status(500).json({ message: "Failed to save data", error: error.message });
     }
 };
