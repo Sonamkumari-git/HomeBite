@@ -5,21 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomeBite | Premium Food Delivery</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === VARIABLES & RESET === */
+        /* === VARIABLES & RESET (UPDATED FOR PREMIUM DARK THEME) === */
         :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #fca311;
-            --dark-bg: #111111;
-            --light-bg: #fdfdfd;
-            --gray-bg: #f4f4f4;
-            --text-dark: #333333;
+            --primary-color: #e28743; /* Classy Gold/Orange */
+            --secondary-color: #f4c150;
+            --dark-bg: #050505; /* Deep Black */
+            --section-bg: #0a0a0a; /* Slightly lighter black for sections */
+            --card-bg: #151515;
             --text-light: #ffffff;
-            --text-muted: #777777;
+            --text-muted: #a0a0a0;
             --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -27,8 +26,8 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--light-bg);
-            color: var(--text-dark);
+            background-color: var(--dark-bg);
+            color: var(--text-light);
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
@@ -47,38 +46,41 @@
 
         /* === TOP BAR === */
         .top-bar {
-            background-color: var(--dark-bg);
-            color: var(--text-light);
+            background-color: #000;
+            color: var(--text-muted);
             display: flex;
             justify-content: space-between;
             padding: 10px 5%;
             font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .top-bar span { margin-right: 20px; }
         .top-bar i { color: var(--primary-color); margin-right: 5px; }
 
-        /* === NAVBAR === */
+        /* === NAVBAR (Glassmorphism Dark) === */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
-            background-color: rgba(253, 253, 253, 0.95);
-            backdrop-filter: blur(10px);
+            background-color: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .brand-logo {
             font-size: 2.2rem;
             font-weight: 800;
-            color: var(--dark-bg);
+            color: var(--text-light);
+            letter-spacing: 1px;
         }
-        .brand-logo span { color: var(--primary-color); }
+        .brand-logo span { color: var(--primary-color); font-style: italic; }
         
         .nav-links { display: flex; gap: 35px; }
-        .nav-links a { font-weight: 500; font-size: 1rem; transition: var(--transition); position: relative; }
+        .nav-links a { font-weight: 400; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); position: relative; color: var(--text-light); }
         .nav-links a::after {
             content: ''; position: absolute; width: 0; height: 2px;
             bottom: -5px; left: 0; background-color: var(--primary-color);
@@ -88,126 +90,146 @@
         .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
 
         .btn-main {
-            padding: 12px 30px; background-color: var(--primary-color);
-            color: var(--text-light); border-radius: 30px; font-weight: 600;
-            transition: var(--transition); box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
-            border: 2px solid var(--primary-color);
+            padding: 12px 35px; background-color: var(--primary-color);
+            color: #fff; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: var(--transition); box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2);
+            border: 1px solid var(--primary-color);
         }
-        .btn-main:hover { background-color: transparent; color: var(--primary-color); box-shadow: none; }
+        .btn-main:hover { background-color: transparent; color: var(--primary-color); box-shadow: 0 15px 30px rgba(226, 135, 67, 0.4); transform: translateY(-3px); }
 
-        /* === HERO SECTION === */
+        /* === HERO SECTION (Modern Dark Gradient) === */
         .hero {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 60px 5% 100px; background-color: var(--gray-bg);
+            padding: 80px 5% 120px; 
+            background: radial-gradient(circle at 20% 50%, rgba(226, 135, 67, 0.1) 0%, var(--dark-bg) 50%);
             min-height: 90vh;
+            position: relative;
         }
-        .hero-text { flex: 1; padding-right: 50px; }
-        .hero-text h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; color: var(--dark-bg); }
-        .hero-text p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; }
+        /* Stylish glow behind text */
+        .hero::before {
+            content: ''; position: absolute; top: 20%; left: 10%; width: 300px; height: 300px;
+            background: var(--primary-color); filter: blur(150px); opacity: 0.15; z-index: 0;
+        }
+
+        .hero-text { flex: 1; padding-right: 50px; position: relative; z-index: 1; }
+        .hero-text h1 { font-size: 4.8rem; line-height: 1.1; margin-bottom: 25px; color: var(--text-light); text-shadow: 2px 4px 15px rgba(0,0,0,0.5); }
+        .hero-text p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 45px; line-height: 1.8; max-width: 90%; }
         
-        .hero-img { flex: 1; position: relative; }
+        .hero-img { flex: 1; position: relative; z-index: 1; }
         .hero-img img {
-            width: 100%; border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            width: 100%; border-radius: 12px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(226, 135, 67, 0.2);
             animation: floatImage 6s ease-in-out infinite;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         @keyframes floatImage { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
 
-        /* === ABOUT / STORY SECTION === */
-        .about-section { padding: 100px 5%; display: flex; align-items: center; gap: 60px; }
-        .about-img { flex: 1; }
-        .about-img img { width: 100%; border-radius: 20px; }
+        /* === ABOUT / STORY SECTION (Classy Dark) === */
+        .about-section { 
+            padding: 120px 5%; display: flex; align-items: center; gap: 70px; 
+            background: linear-gradient(to bottom, var(--dark-bg), var(--section-bg));
+            border-top: 1px solid rgba(255,255,255,0.02);
+        }
+        .about-img { flex: 1; position: relative; }
+        .about-img img { width: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.05); filter: brightness(0.85); transition: 0.4s; }
+        .about-img:hover img { filter: brightness(1); transform: scale(1.02); }
+        
         .about-text { flex: 1; }
-        .section-title { font-size: 3rem; margin-bottom: 20px; color: var(--dark-bg); }
-        .section-subtitle { color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px; }
+        .section-subtitle { color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 15px; font-size: 0.9rem; }
+        .section-title { font-size: 3.5rem; margin-bottom: 25px; color: var(--text-light); }
+        .about-text p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.9; font-size: 1.05rem; }
+        
+        .btn-outline {
+            display: inline-block; padding: 12px 35px; border: 1px solid var(--primary-color); color: var(--primary-color);
+            text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500; border-radius: 4px; transition: 0.3s;
+        }
+        .btn-outline:hover { background: var(--primary-color); color: #fff; box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
 
-        /* === FEATURED MENU (Grid Layout) === */
-        .menu-section { padding: 100px 5%; background-color: var(--dark-bg); color: var(--text-light); text-align: center; }
-        .menu-section .section-title { color: var(--text-light); }
+        /* === FEATURED MENU (Dark Cards) === */
+        .menu-section { padding: 120px 5%; background-color: var(--dark-bg); text-align: center; }
         
         .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 40px; margin-top: 60px; text-align: left;
         }
         .menu-card {
-            background: #1a1a1a; border-radius: 20px; overflow: hidden;
-            transition: var(--transition); border: 1px solid #333;
+            background: var(--card-bg); border-radius: 12px; overflow: hidden;
+            transition: var(--transition); border: 1px solid rgba(255,255,255,0.03);
         }
-        .menu-card:hover { transform: translateY(-15px); border-color: var(--primary-color); box-shadow: 0 20px 40px rgba(255, 107, 107, 0.15); }
-        .menu-card img { width: 100%; height: 250px; object-fit: cover; transition: var(--transition); }
-        .menu-card:hover img { transform: scale(1.05); }
+        .menu-card:hover { transform: translateY(-15px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .menu-card img { width: 100%; height: 260px; object-fit: cover; transition: var(--transition); filter: brightness(0.9); }
+        .menu-card:hover img { transform: scale(1.08); filter: brightness(1.1); }
         
-        .card-body { padding: 25px; }
-        .card-body h3 { font-size: 1.5rem; margin-bottom: 10px; }
-        .card-body p { color: #aaa; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6; }
+        .card-body { padding: 30px 25px; }
+        .card-body h3 { font-size: 1.6rem; margin-bottom: 10px; color: var(--text-light); }
+        .card-body p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.7; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 1.4rem; font-weight: 600; color: var(--secondary-color); }
+        .price { font-size: 1.5rem; font-weight: 600; color: var(--primary-color); font-family: 'Playfair Display', serif; }
         .order-btn {
-            background: rgba(255, 255, 255, 0.1); color: var(--text-light);
-            padding: 8px 20px; border-radius: 50px; transition: var(--transition);
+            background: rgba(226, 135, 67, 0.1); color: var(--primary-color);
+            padding: 10px 25px; border-radius: 4px; transition: var(--transition); border: 1px solid rgba(226, 135, 67, 0.2);
+            text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
         }
-        .order-btn:hover { background: var(--primary-color); }
+        .order-btn:hover { background: var(--primary-color); color: #fff; }
 
         /* === NEWSLETTER SECTION === */
         .newsletter {
-            padding: 100px 5%; text-align: center; background-color: var(--primary-color); color: var(--text-light);
+            padding: 100px 5%; text-align: center; background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            position: relative;
         }
-        .newsletter h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .newsletter::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(5,5,5,0.85); }
+        .newsletter-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+        .newsletter h2 { font-size: 3rem; margin-bottom: 15px; color: var(--primary-color); }
+        .newsletter p { color: #ddd; margin-bottom: 30px; font-size: 1.1rem; }
+        
         .newsletter form {
-            max-width: 600px; margin: 30px auto 0; display: flex; background: var(--text-light);
-            border-radius: 50px; overflow: hidden; padding: 5px;
+            display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px; overflow: hidden; padding: 5px; backdrop-filter: blur(10px);
         }
-        .newsletter input { flex: 1; border: none; outline: none; padding: 15px 25px; font-size: 1rem; }
+        .newsletter input { flex: 1; border: none; outline: none; padding: 15px 25px; font-size: 1rem; background: transparent; color: #fff; }
+        .newsletter input::placeholder { color: #888; }
         .newsletter button {
-            background: var(--dark-bg); color: var(--text-light); border: none;
-            padding: 15px 30px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: var(--transition);
+            background: var(--primary-color); color: #fff; border: none;
+            padding: 15px 35px; border-radius: 4px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);
         }
-        .newsletter button:hover { background: #333; }
+        .newsletter button:hover { background: #c97130; }
 
         /* === BIG MODERN FOOTER === */
-        footer {
-            background-color: #0a0a0a; color: #bbbbbb; padding: 80px 5% 30px;
-        }
-        .footer-container {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px;
-        }
-        .footer-col h3 { color: var(--text-light); font-size: 1.5rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; }
-        .footer-col h3::after {
-            content: ''; position: absolute; left: 0; bottom: 0; width: 50px; height: 2px; background-color: var(--primary-color);
-        }
-        .footer-col p { line-height: 1.8; margin-bottom: 20px; }
+        footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
+        .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--primary-color); }
+        .footer-col p { line-height: 1.8; margin-bottom: 20px; color: var(--text-muted); }
         
         .social-links { display: flex; gap: 15px; }
         .social-links a {
-            display: inline-flex; justify-content: center; align-items: center; width: 40px; height: 40px;
-            background: rgba(255,255,255,0.05); border-radius: 50%; color: var(--text-light); transition: var(--transition);
+            display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px;
+            background: rgba(255,255,255,0.03); border-radius: 4px; color: var(--primary-color); transition: var(--transition); border: 1px solid rgba(255,255,255,0.05);
         }
-        .social-links a:hover { background: var(--primary-color); transform: translateY(-5px); }
+        .social-links a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
 
         .footer-links li { margin-bottom: 15px; }
-        .footer-links a { transition: var(--transition); }
-        .footer-links a:hover { color: var(--primary-color); padding-left: 5px; }
+        .footer-links a { color: var(--text-muted); transition: var(--transition); }
+        .footer-links a:hover { color: var(--primary-color); padding-left: 8px; }
 
-        .contact-info li { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .contact-info i { color: var(--primary-color); font-size: 1.2rem; }
-        
-        /* The specific email requested */
-        .highlight-email { color: var(--primary-color); font-weight: 600; }
+        .contact-info li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; color: var(--text-muted); line-height: 1.6; }
+        .contact-info i { color: var(--primary-color); font-size: 1.2rem; margin-top: 3px; }
+        .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
 
-        .footer-bottom {
-            text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;
-        }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
 
         /* === RESPONSIVE === */
-        .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; }
+        .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-color); }
         @media (max-width: 991px) {
             .hero, .about-section { flex-direction: column; text-align: center; }
             .hero-text { padding-right: 0; margin-bottom: 50px; }
-            .nav-links { display: none; } /* Could add JS mobile menu here */
+            .hero::before { left: 50%; transform: translateX(-50%); }
+            .nav-links { display: none; }
             .mobile-toggle { display: block; }
         }
         @media (max-width: 768px) {
-            .hero-text h1 { font-size: 3rem; }
+            .hero-text h1 { font-size: 3.5rem; }
+            .section-title { font-size: 2.8rem; }
             .top-bar { display: none; }
         }
     </style>
@@ -238,42 +260,42 @@
 
     <section class="hero">
         <div class="hero-text reveal">
-            <h1>It's Not Just Food, It's an Experience.</h1>
-            <p>Welcome to HomeBite. We serve the most delicious, freshly prepared meals directly to your doorstep. Satisfy your cravings with our premium culinary delights.</p>
-            <a href="#menu" class="btn-main" style="padding: 15px 40px; font-size: 1.1rem;">Explore Our Menu</a>
+            <h1>Where Taste<br>Meets Elegance.</h1>
+            <p>Welcome to HomeBite. We serve the most delicious, freshly prepared meals directly to your doorstep. Satisfy your cravings with our premium culinary delights crafted by expert chefs.</p>
+            <a href="#menu" class="btn-main" style="padding: 16px 45px; font-size: 1rem;">Explore Menu</a>
         </div>
         <div class="hero-img reveal">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80" alt="Delicious Food">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=80" alt="Premium Food">
         </div>
     </section>
 
     <section class="about-section" id="about">
         <div class="about-img reveal">
-            <img src="https://media.istockphoto.com/id/1162911786/photo/the-team-of-cooks-backs-in-the-work-in-the-modern-kitchen-the-workflow-of-the-restaurant-in.jpg?s=612x612&w=0&k=20&c=Nn1xO1gbUGnEzTHp4Sitg_ouob_co3jY5hDv_kHWzxE=" alt="Our Kitchen">
+            <img src="https://images.unsplash.com/photo-1577106263724-2c8e03bfe9bc?auto=format&fit=crop&w=800&q=80" alt="Master Chef">
         </div>
         <div class="about-text reveal">
-            <span class="section-subtitle">Our Story</span>
+            <span class="section-subtitle">Our Heritage</span>
             <h2 class="section-title">Cooking with Passion & Perfection</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.8; font-size: 1.1rem;">
+            <p>
                 At HomeBite, we believe that every meal should be a celebration. Our master chefs use only the finest, locally sourced ingredients to craft dishes that are both visually stunning and incredibly delicious.
             </p>
-            <p style="color: var(--text-muted); margin-bottom: 30px; line-height: 1.8; font-size: 1.1rem;">
-                Whether you are craving a hearty pasta, a perfectly grilled steak, or a fresh vibrant salad, HomeBite brings restaurant-quality dining straight to the comfort of your home.
+            <p>
+                Whether you are craving a hearty pasta, a perfectly grilled steak, or a fresh vibrant salad, HomeBite brings 5-star restaurant-quality dining straight to the comfort of your home.
             </p>
-            <a href="#about" class="btn-main" style="background: transparent; color: var(--dark-bg); border-color: var(--dark-bg);">Read More</a>
+            <a href="#menu" class="btn-outline" style="margin-top: 15px;">Discover More</a>
         </div>
     </section>
 
     <section class="menu-section" id="menu">
-        <span class="section-subtitle reveal" style="color: var(--primary-color);">Discover</span>
-        <h2 class="section-title reveal">Our Premium Menu</h2>
+        <span class="section-subtitle reveal" style="text-align: center;">Curated Selection</span>
+        <h2 class="section-title reveal" style="text-align: center;">Our Premium Menu</h2>
         
         <div class="menu-grid">
             <div class="menu-card reveal">
-                <img src="https://img.magnific.com/free-photo/top-view-fast-food-mix-mozzarella-sticks-club-sandwich-hamburger-mushroom-pizza-caesar-shrimp-salad-french-fries-ketchup-mayo-cheese-sauces-table_141793-3998.jpg?semt=ais_hybrid&w=740&q=80" alt="Steak">
+                <img src="https://images.unsplash.com/photo-1544025162-831514bbbbb6?auto=format&fit=crop&w=600&q=80" alt="Steak">
                 <div class="card-body">
                     <h3>Prime Rib Steak</h3>
-                    <p>Juicy, tender prime rib grilled to absolute perfection, served with garlic mashed potatoes.</p>
+                    <p>Juicy, tender prime rib grilled to absolute perfection, served with garlic mashed potatoes and herb butter.</p>
                     <div class="card-footer">
                         <span class="price">₹1,250</span>
                         <a href="#" class="order-btn">Add to Cart</a>
@@ -282,10 +304,10 @@
             </div>
 
             <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=600&q=80" alt="Pasta">
+                <img src="https://images.unsplash.com/photo-1550461716-406e931dcbb1?auto=format&fit=crop&w=600&q=80" alt="Pasta">
                 <div class="card-body">
                     <h3>Truffle Mushroom Pasta</h3>
-                    <p>Handmade fettuccine tossed in a rich, creamy truffle sauce with wild mushrooms.</p>
+                    <p>Handmade fettuccine tossed in a rich, creamy truffle sauce with wild mushrooms and aged parmesan.</p>
                     <div class="card-footer">
                         <span class="price">₹850</span>
                         <a href="#" class="order-btn">Add to Cart</a>
@@ -294,10 +316,10 @@
             </div>
 
             <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80" alt="Salmon">
+                <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=600&q=80" alt="Salmon">
                 <div class="card-body">
                     <h3>Grilled Atlantic Salmon</h3>
-                    <p>Fresh caught salmon glazed with honey mustard, paired with roasted asparagus.</p>
+                    <p>Fresh caught salmon glazed with honey mustard, paired with roasted asparagus and lemon wedges.</p>
                     <div class="card-footer">
                         <span class="price">₹1,100</span>
                         <a href="#" class="order-btn">Add to Cart</a>
@@ -307,19 +329,21 @@
         </div>
     </section>
 
-    <section class="newsletter reveal">
-        <h2>Get Special Offers & Updates</h2>
-        <p>Subscribe to the HomeBite newsletter and get 15% off your first order!</p>
-        <form action="#">
-            <input type="email" placeholder="Enter your email address..." required>
-            <button type="submit">Subscribe</button>
-        </form>
+    <section class="newsletter">
+        <div class="newsletter-content reveal">
+            <h2>Exclusive Culinary Updates</h2>
+            <p>Subscribe to our private newsletter and receive a complimentary appetizer on your first premium order.</p>
+            <form action="#">
+                <input type="email" placeholder="Enter your email address..." required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
     </section>
 
     <footer id="footer">
         <div class="footer-container">
             <div class="footer-col reveal">
-                <a href="#" class="brand-logo" style="color: var(--text-light); margin-bottom: 20px; display: inline-block;">Home<span style="color: var(--primary-color);">Bite</span>.</a>
+                <a href="#" class="brand-logo" style="margin-bottom: 20px; display: inline-block; font-size: 2rem;">Home<span style="color: var(--primary-color);">Bite</span>.</a>
                 <p>Bringing gourmet experiences to your dining table. Fresh ingredients, masterful recipes, and blazing fast delivery.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -332,21 +356,21 @@
             <div class="footer-col reveal">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Home</a></li>
-                    <li><a href="#about"><i class="fas fa-angle-right"></i> About Us</a></li>
-                    <li><a href="#menu"><i class="fas fa-angle-right"></i> Our Menu</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Testimonials</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Home</a></li>
+                    <li><a href="#about"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> About Us</a></li>
+                    <li><a href="#menu"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Our Menu</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Testimonials</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Privacy Policy</a></li>
                 </ul>
             </div>
 
             <div class="footer-col reveal">
                 <h3>Our Services</h3>
                 <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Fast Home Delivery</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Event Catering</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Table Reservations</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Corporate Dining</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Fast Home Delivery</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Event Catering</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Table Reservations</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Corporate Dining</a></li>
                 </ul>
             </div>
 
@@ -355,7 +379,7 @@
                 <ul class="contact-info">
                     <li>
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>123 Culinary Street, Near Frazer Road, Patna, Bihar</span>
+                        <span>123 Culinary Street, Near Frazer Road,<br>Patna, Bihar 800001</span>
                     </li>
                     <li>
                         <i class="fas fa-phone-alt"></i>
@@ -382,7 +406,7 @@
                 for (let i = 0; i < reveals.length; i++) {
                     const windowHeight = window.innerHeight;
                     const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 150;
+                    const elementVisible = 100; // Trigger thoda jaldi hoga smooth feel ke liye
 
                     if (elementTop < windowHeight - elementVisible) {
                         reveals[i].classList.add("active");
