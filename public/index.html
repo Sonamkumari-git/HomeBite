@@ -217,7 +217,10 @@
 
                 if (response.ok) {
                     alert('Login Successful! Welcome to HomeBite, ' + data.fullName);
-                    // Login ke baad dashboard par bhejne ka code yahan aayega future mein
+                    
+                    // 👉 YAHAN MAINE CHANGE KIYA HAI: Login ke baad home.html par bhej dega
+                    window.location.href = 'home.html';
+                    
                 } else {
                     alert('Error: ' + data.message); 
                 }
