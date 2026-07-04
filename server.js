@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const path = require('path'); // Naya module: Files ka rasta (path) set karne ke liye
+const path = require('path'); 
 
 // 1. Dotenv ko batana ki .env file 'backend' folder ke andar hai
 dotenv.config({ path: './backend/.env' });
@@ -16,18 +16,18 @@ connectDB();
 const app = express();
 
 // Middlewares
-app.use(cors()); // Frontend ko API call karne allow karta hai
-app.use(express.json()); // JSON data read karne ke liye
+app.use(cors()); 
+app.use(express.json()); 
 
-// Frontend ki baaki files (agar koi image ya css ho) ko load karne ke liye
-app.use(express.static(__dirname)); 
+// Frontend ki files ab 'public' folder se load hongi
+app.use(express.static(path.join(__dirname, 'public'))); 
 
 // Routes
 app.use('/api/auth', authRoutes);
 
-// Jab koi localhost:5000 par aayega, toh index.html khulega
+// Jab koi localhost:5000 par aayega, toh public folder ka index.html khulega
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
