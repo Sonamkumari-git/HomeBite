@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | HomeBite Premium</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === VARIABLES & RESET (SAME PREMIUM DARK THEME) === */
+        :root {
+            --primary-color: #e28743; 
+            --secondary-color: #f4c150;
+            --dark-bg: #050505; 
+            --section-bg: #0a0a0a; 
+            --card-bg: #151515;
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .brand-logo { font-family: 'Playfair Display', serif; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* === ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* === TOP BAR === */
+        .top-bar {
+            background-color: #000;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 5%;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .top-bar span { margin-right: 20px; }
+        .top-bar i { color: var(--primary-color); margin-right: 5px; }
+
+        /* === NAVBAR === */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .brand-logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+        .brand-logo span { color: var(--primary-color); font-style: italic; }
+        
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { font-weight: 400; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); position: relative; color: var(--text-light); }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
+        .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
+
+        /* === PAGE HEADER === */
+        .page-header {
+            padding: 120px 5% 80px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(226, 135, 67, 0.15) 0%, var(--dark-bg) 70%);
+            position: relative;
+        }
+        .page-header h1 { font-size: 4rem; color: var(--text-light); text-shadow: 2px 4px 15px rgba(0,0,0,0.5); margin-bottom: 15px; }
+        .page-header p { font-size: 1.1rem; color: var(--primary-color); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* === STORY SECTION === */
+        .story-section { 
+            padding: 80px 5% 120px; display: flex; align-items: center; gap: 70px; 
+        }
+        .story-text { flex: 1; }
+        .story-text h2 { font-size: 3rem; margin-bottom: 25px; color: var(--text-light); line-height: 1.2; }
+        .story-text p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.9; font-size: 1.05rem; }
+        
+        .story-img { flex: 1; position: relative; }
+        .story-img img { 
+            width: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); 
+            border: 1px solid rgba(255,255,255,0.05); filter: brightness(0.9); transition: 0.4s; 
+        }
+        .story-img:hover img { filter: brightness(1.1); transform: scale(1.02); }
+
+        /* === CORE VALUES (Dark Cards) === */
+        .values-section {
+            padding: 100px 5%; background-color: var(--section-bg);
+            border-top: 1px solid rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            text-align: center;
+        }
+        .values-section h2 { font-size: 3rem; margin-bottom: 60px; color: var(--text-light); }
+        
+        .values-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+        .value-card {
+            background: var(--card-bg); padding: 50px 30px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.03); transition: var(--transition);
+        }
+        .value-card:hover { transform: translateY(-10px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .value-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 25px; }
+        .value-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-light); }
+        .value-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+
+        /* === TEAM SECTION === */
+        .team-section { padding: 120px 5%; text-align: center; background-color: var(--dark-bg); }
+        .team-subtitle { color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 15px; font-size: 0.9rem; }
+        .team-section h2 { font-size: 3.5rem; margin-bottom: 60px; }
+        
+        .team-grid {
+            display: flex; justify-content: center; gap: 50px; flex-wrap: wrap;
+        }
+        .team-member {
+            width: 320px; background: var(--card-bg); border-radius: 12px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.03); transition: var(--transition);
+        }
+        .team-member:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+        .team-img { width: 100%; height: 350px; object-fit: cover; filter: grayscale(50%); transition: var(--transition); }
+        .team-member:hover .team-img { filter: grayscale(0%); }
+        .team-info { padding: 25px; }
+        .team-info h3 { font-size: 1.4rem; margin-bottom: 5px; }
+        .team-info p { color: var(--primary-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* === FOOTER (Same as Home) === */
+        footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
+        .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--primary-color); }
+        .footer-col p { line-height: 1.8; margin-bottom: 20px; color: var(--text-muted); }
+        .social-links { display: flex; gap: 15px; }
+        .social-links a { display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; background: rgba(255,255,255,0.03); border-radius: 4px; color: var(--primary-color); transition: var(--transition); border: 1px solid rgba(255,255,255,0.05); }
+        .social-links a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: var(--text-muted); transition: var(--transition); }
+        .footer-links a:hover { color: var(--primary-color); padding-left: 8px; }
+        .contact-info li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; color: var(--text-muted); line-height: 1.6; }
+        .contact-info i { color: var(--primary-color); font-size: 1.2rem; margin-top: 3px; }
+        .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
+
+        /* === RESPONSIVE === */
+        .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-color); }
+        @media (max-width: 991px) {
+            .story-section { flex-direction: column; text-align: center; }
+            .nav-links { display: none; }
+            .mobile-toggle { display: block; }
+        }
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 3rem; }
+            .top-bar { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div>
+            <span><i class="fas fa-envelope"></i> sonam@homebite.com</span>
+            <span><i class="fas fa-phone"></i> +91 98765 43210</span>
+        </div>
+        <div>
+            <span><i class="fas fa-map-marker-alt"></i> Patna, Bihar, India</span>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="brand-logo">Home<span>Bite</span>.</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html" class="active">About Us</a></li>
+            <li><a href="index.html#menu">Menu</a></li>
+            <li><a href="#footer">Contact</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+            <a href="#" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#" class="nav-icon"><i class="fas fa-user"></i></a>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="reveal">
+            <h1>Our Story</h1>
+            <p>Where Passion Meets The Plate</p>
+        </div>
+    </header>
+
+    <section class="story-section">
+        <div class="story-img reveal">
+            <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1000&q=80" alt="Restaurant Ambiance">
+        </div>
+        <div class="story-text reveal">
+            <h2>Redefining the Art of Dining at Home.</h2>
+            <p>
+                Founded in the heart of Patna, HomeBite started with a simple vision: to bridge the gap between high-end restaurant dining and the comfort of eating at home. We realized that delivery food shouldn't mean compromising on quality, presentation, or taste.
+            </p>
+            <p>
+                Every ingredient we use is hand-selected by our expert chefs. We partner with local farmers to ensure that only the freshest produce makes it to your plate. Our kitchen is a symphony of flavors, where traditional recipes meet modern culinary techniques to create an unforgettable experience.
+            </p>
+        </div>
+    </section>
+
+    <section class="values-section">
+        <h2 class="reveal">The HomeBite Standard</h2>
+        <div class="values-grid">
+            <div class="value-card reveal">
+                <i class="fas fa-leaf value-icon"></i>
+                <h3>Fresh Ingredients</h3>
+                <p>We source organically and locally whenever possible, ensuring every bite is packed with natural flavor and nutrition.</p>
+            </div>
+            <div class="value-card reveal">
+                <i class="fas fa-fire-burner value-icon"></i>
+                <h3>Masterful Cooking</h3>
+                <p>Our chefs are trained in elite culinary arts, bringing precision, passion, and perfection to every dish they craft.</p>
+            </div>
+            <div class="value-card reveal">
+                <i class="fas fa-motorcycle value-icon"></i>
+                <h3>Pristine Delivery</h3>
+                <p>Hot food should arrive hot. Our premium packaging and expedited delivery ensure your meal arrives in restaurant-ready condition.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <span class="team-subtitle reveal">The Magic Makers</span>
+        <h2 class="reveal">Meet Our Culinary Artists</h2>
+        
+        <div class="team-grid">
+            <div class="team-member reveal">
+                <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80" alt="Executive Chef" class="team-img">
+                <div class="team-info">
+                    <h3>Vikram Singh</h3>
+                    <p>Executive Head Chef</p>
+                </div>
+            </div>
+            <div class="team-member reveal">
+                <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Pastry Chef" class="team-img">
+                <div class="team-info">
+                    <h3>Aanya Sharma</h3>
+                    <p>Master Pastry Chef</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-col reveal">
+                <a href="#" class="brand-logo" style="margin-bottom: 20px; display: inline-block; font-size: 2rem;">Home<span style="color: var(--primary-color);">Bite</span>.</a>
+                <p>Bringing gourmet experiences to your dining table. Fresh ingredients, masterful recipes, and blazing fast delivery.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-col reveal">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> About Us</a></li>
+                    <li><a href="index.html#menu"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Our Menu</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Testimonials</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal">
+                <h3>Our Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Fast Home Delivery</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Event Catering</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Table Reservations</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Corporate Dining</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Culinary Street, Near Frazer Road,<br>Patna, Bihar 800001</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+91 98765 43210 <br> +91 91234 56789</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span class="highlight-email">sonam@homebite.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom reveal">
+            <p>&copy; 2026 HomeBite. Crafted with passion. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const reveals = document.querySelectorAll(".reveal");
+
+            const revealOnScroll = () => {
+                for (let i = 0; i < reveals.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementVisible = 100;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveals[i].classList.add("active");
+                    }
+                }
+            };
+
+            window.addEventListener("scroll", revealOnScroll);
+            revealOnScroll(); // Trigger on load
+        });
+    </script>
+</body>
+</html>
