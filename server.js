@@ -9,6 +9,7 @@ dotenv.config({ path: './backend/.env' });
 // 2. Paths update kar diye gaye hain (taaki backend folder ke andar dekhe)
 const connectDB = require('./backend/config/db');
 const authRoutes = require('./backend/routes/authRoutes');
+const contactRoutes = require('./backend/routes/contactRoutes'); // <-- Naya: Contact route import kiya
 
 // MongoDB se connect karna
 connectDB();
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/contact', contactRoutes); // <-- Naya: Contact API ko server par chalu kiya
 
 // Jab koi localhost:5000 par aayega, toh public folder ka index.html khulega
 app.get('/', (req, res) => {
