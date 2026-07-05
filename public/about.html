@@ -118,41 +118,71 @@
         }
         .story-img:hover img { filter: brightness(1.1); transform: scale(1.02); }
 
-        /* === CORE VALUES (Dark Cards) === */
+        /* === CORE VALUES (UPDATED: Premium Background with Translucent Cards) === */
         .values-section {
-            padding: 100px 5%; background-color: var(--section-bg);
-            border-top: 1px solid rgba(255,255,255,0.02);
-            border-bottom: 1px solid rgba(255,255,255,0.02);
+            padding: 100px 5%; 
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             text-align: center;
+            z-index: 1;
         }
+        
+        /* Dark Overlay for the background image */
+        .values-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 5, 5, 0.75); /* Dark overlay */
+            z-index: -1;
+        }
+
         .values-section h2 { font-size: 3rem; margin-bottom: 60px; color: var(--text-light); }
         
         .values-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
         }
+
+        /* The Translucent (Glassmorphism) Card */
         .value-card {
-            background: var(--card-bg); padding: 50px 30px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.03); transition: var(--transition);
+            background: rgba(20, 20, 20, 0.4); /* Translucent background */
+            backdrop-filter: blur(15px); /* Classy blur effect */
+            -webkit-backdrop-filter: blur(15px);
+            padding: 50px 30px; 
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .value-card:hover { transform: translateY(-10px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .value-card:hover { 
+            transform: translateY(-10px); 
+            background: rgba(30, 30, 30, 0.6);
+            border-color: rgba(226, 135, 67, 0.5); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
+        }
         .value-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 25px; }
         .value-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-light); }
-        .value-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+        .value-card p { color: #d0d0d0; font-size: 0.95rem; line-height: 1.7; } /* Slightly brighter text for glass card */
 
-        /* === TEAM SECTION === */
+        /* === TEAM SECTION (UPDATED: Added more cards) === */
         .team-section { padding: 120px 5%; text-align: center; background-color: var(--dark-bg); }
         .team-subtitle { color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 15px; font-size: 0.9rem; }
         .team-section h2 { font-size: 3.5rem; margin-bottom: 60px; }
         
         .team-grid {
-            display: flex; justify-content: center; gap: 50px; flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .team-member {
-            width: 320px; background: var(--card-bg); border-radius: 12px; overflow: hidden;
+            background: var(--card-bg); border-radius: 12px; overflow: hidden;
             border: 1px solid rgba(255,255,255,0.03); transition: var(--transition);
         }
-        .team-member:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+        .team-member:hover { transform: translateY(-10px); border-color: var(--primary-color); box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
         .team-img { width: 100%; height: 350px; object-fit: cover; filter: grayscale(50%); transition: var(--transition); }
         .team-member:hover .team-img { filter: grayscale(0%); }
         .team-info { padding: 25px; }
@@ -265,18 +295,26 @@
         <h2 class="reveal">Meet Our Culinary Artists</h2>
         
         <div class="team-grid">
-            <div class="team-member reveal">
-                <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80" alt="Executive Chef" class="team-img">
-                <div class="team-info">
-                    <h3>Vikram Singh</h3>
-                    <p>Executive Head Chef</p>
-                </div>
-            </div>
+            
             <div class="team-member reveal">
                 <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Pastry Chef" class="team-img">
                 <div class="team-info">
                     <h3>Aanya Sharma</h3>
                     <p>Master Pastry Chef</p>
+                </div>
+            </div>
+            <div class="team-member reveal">
+                <img src="https://images.unsplash.com/photo-1614436163996-25cee5f54290?auto=format&fit=crop&w=600&q=80" alt="Sous Chef" class="team-img">
+                <div class="team-info">
+                    <h3>Rohan Kapoor</h3>
+                    <p>Senior Sous Chef</p>
+                </div>
+            </div>
+            <div class="team-member reveal">
+                <img src="https://images.unsplash.com/photo-1566554273541-37a9ca77b91f?auto=format&fit=crop&w=600&q=80" alt="Culinary Director" class="team-img">
+                <div class="team-info">
+                    <h3>Meera Desai</h3>
+                    <p>Culinary Director</p>
                 </div>
             </div>
         </div>
