@@ -1,21 +1,20 @@
 // backend/controllers/userController.js
 const User = require('../models/User');
 const cloudinary = require('../config/cloudinary'); 
-const bcrypt = require('bcryptjs'); // Password hash karne ke liye zaroori hai
+const bcrypt = require('bcryptjs'); 
 
 // 1. Get User Profile Data
 const getUserProfile = async (req, res) => {
     try {
-        // req.user.id middleware se aayega, -password matlab password hide kar do
         const user = await User.findById(req.user.id).select('-password');
         if (user) {
-            res.json(user);
+            return res.json(user);
         } else {
-            res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
         console.error("Get Profile Error:", error);
-        res.status(500).json({ message: 'Server error while fetching profile' });
+        return res.status(500).json({ message: 'Server error while fetching profile' });
     }
 };
 
@@ -25,26 +24,25 @@ const updateUserProfile = async (req, res) => {
         const user = await User.findById(req.user.id);
 
         if (user) {
-            // Agar request me naya data hai toh update karo, warna purana hi rehne do
             user.fullName = req.body.fullName || user.fullName;
             user.email = req.body.email || user.email;
             user.address = req.body.address || user.address;
 
             const updatedUser = await user.save();
             
-            res.json({
+            return res.json({
                 _id: updatedUser._id,
                 fullName: updatedUser.fullName,
                 email: updatedUser.email,
                 address: updatedUser.address,
-                profileImage: updatedUser.profileImage // FIXED: Schema ke mutabik profileImage kiya
+                profileImage: updatedUser.profileImage 
             });
         } else {
-            res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
         console.error("Update Profile Error:", error);
-        res.status(500).json({ message: 'Server error while updating profile' });
+        return res.status(500).json({ message: 'Server error while updating profile' });
     }
 };
 
@@ -54,27 +52,24 @@ const changePassword = async (req, res) => {
         const user = await User.findById(req.user.id);
 
         if (user) {
-            // Frontend se aane wale old aur new password ko check karna
             const { oldPassword, newPassword } = req.body;
 
-            // Database ke password se purana password match karein
             const isMatch = await bcrypt.compare(oldPassword, user.password);
             if (!isMatch) {
                 return res.status(400).json({ message: 'Old password is incorrect' });
             }
 
-            // Naye password ko encrypt (hash) karein
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(newPassword, salt);
 
             await user.save();
-            res.json({ message: 'Password updated successfully' });
+            return res.json({ message: 'Password updated successfully' });
         } else {
-            res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
         console.error("Change Password Error:", error);
-        res.status(500).json({ message: 'Server error while changing password' });
+        return res.status(500).json({ message: 'Server error while changing password' });
     }
 };
 
@@ -98,18 +93,18 @@ const uploadProfilePic = async (req, res) => {
         // MongoDB me user ka profileImage URL update karna
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
-            { profileImage: cloudinaryResponse.secure_url }, // FIXED: profileImage variable map kiya
+            { profileImage: cloudinaryResponse.secure_url }, 
             { new: true }
         ).select('-password');
 
-        res.status(200).json({ 
+        return res.status(200).json({ 
             message: "Profile picture updated successfully!", 
-            profileImage: updatedUser.profileImage // FIXED: Response me sahi field bheja
+            profileImage: updatedUser.profileImage 
         });
 
     } catch (error) {
         console.error("Upload Error:", error);
-        res.status(500).json({ message: "Image upload failed", error: error.message });
+        return res.status(500).json({ message: "Image upload failed", error: error.message });
     }
 };
 
