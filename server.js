@@ -24,6 +24,11 @@ app.use(express.json());
 
 // Frontend ki files ab 'public' folder se load hongi
 app.use(express.static(path.join(__dirname, 'public'))); 
+// PEHLE AISI THI:
+// app.use(express.static(path.join(__dirname, 'public'))); 
+
+// AB AISI KAR DIJIYE:
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // Routes (Yahan route match ho jayega)
 app.use('/api/auth', authRoutes);
