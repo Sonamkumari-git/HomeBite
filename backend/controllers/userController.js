@@ -2,6 +2,7 @@
 const User = require('../models/User');
 const cloudinary = require('../config/cloudinary'); 
 const bcrypt = require('bcryptjs'); 
+const streamifier = require('streamifier'); // 🔥 NAYA ADD KIYA HAI
 
 // 1. Get User Profile Data
 const getUserProfile = async (req, res) => {
@@ -73,22 +74,32 @@ const changePassword = async (req, res) => {
     }
 };
 
-// 4. Upload Profile Picture
+// 4. Upload Profile Picture (🔥 UPDATED LOGIC)
 const uploadProfilePic = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: "No image file provided" });
         }
 
-        // Buffer ko Base64 me convert karke Cloudinary par upload karna
-        const b64 = Buffer.from(req.file.buffer).toString("base64");
-        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-        
-        // Yahan 'cloudinary' humare config file se aa raha hai
-        const cloudinaryResponse = await cloudinary.uploader.upload(dataURI, {
-            folder: "homebite/profiles", 
-            resource_type: "auto",
-        });
+        // Buffer ko Cloudinary par direct stream ke through bhejna (No Base64 memory crash)
+        let streamUpload = (req) => {
+            return new Promise((resolve, reject) => {
+                let stream = cloudinary.uploader.upload_stream(
+                    { 
+                        folder: "homebite/profiles",
+                        resource_type: "auto"
+                    }, 
+                    (error, result) => {
+                        if (result) resolve(result);
+                        else reject(error);
+                    }
+                );
+                // req.file.buffer ko seedha read karke stream me pipe karna
+                streamifier.createReadStream(req.file.buffer).pipe(stream);
+            });
+        };
+
+        const cloudinaryResponse = await streamUpload(req);
 
         // MongoDB me user ka profileImage URL update karna
         const updatedUser = await User.findByIdAndUpdate(
