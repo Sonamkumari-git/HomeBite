@@ -10,6 +10,8 @@ dotenv.config({ path: './backend/.env' });
 const connectDB = require('./backend/config/db');
 const authRoutes = require('./backend/routes/authRoutes');
 const contactRoutes = require('./backend/routes/contactRoutes');
+// UPDATE: Yahan userRoutes ko import kiya hai
+const userRoutes = require('./backend/routes/userRoutes'); 
 
 // MongoDB se connect karna
 connectDB();
@@ -26,6 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes (Yahan route match ho jayega)
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes); 
+// UPDATE: Yahan userRoutes ko /api/users path par connect kar diya hai
+app.use('/api/users', userRoutes); 
 
 // Jab koi localhost:5000 par aayega, toh public folder ka index.html khulega
 app.get('/', (req, res) => {
