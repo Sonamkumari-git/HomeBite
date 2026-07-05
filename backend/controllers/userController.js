@@ -37,7 +37,7 @@ const updateUserProfile = async (req, res) => {
                 fullName: updatedUser.fullName,
                 email: updatedUser.email,
                 address: updatedUser.address,
-                profilePic: updatedUser.profilePic
+                profileImage: updatedUser.profileImage // FIXED: Schema ke mutabik profileImage kiya
             });
         } else {
             res.status(404).json({ message: 'User not found' });
@@ -78,7 +78,7 @@ const changePassword = async (req, res) => {
     }
 };
 
-// 4. Upload Profile Picture (Aapka diya gaya function)
+// 4. Upload Profile Picture
 const uploadProfilePic = async (req, res) => {
     try {
         if (!req.file) {
@@ -95,16 +95,16 @@ const uploadProfilePic = async (req, res) => {
             resource_type: "auto",
         });
 
-        // MongoDB me user ka profilePic URL update karna
+        // MongoDB me user ka profileImage URL update karna
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
-            { profilePic: cloudinaryResponse.secure_url },
+            { profileImage: cloudinaryResponse.secure_url }, // FIXED: profileImage variable map kiya
             { new: true }
         ).select('-password');
 
         res.status(200).json({ 
             message: "Profile picture updated successfully!", 
-            profilePic: updatedUser.profilePic 
+            profileImage: updatedUser.profileImage // FIXED: Response me sahi field bheja
         });
 
     } catch (error) {
