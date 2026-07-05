@@ -1,12 +1,13 @@
+// backend/config/cloudinary.js
 const cloudinary = require('cloudinary').v2;
 
-// 🔥 Direct Cloudinary Credentials (Bina kisi extra space ke)
 cloudinary.config({
-    cloud_name: 'wewfaleq',
-    api_key: '212696247798657',
-    api_secret: 'hXrlDOVXYbPHIb8pcqpuLAhMocQ' // Space bilkul hata diya hai
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log("✅ Cloudinary Connected Successfully with Hardcoded Credentials!");
+// Yeh check karne ke liye ki variables sahi se load ho rahe hain ya nahi
+console.log("Cloudinary Configured with Environment Variables!");
 
 module.exports = cloudinary;
