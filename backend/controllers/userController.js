@@ -1,12 +1,9 @@
+// backend/controllers/userController.js
 const User = require('../models/User');
-const cloudinary = require('cloudinary').v2;
+// Puraana cloudinary import hata kar ab hum apna config wala import karenge:
+const cloudinary = require('../config/cloudinary'); 
 
-// Cloudinary config
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
+// (Aapko yahan cloudinary.config({...}) dobara likhne ki zaroorat nahi hai)
 
 // @route   PUT /api/users/profile-pic
 exports.uploadProfilePic = async (req, res) => {
@@ -19,8 +16,9 @@ exports.uploadProfilePic = async (req, res) => {
         const b64 = Buffer.from(req.file.buffer).toString("base64");
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
         
+        // Yahan 'cloudinary' humare config file se aa raha hai
         const cloudinaryResponse = await cloudinary.uploader.upload(dataURI, {
-            folder: "homebite/profiles", // Cloudinary me is folder me save hoga
+            folder: "homebite/profiles", 
             resource_type: "auto",
         });
 
