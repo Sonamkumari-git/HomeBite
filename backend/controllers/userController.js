@@ -74,7 +74,7 @@ const changePassword = async (req, res) => {
     }
 };
 
-// 4. Upload Profile Picture (🔥 UPDATED LOGIC)
+// 4. Upload Profile Picture (🔥 UPDATED WITH RETURN_DOCUMENT FIX)
 const uploadProfilePic = async (req, res) => {
     try {
         if (!req.file) {
@@ -102,10 +102,11 @@ const uploadProfilePic = async (req, res) => {
         const cloudinaryResponse = await streamUpload(req);
 
         // MongoDB me user ka profileImage URL update karna
+        // { returnDocument: 'after' } use kiya hai taaki deprecation warning na aaye
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             { profileImage: cloudinaryResponse.secure_url }, 
-            { new: true }
+            { returnDocument: 'after' } 
         ).select('-password');
 
         return res.status(200).json({ 
