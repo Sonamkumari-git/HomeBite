@@ -213,15 +213,10 @@
             margin-top: 10px;
         }
         .btn-primary:hover { background: #d17835; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(226,135,67,0.3); }
+        .btn-primary:disabled { background: var(--text-muted); cursor: not-allowed; }
 
-        /* Orders Styling */
-        .order-card {
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: var(--item-bg);
-        }
+        /* Orders & Address Styling (Unchanged CSS) */
+        .order-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: var(--item-bg); }
         .order-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px; }
         .order-id { font-weight: 600; color: var(--primary-color); }
         .order-date { color: var(--text-muted); font-size: 0.9rem; }
@@ -232,22 +227,13 @@
         .status.delivered { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
         .status.transit { background: rgba(244, 193, 80, 0.1); color: var(--secondary-color); border: 1px solid rgba(244, 193, 80, 0.3); }
 
-        /* Address Styling */
-        .address-card {
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: var(--item-bg);
-            position: relative;
-        }
+        .address-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: var(--item-bg); position: relative; }
         .address-type { background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 10px; }
         .address-text { color: var(--text-muted); line-height: 1.5; font-size: 0.95rem; margin-bottom: 15px; }
         .address-actions button { background: transparent; border: none; color: var(--text-light); cursor: pointer; margin-right: 15px; font-size: 0.9rem; transition: 0.3s; }
         .address-actions button:hover { color: var(--primary-color); }
         .address-actions button.delete:hover { color: #ff4d4d; }
 
-        /* Settings Toggle */
         .toggle-switch { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border-light); }
         .toggle-switch label { font-size: 1rem; }
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
@@ -257,7 +243,6 @@
         input:checked + .slider { background-color: var(--primary-color); }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        /* Responsive */
         @media (max-width: 900px) {
             .dashboard-container { flex-direction: column; }
             .sidebar { width: 100%; position: static; }
@@ -281,8 +266,8 @@
                 <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
             </div>
             
-            <h3 class="user-name">Rahul Kumar</h3>
-            <p class="user-email">rahul@example.com</p>
+            <h3 class="user-name" id="sidebarName">Loading...</h3>
+            <p class="user-email" id="sidebarEmail">Loading...</p>
 
             <ul class="nav-list">
                 <li><button class="nav-btn active" onclick="openTab(event, 'profile-info')"><i class="fa-regular fa-user"></i> Profile Info</button></li>
@@ -297,119 +282,57 @@
             
             <div id="profile-info" class="tab-content active">
                 <h2 class="section-title">Edit Profile Info</h2>
-                <form onsubmit="saveProfile(event)">
+                <form id="profileForm" onsubmit="saveProfile(event)">
                     <div class="row">
                         <div class="input-group">
                             <label>First Name</label>
-                            <input type="text" value="Rahul" required>
+                            <input type="text" id="firstName" required>
                         </div>
                         <div class="input-group">
                             <label>Last Name</label>
-                            <input type="text" value="Kumar" required>
+                            <input type="text" id="lastName" required>
                         </div>
                     </div>
                     <div class="input-group">
                         <label>Email Address</label>
-                        <input type="email" value="rahul@example.com" required>
+                        <input type="email" id="email" readonly style="opacity: 0.7;"> 
                     </div>
                     <div class="input-group">
                         <label>Phone Number</label>
-                        <input type="tel" value="+91 9876543210" required>
+                        <input type="tel" id="phone" required>
                     </div>
-                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="submit" id="saveProfileBtn" class="btn-primary">Save Changes</button>
                 </form>
             </div>
 
             <div id="orders" class="tab-content">
                 <h2 class="section-title">Order History</h2>
-                
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">Order #HB-98745</span>
-                        <span class="order-date">24 Oct, 2023 | 08:30 PM</span>
-                    </div>
-                    <div class="order-items">
-                        <p>1x Authentic Chicken Biryani</p>
-                        <p>2x Butter Naan</p>
-                    </div>
-                    <div class="order-footer">
-                        <span class="order-total">Total: ₹350</span>
-                        <span class="status delivered">Delivered</span>
-                    </div>
+                <p style="color: var(--text-muted);">Fetching your recent orders...</p>
                 </div>
-
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">Order #HB-98700</span>
-                        <span class="order-date">22 Oct, 2023 | 01:15 PM</span>
-                    </div>
-                    <div class="order-items">
-                        <p>1x Special Paneer Butter Masala Combo</p>
-                    </div>
-                    <div class="order-footer">
-                        <span class="order-total">Total: ₹220</span>
-                        <span class="status transit">In Transit</span>
-                    </div>
-                </div>
-            </div>
 
             <div id="addresses" class="tab-content">
                 <h2 class="section-title">Manage Addresses</h2>
-                
-                <div class="address-card">
-                    <span class="address-type">Hostel</span>
-                    <p class="address-text">Room No 102, Shivam Boys Hostel,<br>Boring Road, Patna, Bihar - 800001</p>
-                    <div class="address-actions">
-                        <button><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="delete"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-
-                <div class="address-card">
-                    <span class="address-type">Home</span>
-                    <p class="address-text">Flat 4B, Shanti Enclave,<br>Kankarbagh, Patna, Bihar - 800020</p>
-                    <div class="address-actions">
-                        <button><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="delete"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-
-                <button class="btn-primary" style="margin-top: 0;"><i class="fa-solid fa-plus"></i> Add New Address</button>
+                <p style="color: var(--text-muted);">No addresses saved yet.</p>
+                <button class="btn-primary" style="margin-top: 20px;"><i class="fa-solid fa-plus"></i> Add New Address</button>
             </div>
 
             <div id="settings" class="tab-content">
                 <h2 class="section-title">Account Settings</h2>
                 
-                <div class="toggle-switch">
-                    <label>Email Notifications (Offers & Updates)</label>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="toggle-switch" style="margin-bottom: 30px;">
-                    <label>SMS Order Alerts</label>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
                 <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Change Password</h3>
                 <form onsubmit="changePassword(event)">
                     <div class="input-group">
                         <label>Current Password</label>
-                        <input type="password" placeholder="Enter current password" required>
+                        <input type="password" id="currentPassword" placeholder="Enter current password" required>
                     </div>
                     <div class="row">
                         <div class="input-group">
                             <label>New Password</label>
-                            <input type="password" placeholder="New password" required>
+                            <input type="password" id="newPassword" placeholder="New password" required>
                         </div>
                         <div class="input-group">
                             <label>Confirm New Password</label>
-                            <input type="password" placeholder="Confirm password" required>
+                            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
                         </div>
                     </div>
                     <button type="submit" class="btn-primary">Update Password</button>
@@ -420,49 +343,196 @@
     </div>
 
     <script>
-        // 1. Tab Switching Logic
+        // ======= APKI BACKEND URL =======
+        // IMPORTANT: Yahan apna backend url daaliye (e.g., https://your-app.onrender.com/api/users)
+        // Agar locally run kar rahe hain toh shayad ye http://localhost:5000/api/users hoga
+        const API_URL = 'http://localhost:5000/api/users'; 
+
+        // Check if user is logged in (Token in localStorage)
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Agar token nahi hai toh login page par bhej do
+            window.location.href = "index.html";
+        }
+
+        // --- Fetch User Profile on Page Load ---
+        async function fetchUserProfile() {
+            try {
+                const response = await fetch(`${API_URL}/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Update UI with database data
+                    document.getElementById('sidebarName').innerText = `${data.firstName} ${data.lastName}`;
+                    document.getElementById('sidebarEmail').innerText = data.email;
+                    
+                    if(data.profilePic) {
+                        document.getElementById('profileImage').src = data.profilePic;
+                    }
+
+                    // Populate form fields
+                    document.getElementById('firstName').value = data.firstName;
+                    document.getElementById('lastName').value = data.lastName;
+                    document.getElementById('email').value = data.email;
+                    document.getElementById('phone').value = data.phone;
+                } else {
+                    alert('Session expired. Please login again.');
+                    logout();
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        }
+
+        // Call fetch function immediately when page loads
+        fetchUserProfile();
+
+        // --- 1. Tab Switching Logic ---
         function openTab(evt, tabName) {
-            // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(tab => tab.classList.remove('active'));
 
-            // Remove active class from all buttons
             const navBtns = document.querySelectorAll('.nav-btn');
             navBtns.forEach(btn => btn.classList.remove('active'));
 
-            // Show current tab and add active class to button
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
         }
 
-        // 2. Profile Image Live Preview Logic
-        function previewImage(event) {
+        // --- 2. Profile Image Upload (Cloudinary) Logic ---
+        async function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Instant local preview dikhane ke liye
             const reader = new FileReader();
             reader.onload = function() {
-                const output = document.getElementById('profileImage');
-                output.src = reader.result; // Instant photo change
+                document.getElementById('profileImage').src = reader.result;
             };
-            if(event.target.files[0]) {
-                reader.readAsDataURL(event.target.files[0]);
-                // Fake API success alert
-                setTimeout(() => alert("Profile photo updated successfully!"), 300);
+            reader.readAsDataURL(file);
+
+            // Backend (Cloudinary) par upload karne ka logic
+            const formData = new FormData();
+            formData.append("profilePic", file);
+
+            try {
+                const picOverlay = document.querySelector('.pic-overlay');
+                picOverlay.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; 
+                picOverlay.style.opacity = '1';
+
+                const response = await fetch(`${API_URL}/profile-pic`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('profileImage').src = data.profilePic;
+                    alert("Profile photo updated successfully!");
+                } else {
+                    alert(data.message || "Failed to upload photo");
+                }
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                alert("Something went wrong during upload.");
+            } finally {
+                const picOverlay = document.querySelector('.pic-overlay');
+                picOverlay.innerHTML = '<i class="fa-solid fa-camera"></i>';
+                picOverlay.style.opacity = '';
             }
         }
 
-        // 3. Form Submit Actions (Dummy Data Savers)
-        function saveProfile(e) {
+        // --- 3. Save Profile Info ---
+        async function saveProfile(e) {
             e.preventDefault();
-            alert("Profile information saved successfully!");
+            const btn = document.getElementById('saveProfileBtn');
+            btn.innerText = "Saving...";
+            btn.disabled = true;
+
+            const updatedData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phone: document.getElementById('phone').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Profile updated successfully!");
+                    // Update Sidebar name instantly
+                    document.getElementById('sidebarName').innerText = `${data.firstName} ${data.lastName}`;
+                } else {
+                    alert(data.message || "Failed to update profile");
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                alert("Error updating profile.");
+            } finally {
+                btn.innerText = "Save Changes";
+                btn.disabled = false;
+            }
         }
 
-        function changePassword(e) {
+        // --- 4. Change Password ---
+        async function changePassword(e) {
             e.preventDefault();
-            alert("Password updated securely!");
-            e.target.reset();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if(newPassword !== confirmPassword) {
+                return alert("New passwords do not match!");
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/change-password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Password updated securely!");
+                    e.target.reset(); // clear form
+                } else {
+                    alert(data.message || "Failed to change password");
+                }
+            } catch (error) {
+                console.error("Error changing password:", error);
+                alert("Error changing password.");
+            }
         }
 
+        // --- 5. Logout ---
         function logout() {
             if(confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem('token'); // Token remove kar diya
                 window.location.href = "index.html"; // Redirect to login
             }
         }
