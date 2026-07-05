@@ -229,15 +229,6 @@
         .address-actions button:hover { color: var(--primary-color); }
         .address-actions button.delete:hover { color: #ff4d4d; }
 
-        .toggle-switch { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border-light); }
-        .toggle-switch label { font-size: 1rem; }
-        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary-color); }
-        input:checked + .slider:before { transform: translateX(26px); }
-
         @media (max-width: 900px) {
             .dashboard-container { flex-direction: column; }
             .sidebar { width: 100%; position: static; }
@@ -248,8 +239,8 @@
 <body>
 
     <header>
-        <a href="home.html" class="logo">Home<span>Bite</span>.</a>
-        <a href="home.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+        <a href="/" class="logo">Home<span>Bite</span>.</a>
+        <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
     </header>
 
     <div class="dashboard-container">
@@ -258,7 +249,7 @@
             <div class="profile-pic-container" onclick="document.getElementById('fileInput').click();">
                 <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Profile" class="profile-pic" id="profileImage">
                 <div class="pic-overlay"><i class="fa-solid fa-camera"></i></div>
-                <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+                <input type="file" id="fileInput" accept="image/*" onchange="previewAndUploadImage(event)">
             </div>
             
             <h3 class="user-name" id="display-name">Loading...</h3>
@@ -368,25 +359,66 @@
             evt.currentTarget.classList.add('active');
         }
 
-        function previewImage(event) {
+        // === 🚀 FIXED: IMAGE UPLOAD TO CLOUDINARY LOGIC ===
+        async function previewAndUploadImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // 1. Pehle local preview dikhao taaki user ko turant change dikhe
             const reader = new FileReader();
             reader.onload = function() {
-                const output = document.getElementById('profileImage');
-                output.src = reader.result;
+                document.getElementById('profileImage').src = reader.result;
             };
-            if(event.target.files[0]) {
-                reader.readAsDataURL(event.target.files[0]);
-                setTimeout(() => alert("Profile photo updated successfully!"), 300);
+            reader.readAsDataURL(file);
+
+            // 2. Ab photo backend (Cloudinary) par bhejo
+            const token = localStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('profilePic', file); // 'profilePic' hi Multer dhoond raha hai
+
+            try {
+                // Uploading indicator (optional)
+                document.getElementById('display-name').innerHTML = 'Uploading... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+                const response = await fetch('https://homebite-aecl.onrender.com/api/users/profile-pic', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}` 
+                        // Dhyan de: FormData bhejte time Content-Type set nahi karte!
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Profile photo updated and saved to server!");
+                    // Ensure backend URL is used
+                    if (data.profileImage) {
+                        document.getElementById('profileImage').src = data.profileImage;
+                    }
+                    // Wapas naam theek karne ke liye API dobara call karte hain
+                    fetchUserData(token); 
+                } else {
+                    alert("Upload failed: " + data.message);
+                    fetchUserData(token); // Restore normal name
+                }
+            } catch (error) {
+                console.error("Upload Error:", error);
+                alert("Server error during image upload.");
+                fetchUserData(token); // Restore normal name
             }
         }
 
         function saveProfile(e) {
             e.preventDefault();
+            // TODO: PUT /api/users/profile call yahan lagani hai baad mein
             alert("Profile information saved successfully!");
         }
 
         function changePassword(e) {
             e.preventDefault();
+            // TODO: PUT /api/users/change-password call yahan lagani hai baad mein
             alert("Password updated securely!");
             e.target.reset();
         }
@@ -394,21 +426,20 @@
         function logout() {
             if(confirm("Are you sure you want to log out?")) {
                 localStorage.removeItem('token'); 
-                window.location.href = "index.html";
+                window.location.href = "/login"; // Clean URL redirect
             }
         }
 
-        // === BACKEND DATA FETCH LOGIC (FIXED) ===
+        // === 🚀 FIXED: BACKEND DATA FETCH LOGIC ===
         document.addEventListener("DOMContentLoaded", async () => {
             const token = localStorage.getItem('token');
             
-            // Check agar user bina login aaye toh
             if (!token) {
                 console.warn("No token found. User needs to login.");
                 document.getElementById('display-name').textContent = "Please Login";
                 document.getElementById('display-email').textContent = "Redirecting...";
-                // Agar aap chaho toh yahan seedha login page pe bhejne ke liye niche wala code uncomment kar dena:
-                // window.location.href = "index.html"; 
+                // Bina token seedha baahar phenkna
+                window.location.href = "/login"; 
                 return;
             }
 
@@ -417,12 +448,11 @@
 
         async function fetchUserData(token) {
             try {
-                // FIXED: Poora render URL use kiya aur sahi route /api/users/profile lagaya
                 const response = await fetch('https://homebite-aecl.onrender.com/api/users/profile', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // FIXED: Token attach kar diya
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
 
@@ -430,10 +460,14 @@
                     const userData = await response.json(); 
                     
                     // Sidebar Update
-                    // Check kiya ki naam 'name' ya 'fullName' kis variable me aa raha backend se
                     const userName = userData.name || userData.fullName || "User";
                     document.getElementById('display-name').textContent = userName;
                     document.getElementById('display-email').textContent = userData.email || "";
+
+                    // PROFILE PIC UPDATE LOGIC
+                    if (userData.profileImage) {
+                        document.getElementById('profileImage').src = userData.profileImage;
+                    }
 
                     // Form Update
                     const nameParts = userName.split(' ');
@@ -447,10 +481,9 @@
                     }
 
                 } else if (response.status === 401 || response.status === 403) {
-                    // Agar token expire ho gaya ya galat hai
                     alert("Session expired. Please login again.");
                     localStorage.removeItem('token');
-                    window.location.href = "index.html"; // Wapas login par bhejein
+                    window.location.href = "/login"; 
                 } else {
                     console.warn("Could not fetch user data. Error code:", response.status);
                     document.getElementById('display-name').textContent = "Error Loading Profile";
