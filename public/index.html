@@ -352,7 +352,14 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert('Login Successful! Welcome to HomeBite, ' + data.fullName);
+                    // ==========================================
+                    // YAHAN MAINE TOKEN SAVE KARNE KA CODE ADD KIYA HAI
+                    // ==========================================
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);
+                    }
+                    
+                    alert('Login Successful! Welcome to HomeBite, ' + (data.fullName || ""));
                     window.location.href = 'home.html';
                 } else {
                     alert('Error: ' + data.message); 
