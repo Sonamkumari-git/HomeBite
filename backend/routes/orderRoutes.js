@@ -5,7 +5,7 @@ const router = express.Router();
 const { placeOrder, getMyOrders } = require('../controllers/orderController');
 
 // Auth middleware import kiya
-const { protect } = require('../middlewares/authMiddleware');
+const { protect } = require('../middleware/authMiddleware');
 
 // 1. Order place karne ka route
 router.post('/place', protect, placeOrder);
