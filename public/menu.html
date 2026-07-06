@@ -6,7 +6,6 @@
     <title>Our Menu | HomeBite Premium</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -19,6 +18,8 @@
             --card-bg: #151515;
             --text-light: #ffffff;
             --text-muted: #a0a0a0;
+            --success: #2ed573;
+            --danger: #ff4757;
             --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -71,9 +72,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .brand-logo {
-            font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px;
-        }
+        .brand-logo { font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; }
         .brand-logo span { color: var(--primary-color); font-style: italic; }
         
         .nav-links { display: flex; gap: 35px; }
@@ -121,31 +120,116 @@
         /* === FULL MENU SECTION === */
         .menu-section { padding: 0 5% 120px; background-color: var(--dark-bg); }
         
+        /* Grid Fix: Changed auto-fit to auto-fill to prevent massive cards */
         .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 40px;
         }
         
         /* MENU CARDS */
         .menu-card {
-            background: var(--card-bg); border-radius: 12px; overflow: hidden;
-            transition: var(--transition); border: 1px solid rgba(255,255,255,0.03);
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            overflow: hidden;
+            transition: var(--transition); 
+            border: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            flex-direction: column;
         }
         .menu-card:hover { transform: translateY(-15px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .menu-card img { width: 100%; height: 260px; object-fit: cover; transition: var(--transition); filter: brightness(0.9); }
-        .menu-card:hover img { transform: scale(1.08); filter: brightness(1.1); }
         
-        .card-body { padding: 30px 25px; }
-        .card-body h3 { font-size: 1.6rem; margin-bottom: 10px; color: var(--text-light); display: flex; justify-content: space-between; align-items: center; }
-        .badge { font-size: 0.7rem; font-family: 'Poppins', sans-serif; padding: 3px 8px; border-radius: 4px; background: rgba(226, 135, 67, 0.2); color: var(--primary-color); text-transform: uppercase; }
-        .card-body p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.7; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 1.5rem; font-weight: 600; color: var(--primary-color); font-family: 'Playfair Display', serif; }
-        .order-btn {
-            background: rgba(226, 135, 67, 0.1); color: var(--primary-color);
-            padding: 10px 25px; border-radius: 4px; transition: var(--transition); border: 1px solid rgba(226, 135, 67, 0.2);
-            text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; cursor: pointer;
+        .card-img-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
         }
-        .order-btn:hover { background: var(--primary-color); color: #fff; }
+        .card-img-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: var(--transition); 
+            filter: brightness(0.9); 
+        }
+        .menu-card:hover .card-img-container img { transform: scale(1.08); filter: brightness(1.1); }
+        
+        .food-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(5,5,5,0.85);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+        .food-type-badge.veg { border: 1px solid var(--success); }
+        .food-type-badge.non-veg { border: 1px solid var(--danger); }
+
+        .card-body { 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+        }
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 12px; 
+            gap: 10px;
+        }
+        .card-header h3 { 
+            font-size: 1.4rem; 
+            color: var(--text-light); 
+            margin: 0; 
+            line-height: 1.3;
+        }
+        .badge { 
+            font-size: 0.7rem; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            background: rgba(226, 135, 67, 0.15); 
+            color: var(--primary-color); 
+            text-transform: capitalize; 
+            white-space: nowrap;
+        }
+        .card-body p { 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+            margin-bottom: 25px; 
+            line-height: 1.6; 
+            flex-grow: 1;
+            /* Text truncation for long descriptions */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-footer { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: auto;
+        }
+        .price { 
+            font-size: 1.3rem; 
+            font-weight: 600; 
+            color: var(--primary-color); 
+            font-family: 'Playfair Display', serif; 
+        }
+        .order-btn {
+            background: var(--primary-color); color: #fff;
+            padding: 10px 20px; border-radius: 6px; transition: var(--transition); border: none;
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        }
+        .order-btn:hover { background: var(--secondary-color); color: #000; box-shadow: 0 5px 15px rgba(226, 135, 67, 0.4); }
 
         /* === FOOTER === */
         footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
@@ -173,6 +257,7 @@
         @media (max-width: 768px) {
             .page-header h1 { font-size: 3rem; }
             .top-bar { display: none; }
+            .menu-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
         }
     </style>
 </head>
@@ -227,79 +312,7 @@
         </div>
 
         <div class="menu-grid">
-            
-            <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80" alt="Paneer Tikka">
-                <div class="card-body">
-                    <h3>Smoked Paneer Tikka <span class="badge">Starter</span></h3>
-                    <p>Cottage cheese marinated in rich hung curd and secret spices, char-grilled to smoky perfection.</p>
-                    <div class="card-footer">
-                        <span class="price">₹450</span>
-                        <button class="order-btn">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-card reveal">
-                <img src="https://tse1.mm.bing.net/th/id/OIP.vYOQ6ZyXSqVSvfr9y--rZgHaEJ?cb=thfc1falcon4&w=1249&h=700&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Biryani">
-                <div class="card-body">
-                    <h3>Royal Awadhi Biryani <span class="badge">Main</span></h3>
-                    <p>Premium ingredients, aromatic spices, and delicate layers of long-grain basmati rice cooked on dum.</p>
-                    <div class="card-footer">
-                        <span class="price">₹1,250</span>
-                        <button class="order-btn">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-card reveal">
-                <img src="https://www.cooking-therapy.com/wp-content/uploads/2018/02/Truffle-Mushroom-Pasta-2-1080x1512.jpg" alt="Pasta">
-                <div class="card-body">
-                    <h3>Truffle Mushroom Pasta <span class="badge">Main</span></h3>
-                    <p>Handmade fettuccine tossed in a rich, creamy truffle sauce with wild mushrooms and aged parmesan.</p>
-                    <div class="card-footer">
-                        <span class="price">₹850</span>
-                        <button class="order-btn">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=600&q=80" alt="Salmon">
-                <div class="card-body">
-                    <h3>Grilled Atlantic Salmon <span class="badge">Main</span></h3>
-                    <p>Fresh caught salmon glazed with honey mustard, paired with roasted asparagus and lemon wedges.</p>
-                    <div class="card-footer">
-                        <span class="price">₹1,100</span>
-                        <button class="order-btn">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80" alt="Brownie">
-                <div class="card-body">
-                    <h3>Dark Hazelnut Brownie <span class="badge">Dessert</span></h3>
-                    <p>Warm, gooey Belgian dark chocolate brownie topped with roasted hazelnuts and vanilla bean ice cream.</p>
-                    <div class="card-footer">
-                        <span class="price">₹350</span>
-                        <button class="order-btn">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?auto=format&fit=crop&w=800&q=80" alt="Mojito">
-                <div class="card-body">
-                    <h3>Signature Mint Mojito <span class="badge">Beverage</span></h3>
-                    <p>A refreshing blend of crushed mint leaves, fresh lime, and sparkling water for the perfect balance.</p>
-                    <div class="card-footer">
-                        <span class="price">₹250</span>
-                        <button class="order-btn">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
+            <p style="color: var(--primary-color); text-align: center; width: 100%;">Fetching premium menu...</p>
         </div>
     </section>
 
@@ -357,18 +370,14 @@
         </div>
     </footer>
 
-<script>
+    <script>
         let allMenuItems = [];
         
         // AGAR APNA BACKEND DEPLOY HO GAYA HAI TOH RENDER WALI URL YAHAN DALO
-        // Jaise: 'https://homebite-admin.onrender.com/api/menu'
         const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
 
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. Backend se live menu data load karo
             fetchLiveMenu();
-
-            // 2. Filter buttons ki functionality setup karo
             setupFilters();
         });
 
@@ -378,7 +387,7 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                // Data ko globally save karein (array check ke sath)
+                // Data ko globally save karein
                 allMenuItems = Array.isArray(data) ? data : (data.data || []);
                 
                 // Customer ko sirf wahi items dikhane hain jo 'In Stock' (true) hain
@@ -389,7 +398,7 @@
                 console.error("Error fetching live menu:", error);
                 const menuGrid = document.querySelector('.menu-grid');
                 if (menuGrid) {
-                    menuGrid.innerHTML = `<p style="color: var(--primary-color); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Live menu load karne me dikkat aa rahi hai. Kripya baad me try karein!</p>`;
+                    menuGrid.innerHTML = `<p style="color: var(--danger); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Live menu load karne me dikkat aa rahi hai. Kripya baad me try karein!</p>`;
                 }
             }
         }
@@ -404,51 +413,46 @@
                 return;
             }
 
-            // Pura layout wahi hai, bas data MongoDB se aa raha hai
+            // CLEANER HTML INJECTION: Inline styles ki jagah ab classes ka use hua hai
             menuGrid.innerHTML = items.map(item => {
-                // Price Model Configuration (Single vs Variants)
                 let priceHTML = '';
                 if (item.priceModel === 'single' || !item.priceModel) {
-                    priceHTML = `<span class="price">压${item.price}</span>`;
+                    priceHTML = `<span class="price">₹${item.price}</span>`;
                 } else {
-                    priceHTML = `<span class="price" style="font-size: 0.95rem;">压${item.priceHalf} (Half) / 压${item.priceFull} (Full)</span>`;
+                    priceHTML = `<span class="price" style="font-size: 1.1rem;">₹${item.priceHalf} (H) / ₹${item.priceFull} (F)</span>`;
                 }
 
-                // Veg / Non-Veg Visual Badge Indicator
                 const isVeg = item.foodType === 'Veg';
-                const badgeColor = isVeg ? '#2ed573' : '#ff4757';
+                const badgeClass = isVeg ? 'veg' : 'non-veg';
                 const badgeIcon = isVeg ? '🟢' : '🔴';
 
                 return `
                     <div class="menu-card reveal">
-                        <div class="card-img-container" style="position: relative; overflow: hidden; border-radius: 12px; height: 220px;">
-                            <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; transition: var(--transition);">
-                            <span class="food-type-badge" style="position: absolute; top: 12px; right: 12px; background: rgba(5,5,5,0.85); border: 1px solid ${badgeColor}; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 5px;">
+                        <div class="card-img-container">
+                            <img src="${item.image}" alt="${item.name}">
+                            <span class="food-type-badge ${badgeClass}">
                                 ${badgeIcon} ${item.foodType}
                             </span>
                         </div>
-                        <div class="card-info" style="padding: 1.5rem 0 0 0; display: flex; flex-direction: column; height: calc(100% - 220px);">
-                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.6rem; gap: 10px;">
-                                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--text-light); font-weight: 700; margin: 0;">${item.name}</h3>
-                                <span style="font-family: 'Poppins', sans-serif; font-size: 0.75rem; color: var(--primary-color); background: rgba(226,135,67,0.12); padding: 3px 10px; border-radius: 5px; font-weight: 500; text-transform: capitalize; white-space: nowrap;">${item.category}</span>
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>${item.name}</h3>
+                                <span class="badge">${item.category}</span>
                             </div>
-                            <p class="item-desc" style="color: var(--text-muted); font-family: 'Poppins', sans-serif; font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.2rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 42px;">
-                                ${item.desc || 'Premium home-cooked delicacy prepared fresh with elite ingredients.'}
-                            </p>
-                            <div class="card-bottom" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.5rem;">
+                            <p>${item.desc || 'Premium home-cooked delicacy prepared fresh with elite ingredients.'}</p>
+                            <div class="card-footer">
                                 ${priceHTML}
-                                <button class="btn-order" style="background: var(--primary-color); color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: var(--transition);">Order Now</button>
+                                <button class="order-btn">Order Now</button>
                             </div>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            // Naye items render hote hi Scroll Reveal animation reset karein taaki fade-in work kare
             initScrollReveal();
         }
 
-        // Live Dynamic Filtering (All, Veg, Non-Veg, ya custom Categories)
+        // Live Dynamic Filtering
         function setupFilters() {
             const filterBtns = document.querySelectorAll('.filter-btn');
             filterBtns.forEach(btn => {
@@ -457,18 +461,15 @@
                     this.classList.add('active');
 
                     const filterValue = this.innerText.trim().toLowerCase();
-
-                    // Sirf in-stock items ko hi process karenge
                     const activeMenu = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
 
-                    if (filterValue === 'all' || filterValue === 'our menu') {
+                    if (filterValue === 'all items' || filterValue === 'our menu') {
                         renderMenuCards(activeMenu);
                     } else if (filterValue === 'veg') {
                         renderMenuCards(activeMenu.filter(item => item.foodType === 'Veg'));
                     } else if (filterValue === 'non-veg') {
                         renderMenuCards(activeMenu.filter(item => item.foodType === 'Non-Veg'));
                     } else {
-                        // Agar koi specific category buttons banaye hain (e.g., Biryani, Starters)
                         renderMenuCards(activeMenu.filter(item => item.category.toLowerCase() === filterValue));
                     }
                 });
@@ -489,10 +490,10 @@
                     }
                 }
             };
-            // Puraane events clear karke naye lagayein taaki lag na ho
             window.removeEventListener("scroll", revealOnScroll);
             window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Pehli baar instant trigger karein window load par
+            // Quick delay to ensure DOM is fully repainted before triggering reveal
+            setTimeout(revealOnScroll, 50); 
         }
     </script>
 </body>
