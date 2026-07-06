@@ -199,7 +199,7 @@
         }
         .summary-row.total span:last-child { color: var(--primary-color); }
 
-        /* === PAYMENT METHODS === */
+        /* PAYMENT METHODS */
         .payment-methods {
             margin-top: 25px;
             border-top: 1px solid var(--border-light);
@@ -292,54 +292,25 @@
         <div class="cart-wrapper">
             
             <div class="cart-items" id="cart-items-container">
-                <div class="cart-item" id="item1">
-                    <button class="remove-btn" onclick="removeItem('item1')"><i class="fa-solid fa-trash"></i></button>
-                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93cb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Biryani" class="item-img">
-                    <div class="item-details">
-                        <h3 class="item-title">Authentic Chicken Biryani</h3>
-                        <p class="item-chef">By Chef Sharma</p>
-                        <p class="item-price">₹<span class="price-val">250</span></p>
-                    </div>
-                    <div class="quantity-control">
-                        <button class="qty-btn" onclick="updateQty('qty1', -1, 'item1')"><i class="fa-solid fa-minus"></i></button>
-                        <span class="qty-val" id="qty1">1</span>
-                        <button class="qty-btn" onclick="updateQty('qty1', 1, 'item1')"><i class="fa-solid fa-plus"></i></button>
-                    </div>
                 </div>
-
-                <div class="cart-item" id="item2">
-                    <button class="remove-btn" onclick="removeItem('item2')"><i class="fa-solid fa-trash"></i></button>
-                    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Paneer" class="item-img">
-                    <div class="item-details">
-                        <h3 class="item-title">Special Paneer Butter Masala</h3>
-                        <p class="item-chef">By Aunty Ki Rasoi</p>
-                        <p class="item-price">₹<span class="price-val">180</span></p>
-                    </div>
-                    <div class="quantity-control">
-                        <button class="qty-btn" onclick="updateQty('qty2', -1, 'item2')"><i class="fa-solid fa-minus"></i></button>
-                        <span class="qty-val" id="qty2">2</span>
-                        <button class="qty-btn" onclick="updateQty('qty2', 1, 'item2')"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
 
             <div class="cart-summary">
                 <h3 class="summary-title">Order Summary</h3>
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span>₹<span id="subtotal">610</span></span>
+                    <span>₹<span id="subtotal">0</span></span>
                 </div>
                 <div class="summary-row">
                     <span>Delivery Fee</span>
-                    <span>₹<span id="delivery">40</span></span>
+                    <span>₹<span id="delivery">0</span></span>
                 </div>
                 <div class="summary-row">
                     <span>Taxes (5%)</span>
-                    <span>₹<span id="tax">30.5</span></span>
+                    <span>₹<span id="tax">0</span></span>
                 </div>
                 <div class="summary-row total">
                     <span>Total Amount</span>
-                    <span>₹<span id="totalAmt">680.5</span></span>
+                    <span>₹<span id="totalAmt">0</span></span>
                 </div>
 
                 <div class="payment-methods">
@@ -363,18 +334,54 @@
     </div>
 
     <script>
+        // LocalStorage se cart fetch karna ('cart' aapke array ka key hona chahiye)
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // DOM Elements
+        const cartContainer = document.getElementById('cart-items-container');
+
+        // Function to render cart items dynamically
+        function renderCart() {
+            cartContainer.innerHTML = ''; // Clear container first
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<p style="text-align:center; color: var(--text-muted); padding: 50px;">Your premium box is empty.</p>';
+                calculateTotal();
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const itemHTML = `
+                    <div class="cart-item" id="item-${index}">
+                        <button class="remove-btn" onclick="removeItem(${index})"><i class="fa-solid fa-trash"></i></button>
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" alt="${item.title}" class="item-img">
+                        <div class="item-details">
+                            <h3 class="item-title">${item.title || 'Delicious Meal'}</h3>
+                            <p class="item-chef">${item.chef || 'By HomeBite Chef'}</p>
+                            <p class="item-price">₹<span class="price-val">${item.price}</span></p>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="qty-btn" onclick="updateQty(${index}, -1)"><i class="fa-solid fa-minus"></i></button>
+                            <span class="qty-val">${item.qty || 1}</span>
+                            <button class="qty-btn" onclick="updateQty(${index}, 1)"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                `;
+                cartContainer.innerHTML += itemHTML;
+            });
+
+            calculateTotal();
+        }
+
         // Total calculate karne ka function
         function calculateTotal() {
             let subtotal = 0;
-            const items = document.querySelectorAll('.cart-item');
             
-            items.forEach(item => {
-                const price = parseFloat(item.querySelector('.price-val').innerText);
-                const qty = parseInt(item.querySelector('.qty-val').innerText);
-                subtotal += (price * qty);
+            cart.forEach(item => {
+                subtotal += (parseFloat(item.price) * parseInt(item.qty || 1));
             });
 
-            const delivery = subtotal > 0 ? 40 : 0; // Agar cart empty hai to delivery 0
+            const delivery = subtotal > 0 ? 40 : 0; 
             const tax = subtotal * 0.05;
             const total = subtotal + delivery + tax;
 
@@ -384,43 +391,36 @@
             document.getElementById('totalAmt').innerText = total.toFixed(2);
         }
 
-        // Quantity Update karne ka logic
-        function updateQty(elementId, change, itemId) {
-            const qtyElement = document.getElementById(elementId);
-            let currentQty = parseInt(qtyElement.innerText);
-            
-            let newQty = currentQty + change;
-            if(newQty >= 1) { // Minimum 1 item hona chahiye
-                qtyElement.innerText = newQty;
-                calculateTotal();
+        // Quantity Update logic
+        function updateQty(index, change) {
+            let newQty = (cart[index].qty || 1) + change;
+            if(newQty >= 1) { 
+                cart[index].qty = newQty;
+                localStorage.setItem('cart', JSON.stringify(cart)); // Update in localStorage
+                renderCart(); // Re-render HTML
             }
         }
 
-        // Item Remove karne ka logic
-        function removeItem(itemId) {
-            const item = document.getElementById(itemId);
-            item.style.opacity = '0'; // Smooth hide animation
+        // Item Remove logic
+        function removeItem(index) {
+            const itemElement = document.getElementById(`item-${index}`);
+            itemElement.style.opacity = '0'; // Smooth hide animation
+            
             setTimeout(() => {
-                item.remove();
-                calculateTotal(); // Delete hone ke baad total update
-                
-                // Agar cart khaali ho jaye
-                const container = document.getElementById('cart-items-container');
-                if(container.children.length === 0) {
-                    container.innerHTML = '<p style="text-align:center; color: var(--text-muted); padding: 50px;">Your premium box is empty.</p>';
-                }
+                cart.splice(index, 1); // Array se delete karo
+                localStorage.setItem('cart', JSON.stringify(cart)); // LocalStorage update karo
+                renderCart(); // UI refresh karo
             }, 300);
         }
 
-        // Checkout Button Click (UPDATED WITH PAYMENT METHOD CHECK)
+        // Checkout Button Click
         function checkout() {
-            const total = document.getElementById('totalAmt').innerText;
-            if(parseFloat(total) === 0) {
-                alert("Your cart is empty! Please add some meals.");
+            if (cart.length === 0) {
+                alert("Your cart is empty! Please add some meals from the menu.");
                 return;
             }
 
-            // Check which payment method is selected
+            const total = document.getElementById('totalAmt').innerText;
             const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
 
             if (paymentMethod === 'online') {
@@ -429,11 +429,16 @@
             } else if (paymentMethod === 'cod') {
                 alert("Order Placed Successfully via Cash on Delivery! Total amount to pay at door: ₹" + total);
                 // Redirect logic yahan dalna: window.location.href = 'success.html';
+                
+                // Clear cart after successful COD order
+                localStorage.removeItem('cart');
+                cart = [];
+                renderCart();
             }
         }
 
-        // Initial Calculation jab page load ho
-        window.onload = calculateTotal;
+        // Initial render jab page load ho
+        window.onload = renderCart;
     </script>
 </body>
 </html>
