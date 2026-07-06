@@ -7,6 +7,8 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 
     <style>
         :root {
@@ -420,13 +422,17 @@
     // Server API URL
     const SERVER_URL = 'https://homebite-aecl.onrender.com';
 
-    // LOCALSTORAGE KEY से आइटम्स लोड करना
+    // 🔥 CASHFREE SDK INITIALIZATION
+    // Jab aap apne business ko live karenge toh "sandbox" ko "production" kar dena
+    const cashfree = Cashfree({
+        mode: "sandbox", 
+    });
+
+    // LOCALSTORAGE KEY
     let cartItems = JSON.parse(localStorage.getItem('homebite_cart')) || [];
-    
-    // 🔥 UPDATE: Global variable user ka data hold karne ke liye
     let currentUserData = null; 
 
-    // Fetch Live profile address data from onrender user controller
+    // Fetch Live profile address data
     async function fetchUserProfileData() {
         try {
             const token = localStorage.getItem('token'); 
@@ -437,9 +443,8 @@
             
             if (response.ok) {
                 const userData = await response.json();
-                currentUserData = userData; // 🔥 User ka data save kar liya taaki checkout me use ho sake
+                currentUserData = userData; 
                 
-                // Real address information mapping
                 document.getElementById('userAddressDisplay').innerText = `${userData.fullName} — ${userData.address || 'Address not updated'}`;
                 if(userData.phoneNumber || userData.email) {
                     document.getElementById('userContactDisplay').innerText = `Contact: ${userData.phoneNumber || ''} | ${userData.email}`;
@@ -454,12 +459,10 @@
         }
     }
 
-    // Save current cart snapshot state into local storage key
     function syncCartStorage() {
         localStorage.setItem('homebite_cart', JSON.stringify(cartItems));
     }
 
-    // Dynamic HTML Injector for Cart Rows
     function renderCartItems() {
         const listContainer = document.getElementById('cartItemsList');
         if (cartItems.length === 0) {
@@ -494,7 +497,6 @@
         calculatePricingTotals();
     }
 
-    // Update item quantites counter
     function updateQty(index, offset) {
         let currentQty = cartItems[index].qty || cartItems[index].quantity || 1;
         currentQty += offset;
@@ -509,14 +511,12 @@
         }
     }
 
-    // Remove row completely
     function removeCartItem(index) {
         cartItems.splice(index, 1);
         syncCartStorage();
         renderCartItems();
     }
 
-    // Live math summaries calculations
     function calculatePricingTotals() {
         let subtotal = 0;
         cartItems.forEach(item => {
@@ -534,7 +534,7 @@
         document.getElementById('totalVal').innerText = `₹${totalAmount.toFixed(2)}`;
     }
 
-    // 🔥 DATABASE SUBMISSION & PROFILE REDIRECTION (FIXED FUNCTION)
+    // 🔥 CASHFREE INTEGRATED CHECKOUT
     async function processOrderCheckout() {
         if(cartItems.length === 0) return;
 
@@ -549,7 +549,6 @@
 
         const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-        // Pricing recalculation
         let subtotal = 0;
         cartItems.forEach(item => {
             let q = item.qty || item.quantity || 1;
@@ -559,7 +558,6 @@
         const taxAmount = subtotal * 0.05;
         const totalAmount = subtotal + deliveryFee + taxAmount;
 
-        // 🔥 Backend Controller ke mutabiq sahi object mapping kiya gaya hai
         const orderPayload = {
             customerName: currentUserData ? currentUserData.fullName : "Guest User",
             customerPhone: currentUserData ? (currentUserData.phoneNumber || "9693814964") : "9693814964",
@@ -574,11 +572,10 @@
             paymentMethod: selectedPayment
         };
 
-        checkoutBtn.innerText = "Placing Order...";
+        checkoutBtn.innerText = "Processing...";
         checkoutBtn.disabled = true;
 
         try {
-            // 🔥 URL me '/place' add kiya gaya hai backend route se match karne ke liye
             const response = await fetch(`${SERVER_URL}/api/orders/place`, {
                 method: 'POST',
                 headers: {
@@ -588,33 +585,91 @@
                 body: JSON.stringify(orderPayload)
             });
 
-            const data = await response.json(); // Sahi JSON response milega ab
+            const data = await response.json();
 
             if (response.ok && data.success) {
-                checkoutBtn.style.backgroundColor = "var(--success)";
-                checkoutBtn.innerText = "Order Confirmed! 🎉";
-
-                // Local storage saaf karo
-                localStorage.removeItem('homebite_cart');
-
-                // Redirect to orders page
-                setTimeout(() => {
-                    window.location.href = "/profile.html#orders";
-                }, 2000);
+                // 1. Agar COD hai toh direct success
+                if (selectedPayment === 'cod') {
+                    handleSuccess(checkoutBtn);
+                } 
+                // 2. Agar Online hai toh Cashfree modal load karo
+                else if (selectedPayment === 'online' && data.payment_session_id) {
+                    let checkoutOptions = {
+                        paymentSessionId: data.payment_session_id,
+                        redirectTarget: "_modal" // Modal format mein popup khulega
+                    };
+                    
+                    // Cashfree popup function trigger
+                    cashfree.checkout(checkoutOptions).then(function(result) {
+                        if (result.error) {
+                            // User ne cancel kiya ya payment fail hua
+                            alert("Payment Failed or Cancelled!");
+                            checkoutBtn.innerText = "Confirm & Place Order";
+                            checkoutBtn.disabled = false;
+                        } 
+                        if (result.paymentDetails) {
+                            // Payment success ho gaya hai popup mein, ab backend se verify karo
+                            checkoutBtn.innerText = "Verifying Payment...";
+                            verifyPaymentBackend(data.order_id, token, checkoutBtn);
+                        }
+                    });
+                }
             } else {
                 checkoutBtn.style.backgroundColor = "var(--danger)";
-                checkoutBtn.innerText = data.message || "Failed to order";
+                checkoutBtn.innerText = data.message || "Failed to initiate order";
                 checkoutBtn.disabled = false;
             }
         } catch (err) {
-            console.error("Database connection failure:", err);
+            console.error("Connection failure:", err);
             checkoutBtn.style.backgroundColor = "var(--danger)";
             checkoutBtn.innerText = "Connection Error!";
             checkoutBtn.disabled = false;
         }
     }
 
-    // Initial launch operations mappings
+    // 🔥 BACKEND PAYMENT VERIFICATION FUNCTION
+    async function verifyPaymentBackend(orderId, token, checkoutBtn) {
+        try {
+            const response = await fetch(`${SERVER_URL}/api/orders/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ order_id: orderId })
+            });
+            const data = await response.json();
+            
+            if(data.success) {
+                handleSuccess(checkoutBtn);
+            } else {
+                alert("Payment Verification Failed on Server!");
+                checkoutBtn.innerText = "Confirm & Place Order";
+                checkoutBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error verifying payment");
+            checkoutBtn.innerText = "Confirm & Place Order";
+            checkoutBtn.disabled = false;
+        }
+    }
+
+    // 🔥 SUCCESS HANDLER
+    function handleSuccess(checkoutBtn) {
+        checkoutBtn.style.backgroundColor = "var(--success)";
+        checkoutBtn.innerText = "Order Confirmed! 🎉";
+        
+        // Cart clean karo
+        localStorage.removeItem('homebite_cart');
+        
+        // Profile par redirect karo history dekhne ke liye
+        setTimeout(() => {
+            window.location.href = "/profile.html#orders";
+        }, 2000);
+    }
+
+    // Initial launch operations
     window.addEventListener('DOMContentLoaded', () => {
         fetchUserProfileData();
         renderCartItems();
