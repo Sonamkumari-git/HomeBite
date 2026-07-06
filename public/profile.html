@@ -213,7 +213,7 @@
         .order-items { 
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px; /* Thoda gap badhaya taki badi images ke sath acha lage */
             margin-bottom: 15px; 
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -221,27 +221,30 @@
         .order-item-detail {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px; /* Gap badhaya */
         }
         .order-item-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            width: 70px; /* SIZE INCREASED HERE */
+            height: 70px; /* SIZE INCREASED HERE */
+            border-radius: 12px; /* Thoda modern look dene ke liye rounded corners kar diye */
             object-fit: cover;
             border: 1px solid var(--border-light);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Image ko pop karne ke liye shadow */
         }
         .order-item-info {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
+            flex-direction: column; /* Items ko thoda better align karne ke liye */
+            gap: 4px;
+            font-size: 1.05rem; /* Font thoda bada kiya */
         }
         .order-item-qty {
             color: var(--primary-color);
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 0.95rem;
         }
         .order-item-name {
             color: var(--text-light);
+            font-weight: 500;
         }
 
         .order-footer { display: flex; justify-content: space-between; align-items: center; }
@@ -640,8 +643,8 @@
                                     <div class="order-item-detail">
                                         <img src="${itemImg}" alt="${item.name || 'Dish'}" class="order-item-img">
                                         <div class="order-item-info">
-                                            <span class="order-item-qty">${item.qty || 1}x</span>
                                             <span class="order-item-name">${item.name || 'Dish Item'}</span>
+                                            <span class="order-item-qty">Qty: ${item.qty || 1}</span>
                                         </div>
                                     </div>
                                 `;
