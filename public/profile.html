@@ -203,11 +203,47 @@
         }
         .btn-outline:hover { background: var(--primary-color); color: white; }
 
+        /* === ORDER CARD STYLING === */
         .order-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: var(--item-bg); }
         .order-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px; }
         .order-id { font-weight: 600; color: var(--primary-color); }
         .order-date { color: var(--text-muted); font-size: 0.9rem; }
-        .order-items { font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; }
+        
+        /* 🔥 YEH NAYA CSS HAI IMAGES DIKHANE KE LIYE 🔥 */
+        .order-items { 
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px; 
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .order-item-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .order-item-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-light);
+        }
+        .order-item-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .order-item-qty {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .order-item-name {
+            color: var(--text-light);
+        }
+
         .order-footer { display: flex; justify-content: space-between; align-items: center; }
         .order-total { font-weight: 600; font-size: 1.1rem; }
         .status { padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 500; text-transform: capitalize; }
@@ -400,7 +436,6 @@
             e.preventDefault();
             const token = localStorage.getItem('token');
             
-            // First aur Last name ko merge karke fullName banaya jo tumhare userController me expect ho raha hai
             const fullName = document.getElementById('input-fname').value.trim() + ' ' + document.getElementById('input-lname').value.trim();
             const phoneNumber = document.getElementById('input-phone').value.trim();
             const address = document.getElementById('input-address').value.trim();
@@ -428,7 +463,6 @@
                     document.getElementById('saveProfileBtn').style.display = 'none';
                     document.getElementById('editProfileBtn').style.display = 'inline-flex';
                     
-                    // Frontend components reload data to match changes instantly
                     fetchUserData(token);
                 } else {
                     alert("Failed to update profile: " + (data.message || "Unknown Error"));
@@ -514,7 +548,6 @@
                 document.getElementById('mobileMainContent').style.display = 'none';
             }
 
-            // Dono fetch function sequentially triggers honge
             await fetchUserData(token);
             await fetchUserOrders(token);
         });
@@ -568,8 +601,6 @@
         async function fetchUserOrders(token) {
             const ordersContainer = document.getElementById('orders-container');
             try {
-                // Headers me Authorization Authorization: Bearer send karne se backend automatic 
-                // wahi user identify karega aur sirf usi ke unique orders load honge
                 const response = await fetch('https://homebite-aecl.onrender.com/api/orders/my-orders', {
                     method: 'GET',
                     headers: {
@@ -586,11 +617,9 @@
                         return;
                     }
 
-                    // Loop lagake content ko clear aur naye element bind karte hain
                     ordersContainer.innerHTML = '';
                     
                     orders.forEach(order => {
-                        // Date parsing cleanly structured 
                         const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleString('en-IN', {
                             day: 'numeric',
                             month: 'short',
@@ -599,15 +628,26 @@
                             minute: '2-digit'
                         }) : 'Date unavailable';
 
-                        // Sub-items iteration string generator
+                        // 🔥 YAHAN CHANGE HUA HAI: Ab HTML string me img tag joda gaya hai
                         let itemsHtml = '';
                         if (order.items && Array.isArray(order.items)) {
                             order.items.forEach(item => {
-                                itemsHtml += `<p>${item.qty || 1}x ${item.name || 'Dish Item'}</p>`;
+                                // Agar backend se item.image nahi aati, toh ek default food photo dikhegi taaki design kharab na ho
+                                const defaultImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80';
+                                const itemImg = item.image || defaultImage;
+                                
+                                itemsHtml += `
+                                    <div class="order-item-detail">
+                                        <img src="${itemImg}" alt="${item.name || 'Dish'}" class="order-item-img">
+                                        <div class="order-item-info">
+                                            <span class="order-item-qty">${item.qty || 1}x</span>
+                                            <span class="order-item-name">${item.name || 'Dish Item'}</span>
+                                        </div>
+                                    </div>
+                                `;
                             });
                         }
 
-                        // Determine the CSS class safely depending on incoming schema mapping
                         const statusClass = (order.status || order.paymentStatus || 'pending').toLowerCase();
 
                         const orderCard = document.createElement('div');
