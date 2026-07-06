@@ -373,16 +373,14 @@
 
     <script>
         let allMenuItems = [];
-        
         const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
 
         document.addEventListener("DOMContentLoaded", function() {
             fetchLiveMenu();
             setupFilters();
-            updateCartUI(); // Cart ko turant update karenge jab page khule
+            updateCartUI(); 
         });
 
-        // Backend se data laane ka function
         async function fetchLiveMenu() {
             try {
                 const response = await fetch(API_URL);
@@ -401,7 +399,9 @@
             }
         }
 
-        // HTML Cards dynamically generate karne ka function
+        // ==========================================
+        // UI RENDER AND HALF/FULL SELECTOR LOGIC
+        // ==========================================
         function renderMenuCards(items) {
             const menuGrid = document.querySelector('.menu-grid');
             if (!menuGrid) return;
@@ -413,19 +413,30 @@
 
             menuGrid.innerHTML = items.map(item => {
                 let priceHTML = '';
-                let itemPriceForCart = item.price || item.priceFull || 0;
+                let actionHTML = '';
+                const itemId = item._id || item.id;
                 
-                // YAHAN PRICE PAR SIRF POPPINS FONT LAGAYA HAI JISSE NUMBERS CLEAN DIKHE
+                // POPPINS font and Single vs Multi check
                 if (item.priceModel === 'single' || !item.priceModel) {
                     priceHTML = `<span class="price" style="font-family: 'Poppins', sans-serif;">₹${item.price}</span>`;
+                    actionHTML = `<button class="order-btn" onclick="addToCart('${itemId}', 'single')">Add to Cart</button>`;
                 } else {
                     priceHTML = `<span class="price" style="font-family: 'Poppins', sans-serif; font-size: 1.1rem;">₹${item.priceHalf} / ₹${item.priceFull}</span>`;
+                    // YAHAN DROP DOWN (Half/Full) ADD KIYA GAYA HAI INLINE CSS KE SATH
+                    actionHTML = `
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <select id="size-${itemId}" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; outline: none; cursor: pointer;">
+                                <option value="half" style="background: #151515; color: #fff;">Half</option>
+                                <option value="full" style="background: #151515; color: #fff;">Full</option>
+                            </select>
+                            <button class="order-btn" onclick="addToCart('${itemId}', 'multi')" style="padding: 10px 15px;">Add</button>
+                        </div>
+                    `;
                 }
 
                 const isVeg = item.foodType === 'Veg';
                 const badgeClass = isVeg ? 'veg' : 'non-veg';
                 const badgeIcon = isVeg ? '🟢' : '🔴';
-                const itemId = item._id || item.id;
 
                 return `
                     <div class="menu-card reveal active">
@@ -443,7 +454,7 @@
                             <p>${item.desc || 'Premium home-cooked delicacy prepared fresh with elite ingredients.'}</p>
                             <div class="card-footer">
                                 ${priceHTML}
-                                <button class="order-btn" onclick="addToCart('${itemId}')">Add to Cart</button>
+                                ${actionHTML}
                             </div>
                         </div>
                     </div>
@@ -453,30 +464,54 @@
             initScrollReveal();
         }
 
-        // === YAHAN ADD TO CART KA MAIN LOGIC HAI ===
-        function addToCart(itemId) {
+        // ==========================================
+        // ADD TO CART FUNCTION (HANDLE BOTH SINGLE/MULTI)
+        // ==========================================
+        function addToCart(itemId, type) {
             const product = allMenuItems.find(p => (p._id === itemId || p.id === itemId));
             if (!product) return;
             
             let cart = JSON.parse(localStorage.getItem('homebite_cart')) || [];
-            const existingItem = cart.find(item => item.id === itemId);
             
-            let itemPrice = product.price || product.priceFull || 0;
+            let cartItemId = itemId;
+            let itemPrice = product.price || 0;
+            let itemTitle = product.name;
+
+            // Agar Half/Full wala product hai toh selection check karo
+            if (type === 'multi') {
+                const sizeSelector = document.getElementById(`size-${itemId}`);
+                const selectedSize = sizeSelector.value; // 'half' ya 'full'
+                
+                cartItemId = `${itemId}-${selectedSize}`; // Unique ID banaya (e.g. 123-half)
+                
+                if (selectedSize === 'half') {
+                    itemPrice = product.priceHalf;
+                    itemTitle = `${product.name} (Half)`;
+                } else {
+                    itemPrice = product.priceFull;
+                    itemTitle = `${product.name} (Full)`;
+                }
+            } else {
+                itemPrice = product.price || product.priceFull || 0;
+            }
+
+            // Check karo item already cart me hai ya nahi
+            const existingItem = cart.find(item => item.id === cartItemId);
 
             if (existingItem) {
-                existingItem.qty += 1; // Jitni baar click, utni baar quantity +1
+                existingItem.qty += 1;
             } else {
                 cart.push({
-                    id: itemId,
-                    title: product.name,
-                    price: itemPrice,
+                    id: cartItemId,
+                    title: itemTitle,
+                    price: Number(itemPrice),
                     img: product.image || '',
                     qty: 1
                 });
             }
             
             localStorage.setItem('homebite_cart', JSON.stringify(cart));
-            updateCartUI(); // Click karte hi nav bar me price aur item update honge
+            updateCartUI(); 
         }
 
         // === NAVBAR KI LIVE PRICE AUR QUANTITY UPDATE KARNE KA LOGIC ===
@@ -497,7 +532,7 @@
             if (badgePrice) badgePrice.innerText = totalPrice.toFixed(2);
         }
 
-        // Live Dynamic Filtering (Bina CSS chhuede)
+        // Live Dynamic Filtering
         function setupFilters() {
             const filterBtns = document.querySelectorAll('.filter-btn');
             filterBtns.forEach(btn => {
