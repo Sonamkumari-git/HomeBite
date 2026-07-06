@@ -2,7 +2,7 @@
 const User = require('../models/User');
 const cloudinary = require('../config/cloudinary'); 
 const bcrypt = require('bcryptjs'); 
-const streamifier = require('streamifier'); // 🔥 NAYA ADD KIYA HAI
+const streamifier = require('streamifier');
 
 // 1. Get User Profile Data
 const getUserProfile = async (req, res) => {
@@ -27,6 +27,7 @@ const updateUserProfile = async (req, res) => {
         if (user) {
             user.fullName = req.body.fullName || user.fullName;
             user.email = req.body.email || user.email;
+            user.phoneNumber = req.body.phoneNumber || user.phoneNumber; // 🔥 NAYA ADD KIYA HAI
             user.address = req.body.address || user.address;
 
             const updatedUser = await user.save();
@@ -35,6 +36,7 @@ const updateUserProfile = async (req, res) => {
                 _id: updatedUser._id,
                 fullName: updatedUser.fullName,
                 email: updatedUser.email,
+                phoneNumber: updatedUser.phoneNumber, // 🔥 NAYA ADD KIYA HAI
                 address: updatedUser.address,
                 profileImage: updatedUser.profileImage 
             });
@@ -74,14 +76,13 @@ const changePassword = async (req, res) => {
     }
 };
 
-// 4. Upload Profile Picture (🔥 UPDATED WITH RETURN_DOCUMENT FIX)
+// 4. Upload Profile Picture 
 const uploadProfilePic = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: "No image file provided" });
         }
 
-        // Buffer ko Cloudinary par direct stream ke through bhejna (No Base64 memory crash)
         let streamUpload = (req) => {
             return new Promise((resolve, reject) => {
                 let stream = cloudinary.uploader.upload_stream(
@@ -94,15 +95,12 @@ const uploadProfilePic = async (req, res) => {
                         else reject(error);
                     }
                 );
-                // req.file.buffer ko seedha read karke stream me pipe karna
                 streamifier.createReadStream(req.file.buffer).pipe(stream);
             });
         };
 
         const cloudinaryResponse = await streamUpload(req);
 
-        // MongoDB me user ka profileImage URL update karna
-        // { returnDocument: 'after' } use kiya hai taaki deprecation warning na aaye
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             { profileImage: cloudinaryResponse.secure_url }, 
@@ -120,9 +118,6 @@ const uploadProfilePic = async (req, res) => {
     }
 };
 
-// ==========================================
-// SABSE ZAROORI HISA (Export All Functions)
-// ==========================================
 module.exports = {
     getUserProfile,
     updateUserProfile,
