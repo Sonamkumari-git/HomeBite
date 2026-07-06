@@ -337,7 +337,7 @@
         <span class="section-subtitle reveal" style="text-align: center;">Curated Selection</span>
         <h2 class="section-title reveal" style="text-align: center;">Our Premium Menu</h2>
         
-        <div class="menu-grid">
+        <div class="menu-grid" id="menuGrid">
             <div class="menu-card reveal">
                 <img src="https://tse1.mm.bing.net/th/id/OIP.vYOQ6ZyXSqVSvfr9y--rZgHaEJ?cb=thfc1falcon4&w=1249&h=700&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Steak">
                 <div class="card-body">
@@ -447,22 +447,102 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // === 1. ANIMATION LOGIC ===
             const reveals = document.querySelectorAll(".reveal");
 
             const revealOnScroll = () => {
                 for (let i = 0; i < reveals.length; i++) {
                     const windowHeight = window.innerHeight;
                     const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 100; // Trigger thoda jaldi hoga smooth feel ke liye
+                    const elementVisible = 100;
 
                     if (elementTop < windowHeight - elementVisible) {
                         reveals[i].classList.add("active");
                     }
                 }
             };
-
             window.addEventListener("scroll", revealOnScroll);
             revealOnScroll(); // Trigger on load
+
+
+            // === 2. REAL MENU FETCH LOGIC ===
+            async function fetchRealMenu() {
+                try {
+                    // Backend se saara menu mangwa rahe hain
+                    const response = await fetch('https://homebite-admin.onrender.com/api/menu/all');
+                    const data = await response.json();
+                    
+                    let menuItems = [];
+                    // API format check karna
+                    if (data.success && data.data) {
+                        menuItems = data.data;
+                    } else if (Array.isArray(data)) {
+                        menuItems = data;
+                    }
+
+                    // Agar database khali hai to purana dummy hi dikhne do
+                    if (menuItems.length === 0) return;
+
+                    // Items ko categories me divide karna
+                    let sweets = menuItems.filter(item => item.category && (item.category.toLowerCase().includes('sweet') || item.category.toLowerCase().includes('dessert')));
+                    let others = menuItems.filter(item => !item.category || (!item.category.toLowerCase().includes('sweet') && !item.category.toLowerCase().includes('dessert')));
+
+                    let finalSelection = [];
+
+                    // 1. Kam se kam 1 Sweet add karo (agar available hai)
+                    if (sweets.length > 0) {
+                        finalSelection.push(sweets[0]);
+                    }
+
+                    // 2. Baaki ke 2 cards ko kisi dusri category se bharo
+                    for (let i = 0; finalSelection.length < 3 && i < others.length; i++) {
+                        finalSelection.push(others[i]);
+                    }
+
+                    // 3. Agar abhi bhi 3 pure nahi hue to baaki bacche sweets daal do
+                    for (let i = 1; finalSelection.length < 3 && i < sweets.length; i++) {
+                        finalSelection.push(sweets[i]);
+                    }
+
+                    // Ab purane static dummy cards ko hata kar real cards daalenge
+                    const menuGrid = document.getElementById('menuGrid');
+                    menuGrid.innerHTML = ''; 
+
+                    finalSelection.forEach(item => {
+                        // Agar image nahi hai to default premium image lagayenge
+                        const imgSrc = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
+                        
+                        // Description nahi hai to default text
+                        const desc = item.description || 'Delicious premium meal crafted with love. Perfectly balanced spices and fresh ingredients.';
+
+                        const cardHTML = `
+                            <div class="menu-card reveal active">
+                                <img src="${imgSrc}" alt="${item.name}">
+                                <div class="card-body">
+                                    <h3>${item.name}</h3>
+                                    <p>${desc}</p>
+                                    <div class="card-footer">
+                                        <span class="price">₹${item.price}</span>
+                                        <a href="#" class="order-btn">Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        menuGrid.innerHTML += cardHTML;
+                    });
+                    
+                    // Naye cards pe animation activate karne ke liye wapas function call kar diya
+                    revealOnScroll();
+
+                } catch (error) {
+                    console.log("Error loading real menu, keeping dummy items:", error);
+                    // Agar error aayi (jaise internet band ho ya server sleep pe ho), 
+                    // tab bhi purane static cards display hote rahenge, page kharab nahi hoga!
+                }
+            }
+
+            // Function ko call kiya
+            fetchRealMenu();
         });
     </script>
 </body>
