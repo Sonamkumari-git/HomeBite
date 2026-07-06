@@ -66,8 +66,23 @@
             align-items: center;
             gap: 8px;
             transition: var(--transition);
+            cursor: pointer;
         }
         .back-btn:hover { color: var(--primary-color); }
+
+        /* Mobile Back Button (Tab view se bahar aane ke liye) */
+        .mobile-back-btn {
+            display: none;
+            color: var(--primary-color);
+            background: rgba(226, 135, 67, 0.1);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--primary-color);
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
 
         /* === PROFILE DASHBOARD CONTAINER === */
         .dashboard-container {
@@ -90,6 +105,7 @@
             position: sticky;
             top: 100px;
             text-align: center;
+            transition: var(--transition);
         }
 
         .profile-pic-container {
@@ -102,23 +118,11 @@
             overflow: hidden;
             cursor: pointer;
         }
-        .profile-pic {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
+        .profile-pic { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
         .pic-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: var(--transition);
-            color: white;
-            font-size: 1.5rem;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: var(--transition); color: white; font-size: 1.5rem;
         }
         .profile-pic-container:hover .pic-overlay { opacity: 1; }
         .profile-pic-container:hover .profile-pic { transform: scale(1.1); }
@@ -130,19 +134,9 @@
         .nav-list { list-style: none; text-align: left; }
         .nav-list li { margin-bottom: 10px; }
         .nav-list button {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: var(--text-light);
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            width: 100%; background: transparent; border: none; color: var(--text-light);
+            padding: 12px 15px; text-align: left; font-size: 1rem; border-radius: 8px;
+            cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px;
             font-family: 'Poppins', sans-serif;
         }
         .nav-list button i { width: 20px; text-align: center; color: var(--text-muted); }
@@ -162,15 +156,14 @@
             padding: 40px;
             backdrop-filter: blur(10px);
             min-height: 500px;
+            transition: var(--transition);
         }
 
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-light);
-            padding-bottom: 15px;
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; border-bottom: 1px solid var(--border-light); padding-bottom: 15px;
         }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0; }
 
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
@@ -182,34 +175,34 @@
 
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
+        
         .input-group input, .input-group textarea {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            background: var(--item-bg);
-            color: var(--text-light);
-            font-family: 'Poppins', sans-serif;
-            outline: none;
-            transition: var(--transition);
+            width: 100%; padding: 14px; border: 1px solid var(--border-light);
+            border-radius: 8px; background: var(--item-bg); color: var(--text-light);
+            font-family: 'Poppins', sans-serif; outline: none; transition: var(--transition);
         }
-        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary-color); background: rgba(255,255,255,0.06); }
+        /* Disabled Input Style */
+        .input-group input:disabled, .input-group textarea:disabled {
+            background: transparent; color: var(--text-muted); border-color: rgba(255,255,255,0.05); cursor: not-allowed;
+        }
+        .input-group input:not(:disabled):focus { border-color: var(--primary-color); background: rgba(255,255,255,0.06); }
+        
         .row { display: flex; gap: 20px; }
         .row .input-group { flex: 1; }
 
         .btn-primary {
-            padding: 14px 25px;
-            border: none;
-            background: var(--primary-color);
-            color: white;
-            font-size: 1rem;
-            font-weight: 500;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 10px;
+            padding: 14px 25px; border: none; background: var(--primary-color); color: white;
+            font-size: 1rem; font-weight: 500; border-radius: 8px; cursor: pointer;
+            transition: var(--transition); margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;
         }
         .btn-primary:hover { background: #d17835; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(226,135,67,0.3); }
+
+        .btn-outline {
+            padding: 10px 20px; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color);
+            font-size: 0.9rem; font-weight: 500; border-radius: 6px; cursor: pointer; transition: var(--transition);
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-outline:hover { background: var(--primary-color); color: white; }
 
         .order-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: var(--item-bg); }
         .order-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px; }
@@ -225,14 +218,23 @@
         .address-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: var(--item-bg); position: relative; }
         .address-type { background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 10px; }
         .address-text { color: var(--text-muted); line-height: 1.5; font-size: 0.95rem; margin-bottom: 15px; }
-        .address-actions button { background: transparent; border: none; color: var(--text-light); cursor: pointer; margin-right: 15px; font-size: 0.9rem; transition: 0.3s; }
-        .address-actions button:hover { color: var(--primary-color); }
-        .address-actions button.delete:hover { color: #ff4d4d; }
 
+        /* === MOBILE RESPONSIVE FIX (MAGIC HERE) === */
         @media (max-width: 900px) {
-            .dashboard-container { flex-direction: column; }
-            .sidebar { width: 100%; position: static; }
+            .dashboard-container { flex-direction: column; margin: 20px auto; padding: 0 15px; gap: 0; }
+            
+            /* Initial state on mobile: Only Sidebar visible */
+            .sidebar { width: 100%; position: static; padding: 20px 15px; margin-bottom: 20px; }
+            .profile-pic-container { width: 100px; height: 100px; }
+            
+            .main-content { 
+                display: none; /* Initially hide main content on mobile */
+                width: 100%; padding: 25px 15px; min-height: auto; 
+            }
             .row { flex-direction: column; gap: 0; }
+            .section-title { font-size: 1.6rem; }
+
+            .mobile-back-btn { display: inline-flex; } /* Show back button inside active tab */
         }
     </style>
 </head>
@@ -245,7 +247,7 @@
 
     <div class="dashboard-container">
         
-        <aside class="sidebar">
+        <aside class="sidebar" id="mobileSidebar">
             <div class="profile-pic-container" onclick="document.getElementById('fileInput').click();">
                 <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Profile" class="profile-pic" id="profileImage">
                 <div class="pic-overlay"><i class="fa-solid fa-camera"></i></div>
@@ -264,30 +266,47 @@
             </ul>
         </aside>
 
-        <main class="main-content">
+        <main class="main-content" id="mobileMainContent">
+            
+            <button class="mobile-back-btn" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> Back to Menu</button>
             
             <div id="profile-info" class="tab-content active">
-                <h2 class="section-title">Edit Profile Info</h2>
-                <form onsubmit="saveProfile(event)">
+                <div class="section-header">
+                    <h2 class="section-title">Profile Info</h2>
+                    <button class="btn-outline" id="editProfileBtn" type="button" onclick="enableEditMode()">
+                        <i class="fa-solid fa-pen"></i> Edit Profile
+                    </button>
+                </div>
+                
+                <form id="profileForm" onsubmit="saveProfile(event)">
                     <div class="row">
                         <div class="input-group">
                             <label>First Name</label>
-                            <input type="text" id="input-fname" required>
+                            <input type="text" id="input-fname" required disabled>
                         </div>
                         <div class="input-group">
                             <label>Last Name</label>
-                            <input type="text" id="input-lname" required>
+                            <input type="text" id="input-lname" required disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="input-email" required disabled>
+                        </div>
+                        <div class="input-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="input-phone" required disabled>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label>Email Address</label>
-                        <input type="email" id="input-email" required>
+                        <label>Hostel / Room Address</label>
+                        <input type="text" id="input-address" required disabled>
                     </div>
-                    <div class="input-group">
-                        <label>Address</label>
-                        <input type="text" id="input-address" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Save Changes</button>
+                    
+                    <button type="submit" class="btn-primary" id="saveProfileBtn" style="display: none;">
+                        <i class="fa-solid fa-check"></i> Save Changes
+                    </button>
                 </form>
             </div>
 
@@ -314,11 +333,7 @@
                 <div class="address-card">
                     <span class="address-type">Default</span>
                     <p class="address-text" id="display-address">Loading Address...</p>
-                    <div class="address-actions">
-                        <button><i class="fa-solid fa-pen"></i> Edit</button>
-                    </div>
                 </div>
-                <button class="btn-primary" style="margin-top: 0;"><i class="fa-solid fa-plus"></i> Add New Address</button>
             </div>
 
             <div id="settings" class="tab-content">
@@ -347,7 +362,9 @@
     </div>
 
     <script>
-        // === UI INTERACTION LOGIC ===
+        // === MOBILE VIEW LOGIC ===
+        const isMobile = () => window.innerWidth <= 900;
+
         function openTab(evt, tabName) {
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(tab => tab.classList.remove('active'));
@@ -357,35 +374,87 @@
 
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
+
+            // Agar phone me hai toh sidebar hide karke content show karo
+            if(isMobile()) {
+                document.getElementById('mobileSidebar').style.display = 'none';
+                document.getElementById('mobileMainContent').style.display = 'block';
+            }
         }
 
-        // === 🚀 FIXED: IMAGE UPLOAD TO CLOUDINARY LOGIC ===
+        // Phone me content padhne ke baad wapas menu (sidebar) me aane ke liye
+        function goBackToMenu() {
+            document.getElementById('mobileMainContent').style.display = 'none';
+            document.getElementById('mobileSidebar').style.display = 'block';
+        }
+
+        // Desktop walo ke liye resize adjust (failsafe)
+        window.addEventListener('resize', () => {
+            if(!isMobile()) {
+                document.getElementById('mobileSidebar').style.display = 'block';
+                document.getElementById('mobileMainContent').style.display = 'block';
+            } else {
+                document.getElementById('mobileMainContent').style.display = 'none';
+                document.getElementById('mobileSidebar').style.display = 'block';
+            }
+        });
+
+
+        // === EDIT PROFILE LOGIC ===
+        function enableEditMode() {
+            // Edit button ko hide karo aur Save ko show karo
+            document.getElementById('editProfileBtn').style.display = 'none';
+            document.getElementById('saveProfileBtn').style.display = 'inline-flex';
+            
+            // Inputs ko enable karo (Email ko chhodkar, kyuki mail change karne me auth risk hota hai)
+            document.getElementById('input-fname').disabled = false;
+            document.getElementById('input-lname').disabled = false;
+            document.getElementById('input-phone').disabled = false;
+            document.getElementById('input-address').disabled = false;
+
+            // Form par halka effect lagate hain focus draw karne ke liye
+            document.getElementById('input-fname').focus();
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            // TODO: PUT /api/users/profile call yahan lagani hai
+
+            alert("Profile information saved successfully!");
+            
+            // Wapas disable kardo sabko
+            document.getElementById('input-fname').disabled = true;
+            document.getElementById('input-lname').disabled = true;
+            document.getElementById('input-phone').disabled = true;
+            document.getElementById('input-address').disabled = true;
+
+            // Buttons wapas swap
+            document.getElementById('saveProfileBtn').style.display = 'none';
+            document.getElementById('editProfileBtn').style.display = 'inline-flex';
+        }
+
+
+        // === IMAGE UPLOAD TO CLOUDINARY LOGIC ===
         async function previewAndUploadImage(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            // 1. Pehle local preview dikhao taaki user ko turant change dikhe
             const reader = new FileReader();
             reader.onload = function() {
                 document.getElementById('profileImage').src = reader.result;
             };
             reader.readAsDataURL(file);
 
-            // 2. Ab photo backend (Cloudinary) par bhejo
             const token = localStorage.getItem('token');
             const formData = new FormData();
-            formData.append('profilePic', file); // 'profilePic' hi Multer dhoond raha hai
+            formData.append('profilePic', file);
 
             try {
-                // Uploading indicator (optional)
                 document.getElementById('display-name').innerHTML = 'Uploading... <i class="fa-solid fa-spinner fa-spin"></i>';
 
                 const response = await fetch('https://homebite-aecl.onrender.com/api/users/profile-pic', {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}` 
-                        // Dhyan de: FormData bhejte time Content-Type set nahi karte!
-                    },
+                    headers: { 'Authorization': `Bearer ${token}` },
                     body: formData
                 });
 
@@ -393,32 +462,25 @@
 
                 if (response.ok) {
                     alert("Profile photo updated and saved to server!");
-                    // Ensure backend URL is used
                     if (data.profileImage) {
                         document.getElementById('profileImage').src = data.profileImage;
                     }
-                    // Wapas naam theek karne ke liye API dobara call karte hain
                     fetchUserData(token); 
                 } else {
                     alert("Upload failed: " + data.message);
-                    fetchUserData(token); // Restore normal name
+                    fetchUserData(token); 
                 }
             } catch (error) {
                 console.error("Upload Error:", error);
                 alert("Server error during image upload.");
-                fetchUserData(token); // Restore normal name
+                fetchUserData(token); 
             }
         }
 
-        function saveProfile(e) {
-            e.preventDefault();
-            // TODO: PUT /api/users/profile call yahan lagani hai baad mein
-            alert("Profile information saved successfully!");
-        }
 
+        // === OTHER LOGICS ===
         function changePassword(e) {
             e.preventDefault();
-            // TODO: PUT /api/users/change-password call yahan lagani hai baad mein
             alert("Password updated securely!");
             e.target.reset();
         }
@@ -426,11 +488,11 @@
         function logout() {
             if(confirm("Are you sure you want to log out?")) {
                 localStorage.removeItem('token'); 
-                window.location.href = "/login"; // Clean URL redirect
+                window.location.href = "/login"; 
             }
         }
 
-        // === 🚀 FIXED: BACKEND DATA FETCH LOGIC ===
+        // === BACKEND DATA FETCH LOGIC ===
         document.addEventListener("DOMContentLoaded", async () => {
             const token = localStorage.getItem('token');
             
@@ -438,9 +500,13 @@
                 console.warn("No token found. User needs to login.");
                 document.getElementById('display-name').textContent = "Please Login";
                 document.getElementById('display-email').textContent = "Redirecting...";
-                // Bina token seedha baahar phenkna
                 window.location.href = "/login"; 
                 return;
+            }
+
+            // Mobile initial state handle
+            if(isMobile()) {
+                document.getElementById('mobileMainContent').style.display = 'none';
             }
 
             fetchUserData(token);
@@ -459,33 +525,31 @@
                 if (response.ok) {
                     const userData = await response.json(); 
                     
-                    // Sidebar Update
                     const userName = userData.name || userData.fullName || "User";
                     document.getElementById('display-name').textContent = userName;
                     document.getElementById('display-email').textContent = userData.email || "";
 
-                    // PROFILE PIC UPDATE LOGIC
                     if (userData.profileImage) {
                         document.getElementById('profileImage').src = userData.profileImage;
                     }
 
-                    // Form Update
                     const nameParts = userName.split(' ');
                     document.getElementById('input-fname').value = nameParts[0] || '';
                     document.getElementById('input-lname').value = nameParts.slice(1).join(' ') || '';
                     document.getElementById('input-email').value = userData.email || '';
                     
+                    // Phone Number bind
+                    document.getElementById('input-phone').value = userData.phoneNumber || userData.phone || '';
+                    
                     if(userData.address) {
                         document.getElementById('input-address').value = userData.address;
                         document.getElementById('display-address').textContent = userData.address;
                     }
-
                 } else if (response.status === 401 || response.status === 403) {
                     alert("Session expired. Please login again.");
                     localStorage.removeItem('token');
                     window.location.href = "/login"; 
                 } else {
-                    console.warn("Could not fetch user data. Error code:", response.status);
                     document.getElementById('display-name').textContent = "Error Loading Profile";
                 }
             } catch (error) {
