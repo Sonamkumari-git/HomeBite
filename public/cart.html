@@ -334,8 +334,8 @@
     </div>
 
     <script>
-        // LocalStorage se cart fetch karna ('cart' aapke array ka key hona chahiye)
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // Sahi Key 'homebite_cart' ka use kiya gaya hai ab
+        let cart = JSON.parse(localStorage.getItem('homebite_cart')) || [];
 
         // DOM Elements
         const cartContainer = document.getElementById('cart-items-container');
@@ -345,7 +345,7 @@
             cartContainer.innerHTML = ''; // Clear container first
 
             if (cart.length === 0) {
-                cartContainer.innerHTML = '<p style="text-align:center; color: var(--text-muted); padding: 50px;">Your premium box is empty.</p>';
+                cartContainer.innerHTML = '<p style="text-align:center; color: var(--text-muted); padding: 50px;">Your premium box is empty. Go back to the Menu to add some delicious food!</p>';
                 calculateTotal();
                 return;
             }
@@ -354,10 +354,10 @@
                 const itemHTML = `
                     <div class="cart-item" id="item-${index}">
                         <button class="remove-btn" onclick="removeItem(${index})"><i class="fa-solid fa-trash"></i></button>
-                        <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" alt="${item.title}" class="item-img">
+                        <img src="${item.img || item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" alt="${item.title}" class="item-img">
                         <div class="item-details">
                             <h3 class="item-title">${item.title || 'Delicious Meal'}</h3>
-                            <p class="item-chef">${item.chef || 'By HomeBite Chef'}</p>
+                            <p class="item-chef">${item.chef || 'HomeBite Special'}</p>
                             <p class="item-price">₹<span class="price-val">${item.price}</span></p>
                         </div>
                         <div class="quantity-control">
@@ -396,7 +396,7 @@
             let newQty = (cart[index].qty || 1) + change;
             if(newQty >= 1) { 
                 cart[index].qty = newQty;
-                localStorage.setItem('cart', JSON.stringify(cart)); // Update in localStorage
+                localStorage.setItem('homebite_cart', JSON.stringify(cart)); // Sahi key me update
                 renderCart(); // Re-render HTML
             }
         }
@@ -408,7 +408,7 @@
             
             setTimeout(() => {
                 cart.splice(index, 1); // Array se delete karo
-                localStorage.setItem('cart', JSON.stringify(cart)); // LocalStorage update karo
+                localStorage.setItem('homebite_cart', JSON.stringify(cart)); // Sahi key me save
                 renderCart(); // UI refresh karo
             }, 300);
         }
@@ -431,7 +431,7 @@
                 // Redirect logic yahan dalna: window.location.href = 'success.html';
                 
                 // Clear cart after successful COD order
-                localStorage.removeItem('cart');
+                localStorage.removeItem('homebite_cart');
                 cart = [];
                 renderCart();
             }
