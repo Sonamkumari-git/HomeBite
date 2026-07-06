@@ -8,7 +8,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         /* === VARIABLES & RESET (PREMIUM DARK THEME) === */
         :root {
@@ -150,21 +150,21 @@
         .form-section { display: none; animation: fadeIn 0.5s ease; }
         .form-section.active { display: block; }
         
-        .input-group { margin-bottom: 25px; }
+        .input-group { margin-bottom: 20px; } 
         .input-group label { 
             display: block; 
             font-size: 0.85rem; 
             font-weight: 400; 
             color: var(--text-muted); 
-            margin-bottom: 10px; 
+            margin-bottom: 8px; 
             letter-spacing: 0.5px;
         }
         .input-group input { 
             width: 100%; 
-            padding: 15px 20px; 
+            padding: 12px 20px; 
             border: 1px solid var(--border-light); 
             border-radius: 8px; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             outline: none; 
             transition: var(--transition); 
             background: var(--input-bg); 
@@ -178,54 +178,60 @@
             box-shadow: 0 0 15px rgba(226, 135, 67, 0.15); 
         }
 
-        /* Profile Picture Upload Styling */
-        .profile-upload-container {
+        /* === CLICKABLE PROFILE PICTURE UPLOAD STYLING === */
+        .profile-upload-wrapper {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed var(--border-light);
+            margin-bottom: 25px;
         }
+        
+        .profile-upload-wrapper label {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
         .profile-preview-box {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background: var(--input-bg);
-            border: 2px solid var(--border-light);
+            border: 2px dashed var(--primary-color);
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             position: relative;
+            cursor: pointer;
+            transition: var(--transition);
         }
+        
+        .profile-preview-box:hover {
+            background: rgba(226, 135, 67, 0.15);
+            box-shadow: 0 0 15px rgba(226, 135, 67, 0.3);
+        }
+
         .profile-preview-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: none;
         }
+
         .profile-preview-box i {
-            font-size: 1.5rem;
-            color: var(--text-muted);
+            font-size: 1.8rem;
+            color: var(--primary-color);
         }
-        .upload-btn-wrapper {
-            flex: 1;
-        }
-        .input-group input[type="file"] {
-            padding: 8px 0;
-            border: none;
-            background: transparent;
-        }
-        .input-group input[type="file"]:focus {
-            box-shadow: none;
+        
+        /* Hide the actual file input */
+        #signupProfile {
+            display: none;
         }
 
         /* Submit Button */
         .submit-btn { 
             width: 100%; 
-            padding: 16px; 
+            padding: 15px; 
             border: 1px solid var(--primary-color); 
             background: var(--primary-color); 
             color: white; 
@@ -235,7 +241,7 @@
             cursor: pointer; 
             transition: var(--transition); 
             box-shadow: 0 8px 20px rgba(226, 135, 67, 0.2); 
-            margin-top: 15px; 
+            margin-top: 10px; 
             text-transform: uppercase;
             letter-spacing: 1px;
             font-family: 'Poppins', sans-serif;
@@ -253,7 +259,7 @@
             font-size: 0.85rem; 
             color: var(--text-muted); 
             text-decoration: none; 
-            margin-top: -10px; 
+            margin-top: -5px; 
             margin-bottom: 25px; 
             transition: var(--transition);
         }
@@ -306,17 +312,14 @@
             </form>
 
             <form id="signupForm" class="form-section">
-                <div class="input-group">
-                    <label>Profile Picture</label>
-                    <div class="profile-upload-container">
-                        <div class="profile-preview-box" id="previewBox">
-                            <i class="fas fa-user" id="defaultUserIcon"></i>
-                            <img id="profileImagePreview" src="" alt="Profile Preview">
-                        </div>
-                        <div class="upload-btn-wrapper">
-                            <input type="file" id="signupProfile" accept="image/*">
-                        </div>
-                    </div>
+                
+                <div class="profile-upload-wrapper">
+                    <label>Upload Profile Picture</label>
+                    <label for="signupProfile" class="profile-preview-box" id="previewBox" title="Click to upload image">
+                        <i class="fas fa-camera" id="defaultUserIcon"></i>
+                        <img id="profileImagePreview" src="" alt="Profile Preview">
+                    </label>
+                    <input type="file" id="signupProfile" accept="image/*">
                 </div>
 
                 <div class="input-group">
@@ -329,7 +332,7 @@
                 </div>
                 <div class="input-group">
                     <label>Phone Number</label>
-                    <input type="tel" id="signupPhone" placeholder="e.g. +91 9876543210" pattern="[0-9]{10,13}" title="Kripya valid phone number enter karein" required>
+                    <input type="tel" id="signupPhone" placeholder="e.g. 9876543210" pattern="[0-9]{10,13}" title="Kripya valid phone number enter karein" required>
                 </div>
                 <div class="input-group">
                     <label>Hostel / Room Address</label>
@@ -401,7 +404,7 @@
             const profileFile = document.getElementById('signupProfile').files[0];
 
             try {
-                // Kyuki ab form mein file (image) hai, isliye FormData use karenge
+                // Backend me file (image) bhejni hai isliye FormData use kar rahe hain
                 const formData = new FormData();
                 formData.append('fullName', fullName);
                 formData.append('email', email);
@@ -410,12 +413,13 @@
                 formData.append('password', password);
                 
                 if (profileFile) {
-                    formData.append('profileImage', profileFile); // Aapka backend is unique name se file receive karega
+                    // Ye naam backend route 'upload.single("profileImage")' se match hona chahiye
+                    formData.append('profileImage', profileFile); 
                 }
 
+                // Backend API call
                 const response = await fetch('/api/auth/register', {
                     method: 'POST',
-                    // Note: FormData bhejte waqt 'Content-Type' header automatically boundary ke saath set ho jata hai, manually dene ki jarurat nahi hoti.
                     body: formData
                 });
 
@@ -425,7 +429,7 @@
                     alert('Account successfully created! Ab aap login kar sakte hain.');
                     e.target.reset(); // Form clear kar do
                     
-                    // Image preview reset karein
+                    // Image preview ko reset karein
                     profileImagePreview.src = '';
                     profileImagePreview.style.display = 'none';
                     defaultUserIcon.style.display = 'block';
