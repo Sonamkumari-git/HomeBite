@@ -336,7 +336,7 @@
             font-size: 1rem;
         }
 
-        /* === NEW: SUCCESS POPUP MODAL STYLES === */
+        /* === SUCCESS POPUP MODAL STYLES === */
         .success-modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -418,7 +418,7 @@
             display: block;
         }
 
-        /* === NEW: MAGIC CURSOR PARTICLE STYLE === */
+        /* === UPDATED: MAGIC CURSOR PARTICLE STYLE === */
         .magic-spark {
             position: fixed;
             top: 0; left: 0;
@@ -426,13 +426,13 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 10000;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(1); /* FIXED TYPO HERE */
             animation: sparkFadeDrift 0.8s ease-out forwards;
         }
         @keyframes sparkFadeDrift {
             0% {
                 opacity: 1;
-                transform: translate(-50%, -50__) scale(1);
+                transform: translate(-50%, -50%) scale(1);
             }
             100% {
                 opacity: 0;
@@ -534,7 +534,7 @@
         </div>
     </div>
 
-   <script>
+<script>
     // Server API URL
     const SERVER_URL = 'https://homebite-aecl.onrender.com';
 
@@ -767,7 +767,7 @@
         }
     }
 
-    // 🔥 UPDATED: SUCCESS HANDLER WITH PRETTY MODAL POPUP
+    // 🔥 SUCCESS HANDLER WITH PRETTY MODAL POPUP
     function handleSuccess(checkoutBtn) {
         checkoutBtn.style.backgroundColor = "var(--success)";
         checkoutBtn.innerText = "Order Confirmed! 🎉";
@@ -787,13 +787,14 @@
         }, 3500);
     }
 
-    // 🔥 NEW: MAGIC CURSOR TRAIL EFFECT LOGIC
-    let mouseThrottler = 0;
+    // 🔥 UPDATED: MAGIC CURSOR TRAIL EFFECT LOGIC (THICK & MORE DENSE)
     document.addEventListener('mousemove', (e) => {
-        mouseThrottler++;
-        // Performance sahi rahe isliye har 2nd move frame par create hoga particle
-        if (mouseThrottler % 2 === 0) {
-            createMagicSpark(e.clientX, e.clientY);
+        // Throttling हटा दी है ताकि माउस मूव करने पर लगातार और घने पार्टिकल्स बनें
+        createMagicSpark(e.clientX, e.clientY);
+        
+        // थोड़ा और "ज्यादा" और रिच इफ़ेक्ट देने के लिए रैंडमली एक एक्स्ट्रा पार्टिकल भी साथ में जोड़ दिया है
+        if (Math.random() > 0.4) {
+            createMagicSpark(e.clientX + (Math.random() - 0.5) * 12, e.clientY + (Math.random() - 0.5) * 12);
         }
     });
 
@@ -805,26 +806,28 @@
         const colors = ['#e28743', '#f4c150', '#ffffff', '#e28743'];
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
         
-        // Random particle dimensions (5px se 11px)
-        const size = Math.random() * 6 + 5;
+        // Size को काफी बढ़ा दिया है (पहले 5px-11px था, अब 12px-24px "मोटा" कर दिया है)
+        const size = Math.random() * 12 + 12;
         
         spark.style.width = `${size}px`;
         spark.style.height = `${size}px`;
         spark.style.backgroundColor = randomColor;
-        spark.style.boxShadow = `0 0 8px ${randomColor}, 0 0 16px ${randomColor}`;
+        
+        // Glow (Box Shadow) को और घना और चमकीला (Thick Look) कर दिया है
+        spark.style.boxShadow = `0 0 14px ${randomColor}, 0 0 28px ${randomColor}`;
         spark.style.left = `${x}px`;
         spark.style.top = `${y}px`;
         
-        // Random drifting angles (bikharta hua spread effect)
-        const dx = (Math.random() - 0.5) * 50; 
-        const dy = (Math.random() - 0.5) * 50 - 20; // Dheere se upar udne ke liye drift
+        // रैंडम बिखरने का एंगल भी थोड़ा वाइड किया है
+        const dx = (Math.random() - 0.5) * 65; 
+        const dy = (Math.random() - 0.5) * 65 - 25; 
         
         spark.style.setProperty('--dx', `${dx}px`);
         spark.style.setProperty('--dy', `${dy}px`);
         
         document.body.appendChild(spark);
         
-        // Animation end hote hi node automatically remove ho jayegi
+        // एनिमेशन एंड होते ही रिमूव हो जाएगा
         setTimeout(() => {
             spark.remove();
         }, 800);
