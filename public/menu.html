@@ -1,534 +1,500 @@
-<!DOCTYPE html>
+bhai kam nahi kiya <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomeBite | Premium Food Delivery</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu | HomeBite Premium</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        /* === VARIABLES & RESET (PREMIUM DARK THEME) === */
-        :root {
-            --primary-color: #e28743; 
-            --secondary-color: #f4c150;
-            --dark-bg: #050505; 
-            --section-bg: #0a0a0a; 
-            --card-bg: #151515;
-            --text-light: #ffffff;
-            --text-muted: #a0a0a0;
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+    <style>
+        /* === VARIABLES & RESET (SAME PREMIUM DARK THEME) === */
+        :root {
+            --primary-color: #e28743; 
+            --secondary-color: #f4c150;
+            --dark-bg: #050505; 
+            --section-bg: #0a0a0a; 
+            --card-bg: #151515;
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --success: #2ed573;
+            --danger: #ff4757;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-        h1, h2, h3, h4, .brand-logo { font-family: 'Playfair Display', serif; }
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
+        h1, h2, h3, h4, .brand-logo { font-family: 'Playfair Display', serif; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
 
-        /* === ANIMATIONS === */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* === ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* === TOP BAR === */
-        .top-bar {
-            background-color: #000;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 5%;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .top-bar span { margin-right: 20px; }
-        .top-bar i { color: var(--primary-color); margin-right: 5px; }
+        /* === TOP BAR === */
+        .top-bar {
+            background-color: #000;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 5%;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .top-bar span { margin-right: 20px; }
+        .top-bar i { color: var(--primary-color); margin-right: 5px; }
 
-        /* === NAVBAR === */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background-color: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(15px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .brand-logo { font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; }
-        .brand-logo span { color: var(--primary-color); font-style: italic; }
-        
-        .nav-links { display: flex; gap: 35px; }
-        .nav-links a { font-weight: 400; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); position: relative; color: var(--text-light); }
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -5px; left: 0; background-color: var(--primary-color);
-            transition: var(--transition);
-        }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+        /* === NAVBAR === */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .brand-logo { font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; }
+        .brand-logo span { color: var(--primary-color); font-style: italic; }
+        
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { font-weight: 400; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); position: relative; color: var(--text-light); }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
 
-        .nav-actions { display: flex; align-items: center; gap: 20px; }
-        .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
-        .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
-        .cart-badge {
-            position: absolute; top: -6px; right: -8px; background-color: var(--primary-color);
-            color: #fff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px;
-            display: flex; justify-content: center; align-items: center; border-radius: 50%;
-        }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
+        .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
+        .cart-badge {
+            position: absolute; top: -6px; right: -8px; background-color: var(--primary-color);
+            color: #fff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px;
+            display: flex; justify-content: center; align-items: center; border-radius: 50%;
+        }
 
-        .btn-main {
-            padding: 12px 35px; background-color: var(--primary-color);
-            color: #fff; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
-            transition: var(--transition); box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2);
-            border: 1px solid var(--primary-color);
-        }
-        .btn-main:hover { background-color: transparent; color: var(--primary-color); box-shadow: 0 15px 30px rgba(226, 135, 67, 0.4); transform: translateY(-3px); }
+        /* === PAGE HEADER === */
+        .page-header {
+            padding: 120px 5% 80px; text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(226, 135, 67, 0.15) 0%, var(--dark-bg) 70%);
+            position: relative;
+        }
+        .page-header h1 { font-size: 4rem; color: var(--text-light); text-shadow: 2px 4px 15px rgba(0,0,0,0.5); margin-bottom: 15px; }
+        .page-header p { font-size: 1.1rem; color: var(--primary-color); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* === HERO SECTION === */
-        .hero {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 80px 5% 120px; 
-            background: radial-gradient(circle at 20% 50%, rgba(226, 135, 67, 0.1) 0%, var(--dark-bg) 50%);
-            min-height: 90vh;
-            position: relative;
-        }
-        .hero::before {
-            content: ''; position: absolute; top: 20%; left: 10%; width: 300px; height: 300px;
-            background: var(--primary-color); filter: blur(150px); opacity: 0.15; z-index: 0;
-        }
+        /* === MENU CATEGORY FILTERS === */
+        .menu-filters {
+            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 60px;
+        }
+        .filter-btn {
+            background: transparent; color: var(--text-light); border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 25px; border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color); border-color: var(--primary-color); color: #fff;
+            box-shadow: 0 5px 15px rgba(226, 135, 67, 0.3);
+        }
 
-        .hero-text { flex: 1; padding-right: 50px; position: relative; z-index: 1; }
-        .hero-text h1 { font-size: 4.8rem; line-height: 1.1; margin-bottom: 25px; color: var(--text-light); text-shadow: 2px 4px 15px rgba(0,0,0,0.5); }
-        .hero-text p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 45px; line-height: 1.8; max-width: 90%; }
-        
-        .hero-img { flex: 1; position: relative; z-index: 1; }
-        .hero-img img {
-            width: 100%; border-radius: 12px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(226, 135, 67, 0.2);
-            animation: floatImage 6s ease-in-out infinite;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        @keyframes floatImage { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
+        /* === FULL MENU SECTION === */
+        .menu-section { padding: 0 5% 120px; background-color: var(--dark-bg); }
+        
+        /* Grid Fix: Changed auto-fit to auto-fill to prevent massive cards */
+        .menu-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 40px;
+        }
+        
+        /* MENU CARDS */
+        .menu-card {
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            overflow: hidden;
+            transition: var(--transition); 
+            border: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-card:hover { transform: translateY(-15px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        
+        .card-img-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+        }
+        .card-img-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: var(--transition); 
+            filter: brightness(0.9); 
+        }
+        .menu-card:hover .card-img-container img { transform: scale(1.08); filter: brightness(1.1); }
+        
+        .food-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(5,5,5,0.85);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+        .food-type-badge.veg { border: 1px solid var(--success); }
+        .food-type-badge.non-veg { border: 1px solid var(--danger); }
 
-        /* === ABOUT SECTION === */
-        .about-section { 
-            padding: 120px 5%; display: flex; align-items: center; gap: 70px; 
-            background: linear-gradient(to bottom, var(--dark-bg), var(--section-bg));
-            border-top: 1px solid rgba(255,255,255,0.02);
-        }
-        .about-img { flex: 1; position: relative; }
-        .about-img img { width: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.05); filter: brightness(0.85); transition: 0.4s; }
-        .about-img:hover img { filter: brightness(1); transform: scale(1.02); }
-        
-        .about-text { flex: 1; }
-        .section-subtitle { color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 15px; font-size: 0.9rem; }
-        .section-title { font-size: 3.5rem; margin-bottom: 25px; color: var(--text-light); }
-        .about-text p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.9; font-size: 1.05rem; }
-        
-        .btn-outline {
-            display: inline-block; padding: 12px 35px; border: 1px solid var(--primary-color); color: var(--primary-color);
-            text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500; border-radius: 4px; transition: 0.3s;
-        }
-        .btn-outline:hover { background: var(--primary-color); color: #fff; box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
+        .card-body { 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+        }
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 12px; 
+            gap: 10px;
+        }
+        .card-header h3 { 
+            font-size: 1.4rem; 
+            color: var(--text-light); 
+            margin: 0; 
+            line-height: 1.3;
+        }
+        .badge { 
+            font-size: 0.7rem; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            background: rgba(226, 135, 67, 0.15); 
+            color: var(--primary-color); 
+            text-transform: capitalize; 
+            white-space: nowrap;
+        }
+        .card-body p { 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+            margin-bottom: 25px; 
+            line-height: 1.6; 
+            flex-grow: 1;
+            /* Text truncation for long descriptions */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-footer { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: auto;
+        }
+        .price { 
+            font-size: 1.3rem; 
+            font-weight: 600; 
+            color: var(--primary-color); 
+            font-family: 'Playfair Display', serif; 
+        }
+        .order-btn {
+            background: var(--primary-color); color: #fff;
+            padding: 10px 20px; border-radius: 6px; transition: var(--transition); border: none;
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        }
+        .order-btn:hover { background: var(--secondary-color); color: #000; box-shadow: 0 5px 15px rgba(226, 135, 67, 0.4); }
 
-        /* === FEATURED MENU === */
-        .menu-section { padding: 120px 5%; background-color: var(--dark-bg); text-align: center; }
-        
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px; margin-top: 60px; text-align: left;
-        }
-        .menu-card {
-            background: var(--card-bg); border-radius: 12px; overflow: hidden;
-            transition: var(--transition); border: 1px solid rgba(255,255,255,0.03);
-            display: flex; flex-direction: column;
-        }
-        .menu-card:hover { transform: translateY(-15px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        
-        .card-img-container { width: 100%; height: 240px; overflow: hidden; position: relative; }
-        .card-img-container img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); filter: brightness(0.9); }
-        .menu-card:hover .card-img-container img { transform: scale(1.08); filter: brightness(1.1); }
-        
-        /* Simpler Price and Card Body */
-        .card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-body h3 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-light); }
-        .card-body p { 
-            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6; flex-grow: 1;
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: auto; }
-        
-        /* SIMPLE PRICE DESIGN */
-        .price { 
-            font-size: 1.05rem; 
-            font-weight: 600; 
-            color: var(--primary-color); 
-            font-family: 'Poppins', sans-serif; /* Playfair hata diya, clean font lagaya */
-            background: rgba(226, 135, 67, 0.1); /* Halka sa orange background */
-            padding: 6px 12px;
-            border-radius: 6px;
-        }
+        /* === FOOTER === */
+        footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
+        .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--primary-color); }
+        .footer-col p { line-height: 1.8; margin-bottom: 20px; color: var(--text-muted); }
+        .social-links { display: flex; gap: 15px; }
+        .social-links a { display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; background: rgba(255,255,255,0.03); border-radius: 4px; color: var(--primary-color); transition: var(--transition); border: 1px solid rgba(255,255,255,0.05); }
+        .social-links a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: var(--text-muted); transition: var(--transition); }
+        .footer-links a:hover { color: var(--primary-color); padding-left: 8px; }
+        .contact-info li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; color: var(--text-muted); line-height: 1.6; }
+        .contact-info i { color: var(--primary-color); font-size: 1.2rem; margin-top: 3px; }
+        .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
 
-        .order-btn {
-            background: var(--primary-color); color: #fff; border: none;
-            padding: 10px 20px; border-radius: 6px; transition: var(--transition);
-            font-size: 0.85rem; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer;
-        }
-        .order-btn:hover { background: var(--secondary-color); color: #000; }
-
-        /* === NEWSLETTER === */
-        .newsletter {
-            padding: 100px 5%; text-align: center; background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
-            position: relative;
-        }
-        .newsletter::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(5,5,5,0.85); }
-        .newsletter-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-        .newsletter h2 { font-size: 3rem; margin-bottom: 15px; color: var(--primary-color); }
-        .newsletter p { color: #ddd; margin-bottom: 30px; font-size: 1.1rem; }
-        
-        .newsletter form {
-            display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px; overflow: hidden; padding: 5px; backdrop-filter: blur(10px);
-        }
-        .newsletter input { flex: 1; border: none; outline: none; padding: 15px 25px; font-size: 1rem; background: transparent; color: #fff; }
-        .newsletter button {
-            background: var(--primary-color); color: #fff; border: none;
-            padding: 15px 35px; border-radius: 4px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);
-        }
-        .newsletter button:hover { background: #c97130; }
-
-        /* === FOOTER === */
-        footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
-        .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
-        .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--primary-color); }
-        .footer-col p { line-height: 1.8; margin-bottom: 20px; color: var(--text-muted); }
-        .social-links { display: flex; gap: 15px; }
-        .social-links a { display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; background: rgba(255,255,255,0.03); border-radius: 4px; color: var(--primary-color); transition: var(--transition); border: 1px solid rgba(255,255,255,0.05); }
-        .social-links a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); }
-        .footer-links li { margin-bottom: 15px; }
-        .footer-links a { color: var(--text-muted); transition: var(--transition); }
-        .footer-links a:hover { color: var(--primary-color); padding-left: 8px; }
-        .contact-info li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; color: var(--text-muted); line-height: 1.6; }
-        .contact-info i { color: var(--primary-color); font-size: 1.2rem; margin-top: 3px; }
-        .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
-        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
-
-        /* === RESPONSIVE === */
-        .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-color); }
-        @media (max-width: 991px) {
-            .hero, .about-section { flex-direction: column; text-align: center; }
-            .hero-text { padding-right: 0; margin-bottom: 50px; }
-            .hero::before { left: 50%; transform: translateX(-50%); }
-            .nav-links { display: none; }
-            .mobile-toggle { display: block; }
-        }
-        @media (max-width: 768px) {
-            .hero-text h1 { font-size: 3.5rem; }
-            .section-title { font-size: 2.8rem; }
-            .top-bar { display: none; }
-            .btn-main { display: none; }
-            .hero-text .btn-main { display: inline-block; } 
-        }
-    </style>
+        /* === RESPONSIVE === */
+        .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-color); }
+        @media (max-width: 991px) {
+            .nav-links { display: none; }
+            .mobile-toggle { display: block; }
+        }
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 3rem; }
+            .top-bar { display: none; }
+            .menu-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div>
-            <span><i class="fas fa-envelope"></i> sonam@homebite.com</span>
-            <span><i class="fas fa-phone"></i> +91 98765 43210</span>
-        </div>
-        <div>
-            <span><i class="fas fa-map-marker-alt"></i> Patna, Bihar, India</span>
-        </div>
-    </div>
+    <div class="top-bar">
+        <div>
+            <span><i class="fas fa-envelope"></i> sonam@homebite.com</span>
+            <span><i class="fas fa-phone"></i> +91 98765 43210</span>
+        </div>
+        <div>
+            <span><i class="fas fa-map-marker-alt"></i> Patna, Bihar, India</span>
+        </div>
+    </div>
 
-    <nav>
-        <a href="#" class="brand-logo">Home<span>Bite</span>.</a>
-        <ul class="nav-links">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/menu">Menu</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
-        
-        <div class="nav-actions">
-            <a href="/cart" class="nav-icon" title="Shopping Cart">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-badge">2</span>
-            </a>
-            <a href="/profile" class="nav-icon" title="User Profile">
-                <i class="fas fa-user"></i>
-            </a>
-            <a href="#menu" class="btn-main">Order Now</a>
-            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
-        </div>
-    </nav>
+    <nav>
+        <a href="index.html" class="brand-logo">Home<span>Bite</span>.</a>
+        <ul class="nav-links">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/menu" class="active">Menu</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+            <a href="cart.html" class="nav-icon" title="Shopping Cart">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge">2</span>
+            </a>
+            <a href="profile.html" class="nav-icon" title="User Profile">
+                <i class="fas fa-user"></i>
+            </a>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
 
-    <section class="hero">
-        <div class="hero-text reveal">
-            <h1>Where Taste<br>Meets Elegance.</h1>
-            <p>Welcome to HomeBite. We serve the most delicious, freshly prepared meals directly to your doorstep. Satisfy your cravings with our premium culinary delights crafted by expert chefs.</p>
-            <a href="#menu" class="btn-main" style="padding: 16px 45px; font-size: 1rem;">Explore Menu</a>
-        </div>
-        <div class="hero-img reveal">
-            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=80" alt="Premium Food">
-        </div>
-    </section>
+    <header class="page-header">
+        <div class="reveal">
+            <h1>Culinary Masterpieces</h1>
+            <p>Explore Our Premium Selection</p>
+        </div>
+    </header>
 
-    <section class="about-section" id="about">
-        <div class="about-img reveal">
-            <img src="https://img.freepik.com/premium-photo/group-chefs-are-working-busy-restaurant-kitchen-they-are-preparing-food-cooking-plating-dishes-kitchen-is-full-activity_14117-76780.jpg?w=900" alt="Master Chef">
-        </div>
-        <div class="about-text reveal">
-            <span class="section-subtitle">Our Heritage</span>
-            <h2 class="section-title">Cooking with Passion & Perfection</h2>
-            <p>
-                At HomeBite, we believe that every meal should be a celebration. Our master chefs use only the finest, locally sourced ingredients to craft dishes that are both visually stunning and incredibly delicious.
-            </p>
-            <p>
-                Whether you are craving a hearty pasta, a perfectly grilled steak, or a fresh vibrant salad, HomeBite brings 5-star restaurant-quality dining straight to the comfort of your home.
-            </p>
-            <a href="#menu" class="btn-outline" style="margin-top: 15px;">Discover More</a>
-        </div>
-    </section>
+    <section class="menu-section">
+        
+        <div class="menu-filters reveal">
+            <button class="filter-btn active">All Items</button>
+            <button class="filter-btn">Starters</button>
+            <button class="filter-btn">Main Course</button>
+            <button class="filter-btn">Desserts</button>
+            <button class="filter-btn">Beverages</button>
+        </div>
 
-    <section class="menu-section" id="menu">
-        <span class="section-subtitle reveal" style="text-align: center;">Curated Selection</span>
-        <h2 class="section-title reveal" style="text-align: center;">Our Premium Menu</h2>
-        
-        <div class="menu-grid" id="menuGrid">
-            <div class="menu-card reveal">
-                <div class="card-img-container">
-                    <img src="https://tse1.mm.bing.net/th/id/OIP.vYOQ6ZyXSqVSvfr9y--rZgHaEJ?cb=thfc1falcon4&w=1249&h=700&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Steak">
-                </div>
-                <div class="card-body">
-                    <h3>Biryani</h3>
-                    <p>Experience the art of authentic biryani—where premium ingredients, aromatic spices, and delicate layers come together in perfect harmony.</p>
-                    <div class="card-footer">
-                        <span class="price">₹1,250</span>
-                        <a href="#" class="order-btn">Add to Cart</a>
-                    </div>
-                </div>
-            </div>
+        <div class="menu-grid">
+            <p style="color: var(--primary-color); text-align: center; width: 100%;">Fetching premium menu...</p>
+        </div>
+    </section>
 
-            <div class="menu-card reveal">
-                <div class="card-img-container">
-                    <img src="https://www.cooking-therapy.com/wp-content/uploads/2018/02/Truffle-Mushroom-Pasta-2-1080x1512.jpg" alt="Pasta">
-                </div>
-                <div class="card-body">
-                    <h3>Truffle Mushroom Pasta</h3>
-                    <p>Handmade fettuccine tossed in a rich, creamy truffle sauce with wild mushrooms and aged parmesan.</p>
-                    <div class="card-footer">
-                        <span class="price">₹850</span>
-                        <a href="#" class="order-btn">Add to Cart</a>
-                    </div>
-                </div>
-            </div>
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-col reveal">
+                <a href="#" class="brand-logo" style="margin-bottom: 20px; display: inline-block; font-size: 2rem;">Home<span style="color: var(--primary-color);">Bite</span>.</a>
+                <p>Bringing gourmet experiences to your dining table. Fresh ingredients, masterful recipes, and blazing fast delivery.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-col reveal">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> About Us</a></li>
+                    <li><a href="menu.html"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Our Menu</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Testimonials</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal">
+                <h3>Our Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Fast Home Delivery</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Event Catering</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Table Reservations</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Corporate Dining</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Culinary Street, Near Frazer Road,<br>Patna, Bihar 800001</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+91 98765 43210 <br> +91 91234 56789</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span class="highlight-email">sonam@homebite.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom reveal">
+            <p>&copy; 2026 HomeBite. Crafted with passion. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-            <div class="menu-card reveal">
-                <div class="card-img-container">
-                    <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=600&q=80" alt="Salmon">
-                </div>
-                <div class="card-body">
-                    <h3>Grilled Atlantic Salmon</h3>
-                    <p>Fresh caught salmon glazed with honey mustard, paired with roasted asparagus and lemon wedges.</p>
-                    <div class="card-footer">
-                        <span class="price">₹1,100</span>
-                        <a href="#" class="order-btn">Add to Cart</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <script>
+        let allMenuItems = [];
+        
+        // AGAR APNA BACKEND DEPLOY HO GAYA HAI TOH RENDER WALI URL YAHAN DALO
+        const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
 
-    <section class="newsletter">
-        <div class="newsletter-content reveal">
-            <h2>Exclusive Culinary Updates</h2>
-            <p>Subscribe to our private newsletter and receive a complimentary appetizer on your first premium order.</p>
-            <form action="#">
-                <input type="email" placeholder="Enter your email address..." required>
-                <button type="submit">Subscribe</button>
-            </form>
-        </div>
-    </section>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchLiveMenu();
+            setupFilters();
+        });
 
-    <footer id="footer">
-        <div class="footer-container">
-            <div class="footer-col reveal">
-                <a href="#" class="brand-logo" style="margin-bottom: 20px; display: inline-block; font-size: 2rem;">Home<span style="color: var(--primary-color);">Bite</span>.</a>
-                <p>Bringing gourmet experiences to your dining table. Fresh ingredients, masterful recipes, and blazing fast delivery.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
+        // Backend se data laane ka function
+        async function fetchLiveMenu() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                // Data ko globally save karein
+                allMenuItems = Array.isArray(data) ? data : (data.data || []);
+                
+                // Customer ko sirf wahi items dikhane hain jo 'In Stock' (true) hain
+                const inStockItems = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
+                
+                renderMenuCards(inStockItems);
+            } catch (error) {
+                console.error("Error fetching live menu:", error);
+                const menuGrid = document.querySelector('.menu-grid');
+                if (menuGrid) {
+                    menuGrid.innerHTML = `<p style="color: var(--danger); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Live menu load karne me dikkat aa rahi hai. Kripya baad me try karein!</p>`;
+                }
+            }
+        }
 
-            <div class="footer-col reveal">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Home</a></li>
-                    <li><a href="#about"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> About Us</a></li>
-                    <li><a href="#menu"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Our Menu</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Testimonials</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Privacy Policy</a></li>
-                </ul>
-            </div>
+        // HTML Cards dynamically generate karne ka function
+        function renderMenuCards(items) {
+            const menuGrid = document.querySelector('.menu-grid');
+            if (!menuGrid) return;
 
-            <div class="footer-col reveal">
-                <h3>Our Services</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Fast Home Delivery</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Event Catering</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Table Reservations</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right" style="color: var(--primary-color); margin-right: 5px;"></i> Corporate Dining</a></li>
-                </ul>
-            </div>
+            if (items.length === 0) {
+                menuGrid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Filhal is category me koi dish available nahi hai.</p>`;
+                return;
+            }
 
-            <div class="footer-col reveal">
-                <h3>Contact Us</h3>
-                <ul class="contact-info">
-                    <li>
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>123 Culinary Street, Near Frazer Road,<br>Patna, Bihar 800001</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-phone-alt"></i>
-                        <span>+91 98765 43210 <br> +91 91234 56789</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-envelope"></i>
-                        <span class="highlight-email">sonam@homebite.com</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom reveal">
-            <p>&copy; 2026 HomeBite. Crafted with passion. All Rights Reserved.</p>
-        </div>
-    </footer>
+            // CLEANER HTML INJECTION: Inline styles ki jagah ab classes ka use hua hai
+            menuGrid.innerHTML = items.map(item => {
+                let priceHTML = '';
+                if (item.priceModel === 'single' || !item.priceModel) {
+                    priceHTML = `<span class="price">₹${item.price}</span>`;
+                } else {
+                    priceHTML = `<span class="price" style="font-size: 1.1rem;">₹${item.priceHalf} (H) / ₹${item.priceFull} (F)</span>`;
+                }
 
-    <script>
-        // === MAIN API URL (Aapki working waali API) ===
-        const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
+                const isVeg = item.foodType === 'Veg';
+                const badgeClass = isVeg ? 'veg' : 'non-veg';
+                const badgeIcon = isVeg ? '🟢' : '🔴';
 
-        document.addEventListener("DOMContentLoaded", function() {
-            
-            // --- 1. SCROLL ANIMATION LOGIC ---
-            const reveals = document.querySelectorAll(".reveal");
-            const revealOnScroll = () => {
-                for (let i = 0; i < reveals.length; i++) {
-                    const windowHeight = window.innerHeight;
-                    const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 100;
-                    if (elementTop < windowHeight - elementVisible) {
-                        reveals[i].classList.add("active");
-                    }
-                }
-            };
-            window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Trigger instantly
+                return `
+                    <div class="menu-card reveal">
+                        <div class="card-img-container">
+                            <img src="${item.image}" alt="${item.name}">
+                            <span class="food-type-badge ${badgeClass}">
+                                ${badgeIcon} ${item.foodType}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>${item.name}</h3>
+                                <span class="badge">${item.category}</span>
+                            </div>
+                            <p>${item.desc || 'Premium home-cooked delicacy prepared fresh with elite ingredients.'}</p>
+                            <div class="card-footer">
+                                ${priceHTML}
+                                <button class="order-btn">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
 
-            // --- 2. LIVE MENU FETCH LOGIC (For Front Page - 3 Items) ---
-            async function fetchLiveMenu() {
-                try {
-                    const response = await fetch(API_URL);
-                    const data = await response.json();
-                    
-                    // JSON format se sahi array extract karna
-                    let allMenuItems = Array.isArray(data) ? data : (data.data || []);
-                    
-                    // Sirf wahi item lenge jo In Stock hain
-                    let inStockItems = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
+            initScrollReveal();
+        }
 
-                    // Agar database khali hai toh purane static cards hi dikhne do
-                    if (inStockItems.length === 0) return;
+        // Live Dynamic Filtering
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
 
-                    // Items ko alag-alag karna (Sweets vs Others)
-                    let sweets = inStockItems.filter(item => item.category && (item.category.toLowerCase().includes('sweet') || item.category.toLowerCase().includes('dessert')));
-                    let others = inStockItems.filter(item => !item.category || (!item.category.toLowerCase().includes('sweet') && !item.category.toLowerCase().includes('dessert')));
+                    const filterValue = this.innerText.trim().toLowerCase();
+                    const activeMenu = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
 
-                    let finalSelection = [];
+                    if (filterValue === 'all items' || filterValue === 'our menu') {
+                        renderMenuCards(activeMenu);
+                    } else if (filterValue === 'veg') {
+                        renderMenuCards(activeMenu.filter(item => item.foodType === 'Veg'));
+                    } else if (filterValue === 'non-veg') {
+                        renderMenuCards(activeMenu.filter(item => item.foodType === 'Non-Veg'));
+                    } else {
+                        renderMenuCards(activeMenu.filter(item => item.category.toLowerCase() === filterValue));
+                    }
+                });
+            });
+        }
 
-                    // 1. Ek sweet zaroor lagao
-                    if (sweets.length > 0) finalSelection.push(sweets[0]);
+        // Premium Scroll Fade-in Animation Engine
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            const revealOnScroll = () => {
+                for (let i = 0; i < reveals.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementVisible = 80;
 
-                    // 2. Baaki jagah normal items se bharo
-                    for (let i = 0; finalSelection.length < 3 && i < others.length; i++) {
-                        finalSelection.push(others[i]);
-                    }
-
-                    // 3. Agar abhi bhi jagah bachi hai toh sweets se bhar do
-                    for (let i = 1; finalSelection.length < 3 && i < sweets.length; i++) {
-                        finalSelection.push(sweets[i]);
-                    }
-
-                    // Ab UI mein real cards dalenge
-                    const menuGrid = document.getElementById('menuGrid');
-                    menuGrid.innerHTML = ''; 
-
-                    finalSelection.forEach(item => {
-                        // Image Fallback
-                        const imgSrc = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
-                        const desc = item.desc || item.description || 'Premium home-cooked delicacy prepared fresh with elite ingredients.';
-
-                        // --- AAPKA SIMPLE PRICE LOGIC ---
-                        let priceHTML = '';
-                        if (item.priceModel === 'single' || !item.priceModel) {
-                            priceHTML = `<span class="price">₹${item.price}</span>`;
-                        } else {
-                            // Half/Full wala structure ekdum clean kiya gaya hai
-                            priceHTML = `<span class="price">₹${item.priceHalf} (H) / ₹${item.priceFull} (F)</span>`;
-                        }
-
-                        const cardHTML = `
-                            <div class="menu-card reveal active">
-                                <div class="card-img-container">
-                                    <img src="${imgSrc}" alt="${item.name}">
-                                </div>
-                                <div class="card-body">
-                                    <h3>${item.name}</h3>
-                                    <p>${desc}</p>
-                                    <div class="card-footer">
-                                        ${priceHTML}
-                                        <button class="order-btn">Add to Cart</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        menuGrid.innerHTML += cardHTML;
-                    });
-                    
-                    // Card load hone ke baad scroll animation trigger karna
-                    revealOnScroll();
-
-                } catch (error) {
-                    console.log("Error loading real menu, keeping default items:", error);
-                }
-            }
-
-            fetchLiveMenu(); // Function call
-        });
-    </script>
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveals[i].classList.add("active");
+                    }
+                }
+            };
+            window.removeEventListener("scroll", revealOnScroll);
+            window.addEventListener("scroll", revealOnScroll);
+            // Quick delay to ensure DOM is fully repainted before triggering reveal
+            setTimeout(revealOnScroll, 50); 
+        }
+    </script>
 </body>
-</html>
+</html> menu wala hai ye dekho asa login likha ke do na ye working hai fir se dashbord ka pura code do sahi logic ke sath taki or na price jo likha at hai usaka thora degine simple karo wo acha nah hai pura code do HomeBite | Premium Food Delivery isaka 
