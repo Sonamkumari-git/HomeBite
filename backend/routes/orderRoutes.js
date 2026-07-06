@@ -1,12 +1,8 @@
-// backend/routes/orderRoutes.js
 const express = require('express');
 const router = express.Router();
-const { placeOrder, getUserOrders } = require('../controllers/orderController');
+const { placeOrder } = require('../controllers/orderController');
 
-// Route to place a new order
+// Ye API frontend call karega
 router.post('/place', placeOrder);
-
-// Route to fetch orders for a specific user via phone number
-router.get('/my-orders/:phone', getUserOrders);
 
 module.exports = router;
