@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please add an email'],
         unique: true
     },
+    phoneNumber: { // 🔥 YEH NAYA FIELD HAI
+        type: String,
+        required: [true, 'Please add a phone number']
+    },
     address: {
         type: String,
         required: [true, 'Please add your hostel/room address']
@@ -20,12 +24,10 @@ const userSchema = new mongoose.Schema({
     },
     profileImage: { 
         type: String, 
-        // Default mein wahi image daal di hai jo HTML mein thi
-        // Taaki jab naya account bane, toh default blank na dikhe
-        
+        // Default blank ya default image url rakh sakte ho
     }
 }, {
-    timestamps: true // Kab account bana, uska time save karega
+    timestamps: true 
 });
 
 module.exports = mongoose.model('User', userSchema);
