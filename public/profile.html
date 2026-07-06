@@ -70,7 +70,7 @@
         }
         .back-btn:hover { color: var(--primary-color); }
 
-        /* Mobile Back Button (Tab view se bahar aane ke liye) */
+        /* Mobile Back Button */
         .mobile-back-btn {
             display: none;
             color: var(--primary-color);
@@ -181,7 +181,6 @@
             border-radius: 8px; background: var(--item-bg); color: var(--text-light);
             font-family: 'Poppins', sans-serif; outline: none; transition: var(--transition);
         }
-        /* Disabled Input Style */
         .input-group input:disabled, .input-group textarea:disabled {
             background: transparent; color: var(--text-muted); border-color: rgba(255,255,255,0.05); cursor: not-allowed;
         }
@@ -211,30 +210,28 @@
         .order-items { font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; }
         .order-footer { display: flex; justify-content: space-between; align-items: center; }
         .order-total { font-weight: 600; font-size: 1.1rem; }
-        .status { padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 500; }
-        .status.delivered { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
-        .status.transit { background: rgba(244, 193, 80, 0.1); color: var(--secondary-color); border: 1px solid rgba(244, 193, 80, 0.3); }
+        .status { padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 500; text-transform: capitalize; }
+        
+        /* Status Styling variants */
+        .status.delivered, .status.completed { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+        .status.transit, .status.placed, .status.new { background: rgba(244, 193, 80, 0.1); color: var(--secondary-color); border: 1px solid rgba(244, 193, 80, 0.3); }
+        .status.pending, .status.processing { background: rgba(226, 135, 67, 0.1); color: var(--primary-color); border: 1px solid rgba(226, 135, 67, 0.3); }
 
         .address-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; background: var(--item-bg); position: relative; }
         .address-type { background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-bottom: 10px; }
         .address-text { color: var(--text-muted); line-height: 1.5; font-size: 0.95rem; margin-bottom: 15px; }
 
-        /* === MOBILE RESPONSIVE FIX (MAGIC HERE) === */
+        .no-data { text-align: center; padding: 30px; color: var(--text-muted); font-size: 1rem; }
+
+        /* === MOBILE RESPONSIVE FIX === */
         @media (max-width: 900px) {
             .dashboard-container { flex-direction: column; margin: 20px auto; padding: 0 15px; gap: 0; }
-            
-            /* Initial state on mobile: Only Sidebar visible */
             .sidebar { width: 100%; position: static; padding: 20px 15px; margin-bottom: 20px; }
             .profile-pic-container { width: 100px; height: 100px; }
-            
-            .main-content { 
-                display: none; /* Initially hide main content on mobile */
-                width: 100%; padding: 25px 15px; min-height: auto; 
-            }
+            .main-content { display: none; width: 100%; padding: 25px 15px; min-height: auto; }
             .row { flex-direction: column; gap: 0; }
             .section-title { font-size: 1.6rem; }
-
-            .mobile-back-btn { display: inline-flex; } /* Show back button inside active tab */
+            .mobile-back-btn { display: inline-flex; }
         }
     </style>
 </head>
@@ -311,20 +308,9 @@
             </div>
 
             <div id="orders" class="tab-content">
-                <h2 class="section-title">Order History</h2>
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">Order #HB-98745</span>
-                        <span class="order-date">24 Oct, 2023 | 08:30 PM</span>
-                    </div>
-                    <div class="order-items">
-                        <p>1x Authentic Chicken Biryani</p>
-                        <p>2x Butter Naan</p>
-                    </div>
-                    <div class="order-footer">
-                        <span class="order-total">Total: ₹350</span>
-                        <span class="status delivered">Delivered</span>
-                    </div>
+                <h2 class="section-title" style="margin-bottom: 20px;">Order History</h2>
+                <div id="orders-container">
+                    <p class="no-data"><i class="fa-solid fa-spinner fa-spin"></i> Fetching your orders...</p>
                 </div>
             </div>
 
@@ -375,20 +361,17 @@
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
 
-            // Agar phone me hai toh sidebar hide karke content show karo
             if(isMobile()) {
                 document.getElementById('mobileSidebar').style.display = 'none';
                 document.getElementById('mobileMainContent').style.display = 'block';
             }
         }
 
-        // Phone me content padhne ke baad wapas menu (sidebar) me aane ke liye
         function goBackToMenu() {
             document.getElementById('mobileMainContent').style.display = 'none';
             document.getElementById('mobileSidebar').style.display = 'block';
         }
 
-        // Desktop walo ke liye resize adjust (failsafe)
         window.addEventListener('resize', () => {
             if(!isMobile()) {
                 document.getElementById('mobileSidebar').style.display = 'block';
@@ -400,37 +383,60 @@
         });
 
 
-        // === EDIT PROFILE LOGIC ===
+        // === EDIT & SAVE PROFILE REAL LOGIC ===
         function enableEditMode() {
-            // Edit button ko hide karo aur Save ko show karo
             document.getElementById('editProfileBtn').style.display = 'none';
             document.getElementById('saveProfileBtn').style.display = 'inline-flex';
             
-            // Inputs ko enable karo (Email ko chhodkar, kyuki mail change karne me auth risk hota hai)
             document.getElementById('input-fname').disabled = false;
             document.getElementById('input-lname').disabled = false;
             document.getElementById('input-phone').disabled = false;
             document.getElementById('input-address').disabled = false;
 
-            // Form par halka effect lagate hain focus draw karne ke liye
             document.getElementById('input-fname').focus();
         }
 
-        function saveProfile(e) {
+        async function saveProfile(e) {
             e.preventDefault();
-            // TODO: PUT /api/users/profile call yahan lagani hai
-
-            alert("Profile information saved successfully!");
+            const token = localStorage.getItem('token');
             
-            // Wapas disable kardo sabko
-            document.getElementById('input-fname').disabled = true;
-            document.getElementById('input-lname').disabled = true;
-            document.getElementById('input-phone').disabled = true;
-            document.getElementById('input-address').disabled = true;
+            // First aur Last name ko merge karke fullName banaya jo tumhare userController me expect ho raha hai
+            const fullName = document.getElementById('input-fname').value.trim() + ' ' + document.getElementById('input-lname').value.trim();
+            const phoneNumber = document.getElementById('input-phone').value.trim();
+            const address = document.getElementById('input-address').value.trim();
 
-            // Buttons wapas swap
-            document.getElementById('saveProfileBtn').style.display = 'none';
-            document.getElementById('editProfileBtn').style.display = 'inline-flex';
+            try {
+                const response = await fetch('https://homebite-aecl.onrender.com/api/users/profile', {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ fullName, phoneNumber, address })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Profile information saved successfully!");
+                    
+                    document.getElementById('input-fname').disabled = true;
+                    document.getElementById('input-lname').disabled = true;
+                    document.getElementById('input-phone').disabled = true;
+                    document.getElementById('input-address').disabled = true;
+
+                    document.getElementById('saveProfileBtn').style.display = 'none';
+                    document.getElementById('editProfileBtn').style.display = 'inline-flex';
+                    
+                    // Frontend components reload data to match changes instantly
+                    fetchUserData(token);
+                } else {
+                    alert("Failed to update profile: " + (data.message || "Unknown Error"));
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                alert("Server error during profile update.");
+            }
         }
 
 
@@ -504,12 +510,13 @@
                 return;
             }
 
-            // Mobile initial state handle
             if(isMobile()) {
                 document.getElementById('mobileMainContent').style.display = 'none';
             }
 
-            fetchUserData(token);
+            // Dono fetch function sequentially triggers honge
+            await fetchUserData(token);
+            await fetchUserOrders(token);
         });
 
         async function fetchUserData(token) {
@@ -538,7 +545,6 @@
                     document.getElementById('input-lname').value = nameParts.slice(1).join(' ') || '';
                     document.getElementById('input-email').value = userData.email || '';
                     
-                    // Phone Number bind
                     document.getElementById('input-phone').value = userData.phoneNumber || userData.phone || '';
                     
                     if(userData.address) {
@@ -555,6 +561,79 @@
             } catch (error) {
                 console.error("Error connecting to server:", error);
                 document.getElementById('display-name').textContent = "Server Offline";
+            }
+        }
+
+        // === FETCH REAL ORDERS FROM BACKEND FOR CURRENT USER ONLY ===
+        async function fetchUserOrders(token) {
+            const ordersContainer = document.getElementById('orders-container');
+            try {
+                // Headers me Authorization Authorization: Bearer send karne se backend automatic 
+                // wahi user identify karega aur sirf usi ke unique orders load honge
+                const response = await fetch('https://homebite-aecl.onrender.com/api/orders/my-orders', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const orders = await response.json();
+                    
+                    if (!orders || orders.length === 0) {
+                        ordersContainer.innerHTML = `<p class="no-data"><i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 10px; display: block; color: var(--primary-color);"></i>You haven't placed any orders yet.</p>`;
+                        return;
+                    }
+
+                    // Loop lagake content ko clear aur naye element bind karte hain
+                    ordersContainer.innerHTML = '';
+                    
+                    orders.forEach(order => {
+                        // Date parsing cleanly structured 
+                        const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : 'Date unavailable';
+
+                        // Sub-items iteration string generator
+                        let itemsHtml = '';
+                        if (order.items && Array.isArray(order.items)) {
+                            order.items.forEach(item => {
+                                itemsHtml += `<p>${item.qty || 1}x ${item.name || 'Dish Item'}</p>`;
+                            });
+                        }
+
+                        // Determine the CSS class safely depending on incoming schema mapping
+                        const statusClass = (order.status || order.paymentStatus || 'pending').toLowerCase();
+
+                        const orderCard = document.createElement('div');
+                        orderCard.className = 'order-card';
+                        orderCard.innerHTML = `
+                            <div class="order-header">
+                                <span class="order-id">Order ${order.orderId || '#HB-XXXXXX'}</span>
+                                <span class="order-date">${orderDate}</span>
+                            </div>
+                            <div class="order-items">
+                                ${itemsHtml}
+                            </div>
+                            <div class="order-footer">
+                                <span class="order-total">Total: ₹${order.totalAmount || '0'}</span>
+                                <span class="status ${statusClass}">${order.status || order.paymentStatus || 'Pending'}</span>
+                            </div>
+                        `;
+                        ordersContainer.appendChild(orderCard);
+                    });
+
+                } else {
+                    ordersContainer.innerHTML = `<p class="no-data" style="color: #ff4d4d;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading order historical records.</p>`;
+                }
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+                ordersContainer.innerHTML = `<p class="no-data" style="color: #ff4d4d;"><i class="fa-solid fa-circle-xmark"></i> Connection error or server offline.</p>`;
             }
         }
     </script>
