@@ -357,35 +357,143 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Scroll Animation Logic
-            const reveals = document.querySelectorAll(".reveal");
+<script>
+        let allMenuItems = [];
+        
+        // AGAR APNA BACKEND DEPLOY HO GAYA HAI TOH RENDER WALI URL YAHAN DALO
+        // Jaise: 'https://homebite-admin.onrender.com/api/menu'
+        const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
 
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Backend se live menu data load karo
+            fetchLiveMenu();
+
+            // 2. Filter buttons ki functionality setup karo
+            setupFilters();
+        });
+
+        // Backend se data laane ka function
+        async function fetchLiveMenu() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                // Data ko globally save karein (array check ke sath)
+                allMenuItems = Array.isArray(data) ? data : (data.data || []);
+                
+                // Customer ko sirf wahi items dikhane hain jo 'In Stock' (true) hain
+                const inStockItems = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
+                
+                renderMenuCards(inStockItems);
+            } catch (error) {
+                console.error("Error fetching live menu:", error);
+                const menuGrid = document.querySelector('.menu-grid');
+                if (menuGrid) {
+                    menuGrid.innerHTML = `<p style="color: var(--primary-color); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Live menu load karne me dikkat aa rahi hai. Kripya baad me try karein!</p>`;
+                }
+            }
+        }
+
+        // HTML Cards dynamically generate karne ka function
+        function renderMenuCards(items) {
+            const menuGrid = document.querySelector('.menu-grid');
+            if (!menuGrid) return;
+
+            if (items.length === 0) {
+                menuGrid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Filhal is category me koi dish available nahi hai.</p>`;
+                return;
+            }
+
+            // Pura layout wahi hai, bas data MongoDB se aa raha hai
+            menuGrid.innerHTML = items.map(item => {
+                // Price Model Configuration (Single vs Variants)
+                let priceHTML = '';
+                if (item.priceModel === 'single' || !item.priceModel) {
+                    priceHTML = `<span class="price">压${item.price}</span>`;
+                } else {
+                    priceHTML = `<span class="price" style="font-size: 0.95rem;">压${item.priceHalf} (Half) / 压${item.priceFull} (Full)</span>`;
+                }
+
+                // Veg / Non-Veg Visual Badge Indicator
+                const isVeg = item.foodType === 'Veg';
+                const badgeColor = isVeg ? '#2ed573' : '#ff4757';
+                const badgeIcon = isVeg ? '🟢' : '🔴';
+
+                return `
+                    <div class="menu-card reveal">
+                        <div class="card-img-container" style="position: relative; overflow: hidden; border-radius: 12px; height: 220px;">
+                            <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; transition: var(--transition);">
+                            <span class="food-type-badge" style="position: absolute; top: 12px; right: 12px; background: rgba(5,5,5,0.85); border: 1px solid ${badgeColor}; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 5px;">
+                                ${badgeIcon} ${item.foodType}
+                            </span>
+                        </div>
+                        <div class="card-info" style="padding: 1.5rem 0 0 0; display: flex; flex-direction: column; height: calc(100% - 220px);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.6rem; gap: 10px;">
+                                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--text-light); font-weight: 700; margin: 0;">${item.name}</h3>
+                                <span style="font-family: 'Poppins', sans-serif; font-size: 0.75rem; color: var(--primary-color); background: rgba(226,135,67,0.12); padding: 3px 10px; border-radius: 5px; font-weight: 500; text-transform: capitalize; white-space: nowrap;">${item.category}</span>
+                            </div>
+                            <p class="item-desc" style="color: var(--text-muted); font-family: 'Poppins', sans-serif; font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.2rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 42px;">
+                                ${item.desc || 'Premium home-cooked delicacy prepared fresh with elite ingredients.'}
+                            </p>
+                            <div class="card-bottom" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.5rem;">
+                                ${priceHTML}
+                                <button class="btn-order" style="background: var(--primary-color); color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: var(--transition);">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Naye items render hote hi Scroll Reveal animation reset karein taaki fade-in work kare
+            initScrollReveal();
+        }
+
+        // Live Dynamic Filtering (All, Veg, Non-Veg, ya custom Categories)
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filterValue = this.innerText.trim().toLowerCase();
+
+                    // Sirf in-stock items ko hi process karenge
+                    const activeMenu = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
+
+                    if (filterValue === 'all' || filterValue === 'our menu') {
+                        renderMenuCards(activeMenu);
+                    } else if (filterValue === 'veg') {
+                        renderMenuCards(activeMenu.filter(item => item.foodType === 'Veg'));
+                    } else if (filterValue === 'non-veg') {
+                        renderMenuCards(activeMenu.filter(item => item.foodType === 'Non-Veg'));
+                    } else {
+                        // Agar koi specific category buttons banaye hain (e.g., Biryani, Starters)
+                        renderMenuCards(activeMenu.filter(item => item.category.toLowerCase() === filterValue));
+                    }
+                });
+            });
+        }
+
+        // Premium Scroll Fade-in Animation Engine
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll(".reveal");
             const revealOnScroll = () => {
                 for (let i = 0; i < reveals.length; i++) {
                     const windowHeight = window.innerHeight;
                     const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 100;
+                    const elementVisible = 80;
 
                     if (elementTop < windowHeight - elementVisible) {
                         reveals[i].classList.add("active");
                     }
                 }
             };
-
+            // Puraane events clear karke naye lagayein taaki lag na ho
+            window.removeEventListener("scroll", revealOnScroll);
             window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Trigger on load
-
-            // Simple Filter Visual Logic (For design purpose)
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        });
+            revealOnScroll(); // Pehli baar instant trigger karein window load par
+        }
     </script>
 </body>
 </html>
