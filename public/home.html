@@ -6,16 +6,15 @@
     <title>HomeBite | Premium Food Delivery</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === VARIABLES & RESET (UPDATED FOR PREMIUM DARK THEME) === */
+        /* === VARIABLES & RESET (PREMIUM DARK THEME) === */
         :root {
-            --primary-color: #e28743; /* Classy Gold/Orange */
+            --primary-color: #e28743; 
             --secondary-color: #f4c150;
-            --dark-bg: #050505; /* Deep Black */
-            --section-bg: #0a0a0a; /* Slightly lighter black for sections */
+            --dark-bg: #050505; 
+            --section-bg: #0a0a0a; 
             --card-bg: #151515;
             --text-light: #ffffff;
             --text-muted: #a0a0a0;
@@ -57,7 +56,7 @@
         .top-bar span { margin-right: 20px; }
         .top-bar i { color: var(--primary-color); margin-right: 5px; }
 
-        /* === NAVBAR (Glassmorphism Dark) === */
+        /* === NAVBAR === */
         nav {
             display: flex;
             justify-content: space-between;
@@ -71,12 +70,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .brand-logo {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--text-light);
-            letter-spacing: 1px;
-        }
+        .brand-logo { font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; }
         .brand-logo span { color: var(--primary-color); font-style: italic; }
         
         .nav-links { display: flex; gap: 35px; }
@@ -89,38 +83,13 @@
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
 
-        /* === NAV ACTIONS (Cart, Profile, Button) === */
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .nav-icon {
-            color: var(--text-light);
-            font-size: 1.25rem;
-            transition: var(--transition);
-            position: relative;
-        }
-        .nav-icon:hover {
-            color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
+        .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
         .cart-badge {
-            position: absolute;
-            top: -6px;
-            right: -8px;
-            background-color: var(--primary-color);
-            color: #fff;
-            font-size: 0.65rem;
-            font-weight: 700;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
+            position: absolute; top: -6px; right: -8px; background-color: var(--primary-color);
+            color: #fff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px;
+            display: flex; justify-content: center; align-items: center; border-radius: 50%;
         }
 
         .btn-main {
@@ -131,7 +100,7 @@
         }
         .btn-main:hover { background-color: transparent; color: var(--primary-color); box-shadow: 0 15px 30px rgba(226, 135, 67, 0.4); transform: translateY(-3px); }
 
-        /* === HERO SECTION (Modern Dark Gradient) === */
+        /* === HERO SECTION === */
         .hero {
             display: flex; align-items: center; justify-content: space-between;
             padding: 80px 5% 120px; 
@@ -139,7 +108,6 @@
             min-height: 90vh;
             position: relative;
         }
-        /* Stylish glow behind text */
         .hero::before {
             content: ''; position: absolute; top: 20%; left: 10%; width: 300px; height: 300px;
             background: var(--primary-color); filter: blur(150px); opacity: 0.15; z-index: 0;
@@ -158,7 +126,7 @@
         }
         @keyframes floatImage { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
 
-        /* === ABOUT / STORY SECTION (Classy Dark) === */
+        /* === ABOUT SECTION === */
         .about-section { 
             padding: 120px 5%; display: flex; align-items: center; gap: 70px; 
             background: linear-gradient(to bottom, var(--dark-bg), var(--section-bg));
@@ -179,7 +147,7 @@
         }
         .btn-outline:hover { background: var(--primary-color); color: #fff; box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
 
-        /* === FEATURED MENU (Dark Cards) === */
+        /* === FEATURED MENU === */
         .menu-section { padding: 120px 5%; background-color: var(--dark-bg); text-align: center; }
         
         .menu-grid {
@@ -189,24 +157,42 @@
         .menu-card {
             background: var(--card-bg); border-radius: 12px; overflow: hidden;
             transition: var(--transition); border: 1px solid rgba(255,255,255,0.03);
+            display: flex; flex-direction: column;
         }
         .menu-card:hover { transform: translateY(-15px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .menu-card img { width: 100%; height: 260px; object-fit: cover; transition: var(--transition); filter: brightness(0.9); }
-        .menu-card:hover img { transform: scale(1.08); filter: brightness(1.1); }
         
-        .card-body { padding: 30px 25px; }
-        .card-body h3 { font-size: 1.6rem; margin-bottom: 10px; color: var(--text-light); }
-        .card-body p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.7; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 1.5rem; font-weight: 600; color: var(--primary-color); font-family: 'Playfair Display', serif; }
-        .order-btn {
-            background: rgba(226, 135, 67, 0.1); color: var(--primary-color);
-            padding: 10px 25px; border-radius: 4px; transition: var(--transition); border: 1px solid rgba(226, 135, 67, 0.2);
-            text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
+        .card-img-container { width: 100%; height: 240px; overflow: hidden; position: relative; }
+        .card-img-container img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); filter: brightness(0.9); }
+        .menu-card:hover .card-img-container img { transform: scale(1.08); filter: brightness(1.1); }
+        
+        /* Simpler Price and Card Body */
+        .card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-body h3 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-light); }
+        .card-body p { 
+            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6; flex-grow: 1;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
         }
-        .order-btn:hover { background: var(--primary-color); color: #fff; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: auto; }
+        
+        /* SIMPLE PRICE DESIGN */
+        .price { 
+            font-size: 1.05rem; 
+            font-weight: 600; 
+            color: var(--primary-color); 
+            font-family: 'Poppins', sans-serif; /* Playfair hata diya, clean font lagaya */
+            background: rgba(226, 135, 67, 0.1); /* Halka sa orange background */
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
 
-        /* === NEWSLETTER SECTION === */
+        .order-btn {
+            background: var(--primary-color); color: #fff; border: none;
+            padding: 10px 20px; border-radius: 6px; transition: var(--transition);
+            font-size: 0.85rem; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer;
+        }
+        .order-btn:hover { background: var(--secondary-color); color: #000; }
+
+        /* === NEWSLETTER === */
         .newsletter {
             padding: 100px 5%; text-align: center; background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
             position: relative;
@@ -221,35 +207,27 @@
             border-radius: 4px; overflow: hidden; padding: 5px; backdrop-filter: blur(10px);
         }
         .newsletter input { flex: 1; border: none; outline: none; padding: 15px 25px; font-size: 1rem; background: transparent; color: #fff; }
-        .newsletter input::placeholder { color: #888; }
         .newsletter button {
             background: var(--primary-color); color: #fff; border: none;
             padding: 15px 35px; border-radius: 4px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);
         }
         .newsletter button:hover { background: #c97130; }
 
-        /* === BIG MODERN FOOTER === */
+        /* === FOOTER === */
         footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
         .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
         .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--primary-color); }
         .footer-col p { line-height: 1.8; margin-bottom: 20px; color: var(--text-muted); }
-        
         .social-links { display: flex; gap: 15px; }
-        .social-links a {
-            display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px;
-            background: rgba(255,255,255,0.03); border-radius: 4px; color: var(--primary-color); transition: var(--transition); border: 1px solid rgba(255,255,255,0.05);
-        }
-        .social-links a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2); }
-
+        .social-links a { display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; background: rgba(255,255,255,0.03); border-radius: 4px; color: var(--primary-color); transition: var(--transition); border: 1px solid rgba(255,255,255,0.05); }
+        .social-links a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); }
         .footer-links li { margin-bottom: 15px; }
         .footer-links a { color: var(--text-muted); transition: var(--transition); }
         .footer-links a:hover { color: var(--primary-color); padding-left: 8px; }
-
         .contact-info li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; color: var(--text-muted); line-height: 1.6; }
         .contact-info i { color: var(--primary-color); font-size: 1.2rem; margin-top: 3px; }
         .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
-
         .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
 
         /* === RESPONSIVE === */
@@ -265,9 +243,8 @@
             .hero-text h1 { font-size: 3.5rem; }
             .section-title { font-size: 2.8rem; }
             .top-bar { display: none; }
-            /* Hide the Order Now button on very small screens to save space, but keep icons */
             .btn-main { display: none; }
-            .hero-text .btn-main { display: inline-block; } /* Keep hero button */
+            .hero-text .btn-main { display: inline-block; } 
         }
     </style>
 </head>
@@ -339,10 +316,12 @@
         
         <div class="menu-grid" id="menuGrid">
             <div class="menu-card reveal">
-                <img src="https://tse1.mm.bing.net/th/id/OIP.vYOQ6ZyXSqVSvfr9y--rZgHaEJ?cb=thfc1falcon4&w=1249&h=700&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Steak">
+                <div class="card-img-container">
+                    <img src="https://tse1.mm.bing.net/th/id/OIP.vYOQ6ZyXSqVSvfr9y--rZgHaEJ?cb=thfc1falcon4&w=1249&h=700&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Steak">
+                </div>
                 <div class="card-body">
                     <h3>Biryani</h3>
-                    <p>Experience the art of authentic biryani—where premium ingredients, aromatic spices, and delicate layers of long-grain basmati rice come together in perfect harmony. Crafted with passion, served with pride.</p>
+                    <p>Experience the art of authentic biryani—where premium ingredients, aromatic spices, and delicate layers come together in perfect harmony.</p>
                     <div class="card-footer">
                         <span class="price">₹1,250</span>
                         <a href="#" class="order-btn">Add to Cart</a>
@@ -351,7 +330,9 @@
             </div>
 
             <div class="menu-card reveal">
-                <img src="https://www.cooking-therapy.com/wp-content/uploads/2018/02/Truffle-Mushroom-Pasta-2-1080x1512.jpg" alt="Pasta">
+                <div class="card-img-container">
+                    <img src="https://www.cooking-therapy.com/wp-content/uploads/2018/02/Truffle-Mushroom-Pasta-2-1080x1512.jpg" alt="Pasta">
+                </div>
                 <div class="card-body">
                     <h3>Truffle Mushroom Pasta</h3>
                     <p>Handmade fettuccine tossed in a rich, creamy truffle sauce with wild mushrooms and aged parmesan.</p>
@@ -363,7 +344,9 @@
             </div>
 
             <div class="menu-card reveal">
-                <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=600&q=80" alt="Salmon">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=600&q=80" alt="Salmon">
+                </div>
                 <div class="card-body">
                     <h3>Grilled Atlantic Salmon</h3>
                     <p>Fresh caught salmon glazed with honey mustard, paired with roasted asparagus and lemon wedges.</p>
@@ -446,84 +429,89 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // === 1. ANIMATION LOGIC ===
-            const reveals = document.querySelectorAll(".reveal");
+        // === MAIN API URL (Aapki working waali API) ===
+        const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
 
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // --- 1. SCROLL ANIMATION LOGIC ---
+            const reveals = document.querySelectorAll(".reveal");
             const revealOnScroll = () => {
                 for (let i = 0; i < reveals.length; i++) {
                     const windowHeight = window.innerHeight;
                     const elementTop = reveals[i].getBoundingClientRect().top;
                     const elementVisible = 100;
-
                     if (elementTop < windowHeight - elementVisible) {
                         reveals[i].classList.add("active");
                     }
                 }
             };
             window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Trigger on load
+            revealOnScroll(); // Trigger instantly
 
-
-            // === 2. REAL MENU FETCH LOGIC ===
-            async function fetchRealMenu() {
+            // --- 2. LIVE MENU FETCH LOGIC (For Front Page - 3 Items) ---
+            async function fetchLiveMenu() {
                 try {
-                    // Backend se saara menu mangwa rahe hain
-                    const response = await fetch('https://homebite-admin.onrender.com/api/menu/all');
+                    const response = await fetch(API_URL);
                     const data = await response.json();
                     
-                    let menuItems = [];
-                    // API format check karna
-                    if (data.success && data.data) {
-                        menuItems = data.data;
-                    } else if (Array.isArray(data)) {
-                        menuItems = data;
-                    }
+                    // JSON format se sahi array extract karna
+                    let allMenuItems = Array.isArray(data) ? data : (data.data || []);
+                    
+                    // Sirf wahi item lenge jo In Stock hain
+                    let inStockItems = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
 
-                    // Agar database khali hai to purana dummy hi dikhne do
-                    if (menuItems.length === 0) return;
+                    // Agar database khali hai toh purane static cards hi dikhne do
+                    if (inStockItems.length === 0) return;
 
-                    // Items ko categories me divide karna
-                    let sweets = menuItems.filter(item => item.category && (item.category.toLowerCase().includes('sweet') || item.category.toLowerCase().includes('dessert')));
-                    let others = menuItems.filter(item => !item.category || (!item.category.toLowerCase().includes('sweet') && !item.category.toLowerCase().includes('dessert')));
+                    // Items ko alag-alag karna (Sweets vs Others)
+                    let sweets = inStockItems.filter(item => item.category && (item.category.toLowerCase().includes('sweet') || item.category.toLowerCase().includes('dessert')));
+                    let others = inStockItems.filter(item => !item.category || (!item.category.toLowerCase().includes('sweet') && !item.category.toLowerCase().includes('dessert')));
 
                     let finalSelection = [];
 
-                    // 1. Kam se kam 1 Sweet add karo (agar available hai)
-                    if (sweets.length > 0) {
-                        finalSelection.push(sweets[0]);
-                    }
+                    // 1. Ek sweet zaroor lagao
+                    if (sweets.length > 0) finalSelection.push(sweets[0]);
 
-                    // 2. Baaki ke 2 cards ko kisi dusri category se bharo
+                    // 2. Baaki jagah normal items se bharo
                     for (let i = 0; finalSelection.length < 3 && i < others.length; i++) {
                         finalSelection.push(others[i]);
                     }
 
-                    // 3. Agar abhi bhi 3 pure nahi hue to baaki bacche sweets daal do
+                    // 3. Agar abhi bhi jagah bachi hai toh sweets se bhar do
                     for (let i = 1; finalSelection.length < 3 && i < sweets.length; i++) {
                         finalSelection.push(sweets[i]);
                     }
 
-                    // Ab purane static dummy cards ko hata kar real cards daalenge
+                    // Ab UI mein real cards dalenge
                     const menuGrid = document.getElementById('menuGrid');
                     menuGrid.innerHTML = ''; 
 
                     finalSelection.forEach(item => {
-                        // Agar image nahi hai to default premium image lagayenge
+                        // Image Fallback
                         const imgSrc = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
-                        
-                        // Description nahi hai to default text
-                        const desc = item.description || 'Delicious premium meal crafted with love. Perfectly balanced spices and fresh ingredients.';
+                        const desc = item.desc || item.description || 'Premium home-cooked delicacy prepared fresh with elite ingredients.';
+
+                        // --- AAPKA SIMPLE PRICE LOGIC ---
+                        let priceHTML = '';
+                        if (item.priceModel === 'single' || !item.priceModel) {
+                            priceHTML = `<span class="price">₹${item.price}</span>`;
+                        } else {
+                            // Half/Full wala structure ekdum clean kiya gaya hai
+                            priceHTML = `<span class="price">₹${item.priceHalf} (H) / ₹${item.priceFull} (F)</span>`;
+                        }
 
                         const cardHTML = `
                             <div class="menu-card reveal active">
-                                <img src="${imgSrc}" alt="${item.name}">
+                                <div class="card-img-container">
+                                    <img src="${imgSrc}" alt="${item.name}">
+                                </div>
                                 <div class="card-body">
                                     <h3>${item.name}</h3>
                                     <p>${desc}</p>
                                     <div class="card-footer">
-                                        <span class="price">₹${item.price}</span>
-                                        <a href="#" class="order-btn">Add to Cart</a>
+                                        ${priceHTML}
+                                        <button class="order-btn">Add to Cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -531,18 +519,15 @@
                         menuGrid.innerHTML += cardHTML;
                     });
                     
-                    // Naye cards pe animation activate karne ke liye wapas function call kar diya
+                    // Card load hone ke baad scroll animation trigger karna
                     revealOnScroll();
 
                 } catch (error) {
-                    console.log("Error loading real menu, keeping dummy items:", error);
-                    // Agar error aayi (jaise internet band ho ya server sleep pe ho), 
-                    // tab bhi purane static cards display hote rahenge, page kharab nahi hoga!
+                    console.log("Error loading real menu, keeping default items:", error);
                 }
             }
 
-            // Function ko call kiya
-            fetchRealMenu();
+            fetchLiveMenu(); // Function call
         });
     </script>
 </body>
