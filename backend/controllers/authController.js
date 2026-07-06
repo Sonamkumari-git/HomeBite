@@ -1,36 +1,66 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('../config/cloudinary'); 
+const streamifier = require('streamifier');
 
-// Token Generate Karne ka function
+// Generate JWT Token
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d', // Token 30 din tak valid rahega
-    });
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
-// @desc    Register new user (Sign Up)
-// @route   POST /api/auth/register
+// ==========================================
+// REGISTER USER CONTROLLER
+// ==========================================
 const registerUser = async (req, res) => {
     try {
-        const { fullName, email, address, password } = req.body;
+        // 🔥 AB REQ.BODY UNDEFINED NAHI AAYEGA!
+        // HTML form se jo naam bheje the, wahi use kar rahe hain
+        const { fullName, email, phone, address, password } = req.body;
 
-        // Check agar user pehle se hai
-        const userExists = await User.findOne({ email });
-        if (userExists) {
-            return res.status(400).json({ message: 'User already exists with this email' });
+        // Validation
+        if (!fullName || !email || !password || !address || !phone) {
+            return res.status(400).json({ message: 'Please add all required fields' });
         }
 
-        // Password Hash (Encrypt) karna
+        // Check if user already exists
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ message: 'User with this email already exists' });
+        }
+
+        // Hash Password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Naya User create karna
+        let profileImageUrl = "";
+
+        // 🔥 AGAR USER NE PROFILE PICTURE BHI UPLOAD KI HAI TOH CLOUDINARY PE BHEJO
+        if (req.file) {
+            let streamUpload = (req) => {
+                return new Promise((resolve, reject) => {
+                    let stream = cloudinary.uploader.upload_stream(
+                        { folder: "homebite/profiles", resource_type: "auto" },
+                        (error, result) => {
+                            if (result) resolve(result);
+                            else reject(error);
+                        }
+                    );
+                    streamifier.createReadStream(req.file.buffer).pipe(stream);
+                });
+            };
+            const cloudinaryResult = await streamUpload(req);
+            profileImageUrl = cloudinaryResult.secure_url;
+        }
+
+        // 🔥 CREATE USER IN DATABASE
         const user = await User.create({
-            fullName,
-            email,
-            address,
-            password: hashedPassword
+            fullName: fullName,
+            email: email,
+            phoneNumber: phone, // HTML se 'phone' aaya, DB me 'phoneNumber' save hoga
+            address: address,
+            password: hashedPassword,
+            profileImage: profileImageUrl // Cloudinary image link
         });
 
         if (user) {
@@ -38,40 +68,40 @@ const registerUser = async (req, res) => {
                 _id: user.id,
                 fullName: user.fullName,
                 email: user.email,
-                address: user.address,
                 token: generateToken(user._id)
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
         }
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Register Error:", error);
+        res.status(500).json({ message: 'Server error during registration' });
     }
 };
 
-// @desc    Authenticate a user (Login)
-// @route   POST /api/auth/login
+// ==========================================
+// LOGIN USER CONTROLLER (Waise hi rahega)
+// ==========================================
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Email se user dhoondo
         const user = await User.findOne({ email });
 
-        // Agar user mila aur password match hua
         if (user && (await bcrypt.compare(password, user.password))) {
             res.json({
                 _id: user.id,
                 fullName: user.fullName,
                 email: user.email,
-                address: user.address,
                 token: generateToken(user._id)
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Login Error:", error);
+        res.status(500).json({ message: 'Server error during login' });
     }
 };
 
