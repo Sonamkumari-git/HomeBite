@@ -320,6 +320,11 @@
             background: #c97130;
             box-shadow: 0 5px 15px rgba(226, 135, 67, 0.3);
         }
+        .checkout-btn:disabled {
+            background: #555 !important;
+            cursor: not-allowed;
+            box-shadow: none !important;
+        }
 
         /* Empty Cart State */
         .empty-cart-message {
@@ -405,26 +410,22 @@
                     </div>
                 </div>
 
-                <button class="checkout-btn" onclick="processOrderCheckout()">Proceed to Checkout</button>
+                <button class="checkout-btn" id="checkoutBtn" onclick="processOrderCheckout()">Confirm & Place Order</button>
             </aside>
 
         </div>
     </main>
 
     <script>
-        // Server Base URL 
+        // Server API URL
         const SERVER_URL = 'https://homebite-aecl.onrender.com';
 
-        // Sample initial cart items array matching your screens for standalone display
-        let cartItems = [
-            { id: "item1", title: "Authentic Chicken Biryani", author: "Chef Sharma", price: 250, qty: 1, img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=150&q=80" },
-            { id: "item2", title: "Special Paneer Butter Masala", author: "Aunty Ki Rasoi", price: 180, qty: 2, img: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=150&q=80" }
-        ];
+        // 🔥 LOCALSTORAGE KEY से आइटम्स लोड करना
+        let cartItems = JSON.parse(localStorage.getItem('homebite_cart')) || [];
 
-        // Fetch user data from your live render instance on startup
+        // Fetch Live profile address data from onrender user controller
         async function fetchUserProfileData() {
             try {
-                // If token exists in localStorage, append it to verify auth state
                 const token = localStorage.getItem('token'); 
                 const headers = {};
                 if(token) headers['Authorization'] = `Bearer ${token}`;
@@ -433,25 +434,27 @@
                 
                 if (response.ok) {
                     const userData = await response.json();
-                    // Inject database content securely into address layout
-                    document.getElementById('userAddressDisplay').innerText = `${userData.fullName} — ${userData.address || 'No Address Saved'}`;
+                    // Real address information mapping
+                    document.getElementById('userAddressDisplay').innerText = `${userData.fullName} — ${userData.address || 'Address not updated'}`;
                     if(userData.phoneNumber || userData.email) {
                         document.getElementById('userContactDisplay').innerText = `Contact: ${userData.phoneNumber || ''} | ${userData.email}`;
                     }
                 } else {
-                    // Fallback configuration if auth fails or run locally
-                    document.getElementById('userAddressDisplay').innerText = "SONAM Kumari — badalpur, Patna, Bihar, India";
-                    document.getElementById('userContactDisplay').innerText = "Contact: +91 96938 14964 | 7258sonam@gmail.com";
+                    document.getElementById('userAddressDisplay').innerText = "Guest User — Please complete profile setup";
+                    document.getElementById('userContactDisplay').innerText = "Contact: N/A";
                 }
             } catch (err) {
-                console.error("Failed to sync user context via API:", err);
-                // Fallback rendering
-                document.getElementById('userAddressDisplay').innerText = "SONAM Kumari — badalpur, Patna, Bihar, India";
-                document.getElementById('userContactDisplay').innerText = "Contact: +91 96938 14964 | 7258sonam@gmail.com";
+                console.error("Failed to sync profile context:", err);
+                document.getElementById('userAddressDisplay').innerText = "Error fetching your real address";
             }
         }
 
-        // Render Cart HTML lists
+        // Save current cart snapshot state into local storage key
+        function syncCartStorage() {
+            localStorage.setItem('homebite_cart', JSON.stringify(cartItems));
+        }
+
+        // Dynamic HTML Injector for Cart Rows
         function renderCartItems() {
             const listContainer = document.getElementById('cartItemsList');
             if (cartItems.length === 0) {
@@ -461,19 +464,19 @@
             }
 
             listContainer.innerHTML = cartItems.map((item, index) => `
-                <div class="cart-item" data-id="${item.id}">
+                <div class="cart-item" data-id="${item.id || item._id}">
                     <div class="item-main-info">
-                        <img src="${item.img}" alt="${item.title}" class="item-img">
+                        <img src="${item.img || item.image || 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=150&q=80'}" alt="${item.title || item.name}" class="item-img">
                         <div class="item-text">
-                            <h4>${item.title}</h4>
-                            <p>By ${item.author}</p>
+                            <h4>${item.title || item.name}</h4>
+                            <p>By ${item.author || 'HomeBite Chef'}</p>
                             <div class="item-price">₹${item.price}</div>
                         </div>
                     </div>
                     <div class="item-controls">
                         <div class="quantity-picker">
                             <button class="qty-btn" onclick="updateQty(${index}, -1)">−</button>
-                            <span class="qty-value">${item.qty}</span>
+                            <span class="qty-value">${item.qty || item.quantity || 1}</span>
                             <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
                         </div>
                         <button class="delete-btn" onclick="removeCartItem(${index})">
@@ -486,27 +489,34 @@
             calculatePricingTotals();
         }
 
-        // Update quantity trigger
+        // Update item quantites counter
         function updateQty(index, offset) {
-            cartItems[index].qty += offset;
-            if (cartItems[index].qty <= 0) {
+            let currentQty = cartItems[index].qty || cartItems[index].quantity || 1;
+            currentQty += offset;
+            
+            if (currentQty <= 0) {
                 removeCartItem(index);
             } else {
+                if(cartItems[index].qty) cartItems[index].qty = currentQty;
+                if(cartItems[index].quantity) cartItems[index].quantity = currentQty;
+                syncCartStorage();
                 renderCartItems();
             }
         }
 
-        // Remove single row structure
+        // Remove row completely
         function removeCartItem(index) {
             cartItems.splice(index, 1);
+            syncCartStorage();
             renderCartItems();
         }
 
-        // Real-time computations (Subtotal, Taxes, Total)
+        // Live math summaries calculations
         function calculatePricingTotals() {
             let subtotal = 0;
             cartItems.forEach(item => {
-                subtotal += (item.price * item.qty);
+                let q = item.qty || item.quantity || 1;
+                subtotal += (item.price * q);
             });
 
             const deliveryFee = subtotal > 0 ? 40 : 0;
@@ -519,29 +529,91 @@
             document.getElementById('totalVal').innerText = `₹${totalAmount.toFixed(2)}`;
         }
 
-        // Handle order placement pipeline
-        function processOrderCheckout() {
-            if(cartItems.length === 0) {
-                return; 
+        // 🔥 DATABASE SUBMISSION & PROFILE REDIRECTION
+        async function processOrderCheckout() {
+            if(cartItems.length === 0) return;
+
+            const token = localStorage.getItem('token');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if(!token) {
+                checkoutBtn.style.backgroundColor = "var(--danger)";
+                checkoutBtn.innerText = "Please login to checkout";
+                return;
             }
-            
+
             const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
             const targetAddress = document.getElementById('userAddressDisplay').innerText;
 
+            // Recalculating dynamic payload variables for your database model
+            let subtotal = 0;
+            cartItems.forEach(item => {
+                let q = item.qty || item.quantity || 1;
+                subtotal += (item.price * q);
+            });
+            const deliveryFee = 40;
+            const taxAmount = subtotal * 0.05;
+            const totalAmount = subtotal + deliveryFee + taxAmount;
+
+            // Structuring final body maps matching standard MERN backend model
             const orderPayload = {
-                items: cartItems,
-                deliveryAddress: targetAddress,
+                orderItems: cartItems.map(item => ({
+                    name: item.title || item.name,
+                    qty: item.qty || item.quantity || 1,
+                    image: item.img || item.image,
+                    price: item.price,
+                    product: item.id || item._id
+                })),
+                shippingAddress: targetAddress,
                 paymentMethod: selectedPayment,
-                timestamp: new Date()
+                itemsPrice: subtotal,
+                taxPrice: taxAmount,
+                shippingPrice: deliveryFee,
+                totalPrice: totalAmount
             };
 
-            console.log("Submitting dynamic payload structure onto Kitchen Dashboard Node:", orderPayload);
-            
-            // Redirect smoothly without browser system alert interrupts
-            window.location.href = "/live-orders.html";
+            // Loader adjustments without browser windows system alerts
+            checkoutBtn.innerText = "Placing Order...";
+            checkoutBtn.disabled = true;
+
+            try {
+                // Post network operation onto render engine backend
+                const response = await fetch(`${SERVER_URL}/api/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(orderPayload)
+                });
+
+                if (response.ok) {
+                    // Success UI visual adjustment
+                    checkoutBtn.style.backgroundColor = "var(--success)";
+                    checkoutBtn.innerText = "Order Confirmed! 🎉";
+
+                    // Clear local storage cart state completely
+                    localStorage.removeItem('homebite_cart');
+
+                    // Smooth delay redirection to your orders section in profile tab
+                    setTimeout(() => {
+                        window.location.href = "/profile.html#orders";
+                    }, 2000);
+                } else {
+                    const errData = await response.json();
+                    checkoutBtn.style.backgroundColor = "var(--danger)";
+                    checkoutBtn.innerText = errData.message || "Failed to order";
+                    checkoutBtn.disabled = false;
+                }
+            } catch (err) {
+                console.error("Database connection failure:", err);
+                checkoutBtn.style.backgroundColor = "var(--danger)";
+                checkoutBtn.innerText = "Connection Error!";
+                checkoutBtn.disabled = false;
+            }
         }
 
-        // Init routine initialization
+        // Initial launch operations mappings
         window.addEventListener('DOMContentLoaded', () => {
             fetchUserProfileData();
             renderCartItems();
