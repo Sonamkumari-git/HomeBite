@@ -31,6 +31,17 @@
             scroll-behavior: smooth;
         }
 
+        /* PREMIUM MAGIC CURSOR CANVAS */
+        #magic-cursor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; 
+            z-index: 9999;
+        }
+
         h1, h2, h3, h4, .brand-logo { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
@@ -165,7 +176,6 @@
         .card-img-container img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); filter: brightness(0.9); }
         .menu-card:hover .card-img-container img { transform: scale(1.08); filter: brightness(1.1); }
         
-        /* Simpler Price and Card Body */
         .card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
         .card-body h3 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-light); }
         .card-body p { 
@@ -174,13 +184,12 @@
         }
         .card-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: auto; }
         
-        /* SIMPLE PRICE DESIGN */
         .price { 
             font-size: 1.05rem; 
             font-weight: 600; 
             color: var(--primary-color); 
-            font-family: 'Poppins', sans-serif; /* Playfair hata diya, clean font lagaya */
-            background: rgba(226, 135, 67, 0.1); /* Halka sa orange background */
+            font-family: 'Poppins', sans-serif;
+            background: rgba(226, 135, 67, 0.1);
             padding: 6px 12px;
             border-radius: 6px;
         }
@@ -249,6 +258,8 @@
     </style>
 </head>
 <body>
+
+    <canvas id="magic-cursor-canvas"></canvas>
 
     <div class="top-bar">
         <div>
@@ -429,7 +440,88 @@
     </footer>
 
     <script>
-        // === MAIN API URL (Aapki working waali API) ===
+        // === MODERN "GLOWING EMBERS" CURSOR EFFECT ===
+        const canvas = document.getElementById('magic-cursor-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        // Elegant Colors: Primary Orange, Gold, and a subtle glowing white
+        const colors = ['#e28743', '#f4c150', '#ffedd3']; 
+
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        const mouse = { x: null, y: null }
+        
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+            // Cursor hilne par 2-3 modern particles banenge
+            for (let i = 0; i < 2; i++) {
+                particlesArray.push(new Particle());
+            }
+        });
+
+        class Particle {
+            constructor() {
+                this.x = mouse.x;
+                this.y = mouse.y;
+                // Size thoda bada rakha hai taki modern bubble look aaye
+                this.size = Math.random() * 5 + 2; 
+                // X me halka hilega, Y me hamesha UPAR jayega (like fire embers/bubbles)
+                this.speedX = Math.random() * 1.5 - 0.75; 
+                this.speedY = Math.random() * -1.5 - 0.5; 
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.life = 1; 
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size -= 0.04; // Dheere chota hoga
+                this.life -= 0.015; // Dheere fade hoga
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(this.life, 0);
+                
+                // Add modern glowing shadow
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = this.color;
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Reset shadow blur for better performance
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function handleParticles() {
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                
+                if (particlesArray[i].size <= 0.3 || particlesArray[i].life <= 0) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // === AAPKI PURANI API & SCROLL LOGIC ===
         const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -447,57 +539,45 @@
                 }
             };
             window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Trigger instantly
+            revealOnScroll();
 
-            // --- 2. LIVE MENU FETCH LOGIC (For Front Page - 3 Items) ---
+            // --- 2. LIVE MENU FETCH LOGIC ---
             async function fetchLiveMenu() {
                 try {
                     const response = await fetch(API_URL);
                     const data = await response.json();
                     
-                    // JSON format se sahi array extract karna
                     let allMenuItems = Array.isArray(data) ? data : (data.data || []);
-                    
-                    // Sirf wahi item lenge jo In Stock hain
                     let inStockItems = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
 
-                    // Agar database khali hai toh purane static cards hi dikhne do
                     if (inStockItems.length === 0) return;
 
-                    // Items ko alag-alag karna (Sweets vs Others)
                     let sweets = inStockItems.filter(item => item.category && (item.category.toLowerCase().includes('sweet') || item.category.toLowerCase().includes('dessert')));
                     let others = inStockItems.filter(item => !item.category || (!item.category.toLowerCase().includes('sweet') && !item.category.toLowerCase().includes('dessert')));
 
                     let finalSelection = [];
 
-                    // 1. Ek sweet zaroor lagao
                     if (sweets.length > 0) finalSelection.push(sweets[0]);
 
-                    // 2. Baaki jagah normal items se bharo
                     for (let i = 0; finalSelection.length < 3 && i < others.length; i++) {
                         finalSelection.push(others[i]);
                     }
 
-                    // 3. Agar abhi bhi jagah bachi hai toh sweets se bhar do
                     for (let i = 1; finalSelection.length < 3 && i < sweets.length; i++) {
                         finalSelection.push(sweets[i]);
                     }
 
-                    // Ab UI mein real cards dalenge
                     const menuGrid = document.getElementById('menuGrid');
                     menuGrid.innerHTML = ''; 
 
                     finalSelection.forEach(item => {
-                        // Image Fallback
                         const imgSrc = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
                         const desc = item.desc || item.description || 'Premium home-cooked delicacy prepared fresh with elite ingredients.';
 
-                        // --- AAPKA SIMPLE PRICE LOGIC ---
                         let priceHTML = '';
                         if (item.priceModel === 'single' || !item.priceModel) {
                             priceHTML = `<span class="price">₹${item.price}</span>`;
                         } else {
-                            // Half/Full wala structure ekdum clean kiya gaya hai
                             priceHTML = `<span class="price">₹${item.priceHalf} (H) / ₹${item.priceFull} (F)</span>`;
                         }
 
@@ -519,7 +599,6 @@
                         menuGrid.innerHTML += cardHTML;
                     });
                     
-                    // Card load hone ke baad scroll animation trigger karna
                     revealOnScroll();
 
                 } catch (error) {
@@ -527,7 +606,7 @@
                 }
             }
 
-            fetchLiveMenu(); // Function call
+            fetchLiveMenu();
         });
     </script>
 </body>
