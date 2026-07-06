@@ -1,9 +1,12 @@
-// User ke orders fetch karne ki API
-router.get('/my-orders/:phone', async (req, res) => {
-    try {
-        const userOrders = await Order.find({ customerPhone: req.params.phone }).sort({ createdAt: -1 });
-        res.status(200).json({ success: true, data: userOrders });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
+// backend/routes/orderRoutes.js
+const express = require('express');
+const router = express.Router();
+const { placeOrder, getUserOrders } = require('../controllers/orderController');
+
+// Route to place a new order
+router.post('/place', placeOrder);
+
+// Route to fetch orders for a specific user via phone number
+router.get('/my-orders/:phone', getUserOrders);
+
+module.exports = router;
