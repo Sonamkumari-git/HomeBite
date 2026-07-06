@@ -1,14 +1,12 @@
-const Order = require('../models/Order'); // Apne order model ka sahi path/naam check kar lena
+const Order = require('../models/Order');
 
 const placeOrder = async (req, res) => {
     try {
-        // Frontend se jo data aa raha hai
         const { customerName, customerPhone, address, items, totalAmount, paymentMethod } = req.body;
-
-        // Unique Order ID generate karna
         const orderId = '#HB-' + Math.floor(100000 + Math.random() * 900000);
 
         const newOrder = new Order({
+            user: req.user._id, // 🔥 YAHAN DIKKAT THI: Ye line add karni hai (Logged-in user ki ID save karne ke liye)
             orderId,
             customerName,
             customerPhone,
@@ -21,7 +19,6 @@ const placeOrder = async (req, res) => {
         });
 
         const savedOrder = await newOrder.save();
-
         res.status(201).json({ success: true, message: "Order Placed Successfully!", order: savedOrder });
 
     } catch (error) {
