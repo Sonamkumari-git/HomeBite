@@ -1,16 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { placeOrder, getMyOrders, verifyPayment } = require('../controllers/orderController');
+const { protect } = require('../middlewares/authMiddleware');
 
-// Controller se dono functions import kiye
-const { placeOrder, getMyOrders } = require('../controllers/orderController');
-
-// Auth middleware import kiya
-const { protect } = require('../middleware/authMiddleware');
-
-// 1. Order place karne ka route
 router.post('/place', protect, placeOrder);
-
-// 2. 🔥 YAHAN JODNA HAI: Profile page ke orders ka route
+router.post('/verify', protect, verifyPayment); // 🔥 NAYA ROUTE
 router.get('/my-orders', protect, getMyOrders);
 
 module.exports = router;
