@@ -7,6 +7,7 @@
     <title>HomeBite Premium - Login & Sign Up</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* === VARIABLES & RESET (PREMIUM DARK THEME) === */
@@ -177,6 +178,50 @@
             box-shadow: 0 0 15px rgba(226, 135, 67, 0.15); 
         }
 
+        /* Profile Picture Upload Styling */
+        .profile-upload-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed var(--border-light);
+        }
+        .profile-preview-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            border: 2px solid var(--border-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .profile-preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .profile-preview-box i {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+        .upload-btn-wrapper {
+            flex: 1;
+        }
+        .input-group input[type="file"] {
+            padding: 8px 0;
+            border: none;
+            background: transparent;
+        }
+        .input-group input[type="file"]:focus {
+            box-shadow: none;
+        }
+
         /* Submit Button */
         .submit-btn { 
             width: 100%; 
@@ -250,11 +295,11 @@
             <form id="loginForm" class="form-section active">
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" placeholder="Enter your email" required>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" placeholder="Enter your password" required>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
                 </div>
                 <a href="#" class="forgot-pass">Forgot Password?</a>
                 <button type="submit" class="submit-btn">Login to HomeBite</button>
@@ -262,20 +307,37 @@
 
             <form id="signupForm" class="form-section">
                 <div class="input-group">
+                    <label>Profile Picture</label>
+                    <div class="profile-upload-container">
+                        <div class="profile-preview-box" id="previewBox">
+                            <i class="fas fa-user" id="defaultUserIcon"></i>
+                            <img id="profileImagePreview" src="" alt="Profile Preview">
+                        </div>
+                        <div class="upload-btn-wrapper">
+                            <input type="file" id="signupProfile" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
                     <label>Full Name</label>
-                    <input type="text" placeholder="e.g. Rahul Kumar" required>
+                    <input type="text" id="signupName" placeholder="e.g. Rahul Kumar" required>
                 </div>
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" placeholder="e.g. rahul@example.com" required>
+                    <input type="email" id="signupEmail" placeholder="e.g. rahul@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="signupPhone" placeholder="e.g. +91 9876543210" pattern="[0-9]{10,13}" title="Kripya valid phone number enter karein" required>
                 </div>
                 <div class="input-group">
                     <label>Hostel / Room Address</label>
-                    <input type="text" placeholder="e.g. Room 102, Shivam Hostel" required>
+                    <input type="text" id="signupAddress" placeholder="e.g. Room 102, Shivam Hostel" required>
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" placeholder="Create a strong password" required>
+                    <input type="password" id="signupPassword" placeholder="Create a strong password" required>
                 </div>
                 <button type="submit" class="submit-btn">Create Account</button>
             </form>
@@ -305,20 +367,56 @@
             }
         }
 
-        // 2. Sign Up Form Submit Karne Ka Logic
+        // 2. Profile Image Preview Ka Logic
+        const signupProfile = document.getElementById('signupProfile');
+        const profileImagePreview = document.getElementById('profileImagePreview');
+        const defaultUserIcon = document.getElementById('defaultUserIcon');
+
+        signupProfile.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImagePreview.src = e.target.result;
+                    profileImagePreview.style.display = 'block';
+                    defaultUserIcon.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                profileImagePreview.src = '';
+                profileImagePreview.style.display = 'none';
+                defaultUserIcon.style.display = 'block';
+            }
+        });
+
+        // 3. Sign Up Form Submit Karne Ka Logic
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
 
-            const fullName = e.target[0].value;
-            const email = e.target[1].value;
-            const address = e.target[2].value;
-            const password = e.target[3].value;
+            const fullName = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const address = document.getElementById('signupAddress').value;
+            const password = document.getElementById('signupPassword').value;
+            const profileFile = document.getElementById('signupProfile').files[0];
 
             try {
+                // Kyuki ab form mein file (image) hai, isliye FormData use karenge
+                const formData = new FormData();
+                formData.append('fullName', fullName);
+                formData.append('email', email);
+                formData.append('phone', phone);
+                formData.append('address', address);
+                formData.append('password', password);
+                
+                if (profileFile) {
+                    formData.append('profileImage', profileFile); // Aapka backend is unique name se file receive karega
+                }
+
                 const response = await fetch('/api/auth/register', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ fullName, email, address, password })
+                    // Note: FormData bhejte waqt 'Content-Type' header automatically boundary ke saath set ho jata hai, manually dene ki jarurat nahi hoti.
+                    body: formData
                 });
 
                 const data = await response.json();
@@ -326,6 +424,12 @@
                 if (response.ok) {
                     alert('Account successfully created! Ab aap login kar sakte hain.');
                     e.target.reset(); // Form clear kar do
+                    
+                    // Image preview reset karein
+                    profileImagePreview.src = '';
+                    profileImagePreview.style.display = 'none';
+                    defaultUserIcon.style.display = 'block';
+                    
                     switchTab('login'); // Login page par shift kar do
                 } else {
                     alert('Error: ' + data.message); 
@@ -336,12 +440,12 @@
             }
         });
 
-        // 3. Login Form Submit Karne Ka Logic
+        // 4. Login Form Submit Karne Ka Logic
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = e.target[0].value;
-            const password = e.target[1].value;
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
 
             try {
                 const response = await fetch('/api/auth/login', {
@@ -353,9 +457,6 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // ==========================================
-                    // YAHAN MAINE TOKEN SAVE KARNE KA CODE ADD KIYA HAI
-                    // ==========================================
                     if (data.token) {
                         localStorage.setItem('token', data.token);
                     }
