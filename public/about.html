@@ -6,11 +6,10 @@
     <title>About Us | HomeBite Premium</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === VARIABLES & RESET (SAME PREMIUM DARK THEME) === */
+        /* === VARIABLES & RESET (PREMIUM DARK THEME) === */
         :root {
             --primary-color: #e28743; 
             --secondary-color: #f4c150;
@@ -30,6 +29,17 @@
             color: var(--text-light);
             overflow-x: hidden;
             scroll-behavior: smooth;
+        }
+
+        /* PREMIUM MAGIC CURSOR & AMBIENT CANVAS */
+        #magic-cursor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; 
+            z-index: 9999;
         }
 
         h1, h2, h3, h4, .brand-logo { font-family: 'Playfair Display', serif; }
@@ -93,6 +103,15 @@
         .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
         .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
 
+        /* Updated Cart Badge Style */
+        .cart-icon-wrapper { position: relative; display: inline-flex; align-items: center; }
+        .cart-badge {
+            position: absolute; top: -8px; right: -10px; background-color: var(--primary-color);
+            color: #fff; font-size: 0.65rem; font-weight: 700; width: 18px; height: 18px;
+            display: flex; justify-content: center; align-items: center; border-radius: 50%;
+        }
+        .cart-price-display { font-size: 0.95rem; font-weight: 600; color: var(--primary-color); margin-left: 12px; }
+
         /* === PAGE HEADER === */
         .page-header {
             padding: 120px 5% 80px;
@@ -118,7 +137,7 @@
         }
         .story-img:hover img { filter: brightness(1.1); transform: scale(1.02); }
 
-        /* === CORE VALUES (UPDATED: Premium Background with Translucent Cards) === */
+        /* === CORE VALUES (Premium Background with Translucent Cards) === */
         .values-section {
             padding: 100px 5%; 
             position: relative;
@@ -147,8 +166,8 @@
 
         /* The Translucent (Glassmorphism) Card */
         .value-card {
-            background: rgba(20, 20, 20, 0.4); /* Translucent background */
-            backdrop-filter: blur(15px); /* Classy blur effect */
+            background: rgba(20, 20, 20, 0.4); 
+            backdrop-filter: blur(15px); 
             -webkit-backdrop-filter: blur(15px);
             padding: 50px 30px; 
             border-radius: 12px;
@@ -164,9 +183,9 @@
         }
         .value-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 25px; }
         .value-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-light); }
-        .value-card p { color: #d0d0d0; font-size: 0.95rem; line-height: 1.7; } /* Slightly brighter text for glass card */
+        .value-card p { color: #d0d0d0; font-size: 0.95rem; line-height: 1.7; } 
 
-        /* === TEAM SECTION (UPDATED: Added more cards) === */
+        /* === TEAM SECTION === */
         .team-section { padding: 120px 5%; text-align: center; background-color: var(--dark-bg); }
         .team-subtitle { color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 15px; font-size: 0.9rem; }
         .team-section h2 { font-size: 3.5rem; margin-bottom: 60px; }
@@ -189,7 +208,7 @@
         .team-info h3 { font-size: 1.4rem; margin-bottom: 5px; }
         .team-info p { color: var(--primary-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === FOOTER (Same as Home) === */
+        /* === FOOTER === */
         footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
         .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
@@ -221,6 +240,8 @@
 </head>
 <body>
 
+    <canvas id="magic-cursor-canvas"></canvas>
+
     <div class="top-bar">
         <div>
             <span><i class="fas fa-envelope"></i> sonam@homebite.com</span>
@@ -234,15 +255,21 @@
     <nav>
         <a href="index.html" class="brand-logo">Home<span>Bite</span>.</a>
         <ul class="nav-links">
-            <li><a href="/home">Home</a></li>
-            <li><a href="/about" class="active">About Us</a></li>
-            <li><a href="/menu">Menu</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html" class="active">About Us</a></li>
+            <li><a href="menu.html">Menu</a></li>
             <li><a href="/contact">Contact</a></li>
         </ul>
         
         <div class="nav-actions">
-            <a href="/cart" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
-            <a href="/profile" class="nav-icon"><i class="fas fa-user"></i></a>
+            <a href="cart.html" class="nav-icon" title="Shopping Cart" style="display: flex; align-items: center; text-decoration: none;">
+                <div class="cart-icon-wrapper">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadgeQty">0</span>
+                </div>
+                <span class="cart-price-display">₹<span id="cartBadgePrice">0</span></span>
+            </a>
+            <a href="profile.html" class="nav-icon" title="User Profile" style="margin-left: 10px;"><i class="fas fa-user"></i></a>
             <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
         </div>
     </nav>
@@ -375,6 +402,143 @@
     </footer>
 
     <script>
+        // ==========================================
+        // === 3D AMBIENT & MAGIC CURSOR CANVAS ===
+        // ==========================================
+        const canvas = document.getElementById('magic-cursor-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const colors = ['#e28743', '#f4c150', '#ffedd3']; 
+        
+        let cursorParticlesArray = [];
+        let ambientParticlesArray = [];
+
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ambientParticlesArray.forEach(p => p.reset(true));
+        });
+
+        const mouse = { x: null, y: null }
+        
+        // 1. MOUSE CURSOR PARTICLES
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+            // Cursor trail
+            for (let i = 0; i < 2; i++) {
+                cursorParticlesArray.push(new CursorParticle());
+            }
+            if (Math.random() > 0.4) {
+                cursorParticlesArray.push(new CursorParticle(true)); // Extra random spark
+            }
+        });
+
+        class CursorParticle {
+            constructor(isRandom = false) {
+                this.x = isRandom ? mouse.x + (Math.random() - 0.5) * 20 : mouse.x;
+                this.y = isRandom ? mouse.y + (Math.random() - 0.5) * 20 : mouse.y;
+                // Thicker dense look
+                this.size = Math.random() * 8 + 4; 
+                this.speedX = Math.random() * 2 - 1; 
+                this.speedY = Math.random() * -2 - 0.5; 
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.life = 1; 
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size -= 0.08; 
+                this.life -= 0.02; 
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(this.life, 0);
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // 2. AMBIENT 3D FLOATING BUBBLES
+        class AmbientParticle {
+            constructor() {
+                this.reset(true);
+            }
+            reset(randomY = false) {
+                this.x = Math.random() * canvas.width;
+                this.y = randomY ? Math.random() * canvas.height : canvas.height + Math.random() * 100;
+                
+                this.size = Math.random() * 4 + 1.5; 
+                this.speedY = (Math.random() * 0.8 + 0.3) * (this.size / 2); 
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.angle = Math.random() * Math.PI * 2;
+                this.angleSpeed = Math.random() * 0.02;
+
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = (this.size / 5) * 0.5 + 0.1; 
+            }
+            update() {
+                this.y -= this.speedY; 
+                this.x += Math.sin(this.angle) * 0.8 + this.speedX; 
+                this.angle += this.angleSpeed;
+
+                if (this.y < 0 - this.size) {
+                    this.reset(false);
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = this.size * 3;
+                ctx.shadowColor = this.color;
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0; 
+            }
+        }
+
+        // Initialize 60 ambient particles running all over the site
+        for(let i = 0; i < 60; i++) {
+            ambientParticlesArray.push(new AmbientParticle());
+        }
+
+        // 3. MAIN ANIMATION LOOP
+        function handleParticles() {
+            for (let i = 0; i < ambientParticlesArray.length; i++) {
+                ambientParticlesArray[i].update();
+                ambientParticlesArray[i].draw();
+            }
+
+            for (let i = 0; i < cursorParticlesArray.length; i++) {
+                cursorParticlesArray[i].update();
+                cursorParticlesArray[i].draw();
+                
+                if (cursorParticlesArray[i].size <= 0.3 || cursorParticlesArray[i].life <= 0) {
+                    cursorParticlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // ==========================================
+        // === PAGE LOAD & CART SYNC LOGIC ===
+        // ==========================================
         document.addEventListener("DOMContentLoaded", function() {
             const reveals = document.querySelectorAll(".reveal");
 
@@ -392,7 +556,28 @@
 
             window.addEventListener("scroll", revealOnScroll);
             revealOnScroll(); // Trigger on load
+            
+            // Sync the Cart details on page load
+            updateCartUI();
         });
+
+        // Function to dynamically update the cart badge and price from Local Storage
+        function updateCartUI() {
+            let cart = JSON.parse(localStorage.getItem('homebite_cart')) || [];
+            let totalQty = 0;
+            let totalPrice = 0;
+            
+            cart.forEach(item => {
+                totalQty += item.qty;
+                totalPrice += (item.price * item.qty);
+            });
+            
+            const badgeQty = document.getElementById('cartBadgeQty');
+            const badgePrice = document.getElementById('cartBadgePrice');
+            
+            if (badgeQty) badgeQty.innerText = totalQty;
+            if (badgePrice) badgePrice.innerText = totalPrice.toFixed(2);
+        }
     </script>
 </body>
 </html>
