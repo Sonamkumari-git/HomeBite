@@ -67,19 +67,20 @@
         .top-bar span { margin-right: 20px; }
         .top-bar i { color: var(--primary-color); margin-right: 5px; }
 
-        /* === NAVBAR === */
+        /* === NAVBAR (Upgraded 3D Glassmorphism) === */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
-            background-color: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(15px);
+            background-color: rgba(10, 10, 10, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         .brand-logo {
             font-size: 2.2rem;
@@ -131,9 +132,17 @@
         .story-text p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.9; font-size: 1.05rem; }
         
         .story-img { flex: 1; position: relative; }
+        
+        /* Fixed Image size for Laptop & Mobile */
         .story-img img { 
-            width: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); 
-            border: 1px solid rgba(255,255,255,0.05); filter: brightness(0.9); transition: 0.4s; 
+            width: 100%; 
+            max-height: 450px; /* Constrains height on large screens */
+            object-fit: cover; /* Keeps aspect ratio perfect */
+            border-radius: 12px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            filter: brightness(0.9); 
+            transition: 0.4s; 
         }
         .story-img:hover img { filter: brightness(1.1); transform: scale(1.02); }
 
