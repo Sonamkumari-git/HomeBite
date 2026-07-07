@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | HomeBite Premium</title>
+    <title>Our Menu | HomeBite Premium</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,6 +18,8 @@
             --card-bg: #151515;
             --text-light: #ffffff;
             --text-muted: #a0a0a0;
+            --success: #2ed573;
+            --danger: #ff4757;
             --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -31,7 +33,7 @@
             scroll-behavior: smooth;
         }
 
-        /* PREMIUM MAGIC CURSOR & AMBIENT CANVAS */
+        /* === PREMIUM MAGIC CURSOR & AMBIENT CANVAS === */
         #magic-cursor-canvas {
             position: fixed;
             top: 0;
@@ -81,9 +83,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .brand-logo {
-            font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px;
-        }
+        .brand-logo { font-size: 2.2rem; font-weight: 800; color: var(--text-light); letter-spacing: 1px; }
         .brand-logo span { color: var(--primary-color); font-style: italic; }
         
         .nav-links { display: flex; gap: 35px; }
@@ -100,30 +100,13 @@
         .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
         .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
         
-        /* Updated Cart Badge Style */
         .cart-icon-wrapper { position: relative; display: inline-flex; align-items: center; }
         .cart-badge {
-            position: absolute; top: -8px; right: -10px; background-color: var(--primary-color);
-            color: #fff; font-size: 0.65rem; font-weight: 700; width: 18px; height: 18px;
+            position: absolute; top: -6px; right: -8px; background-color: var(--primary-color);
+            color: #fff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px;
             display: flex; justify-content: center; align-items: center; border-radius: 50%;
         }
         .cart-price-display { font-size: 0.95rem; font-weight: 600; color: var(--primary-color); margin-left: 12px; }
-
-        /* === BUTTON STYLES === */
-        .btn-main {
-            padding: 15px 35px; background-color: var(--primary-color); color: #fff;
-            border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            transition: var(--transition); border: 1px solid var(--primary-color); cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            box-shadow: 0 10px 20px rgba(226, 135, 67, 0.2);
-        }
-        .btn-main:hover:not(:disabled) {
-            background-color: transparent; color: var(--primary-color);
-            box-shadow: 0 15px 30px rgba(226, 135, 67, 0.4); transform: translateY(-3px);
-        }
-        .btn-main:disabled {
-            opacity: 0.7; cursor: not-allowed;
-        }
 
         /* === PAGE HEADER === */
         .page-header {
@@ -134,55 +117,134 @@
         .page-header h1 { font-size: 4rem; color: var(--text-light); text-shadow: 2px 4px 15px rgba(0,0,0,0.5); margin-bottom: 15px; }
         .page-header p { font-size: 1.1rem; color: var(--primary-color); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* === CONTACT SECTION === */
-        .contact-section {
-            padding: 0 5% 120px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
+        /* === MENU CATEGORY FILTERS === */
+        .menu-filters {
+            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 60px;
+        }
+        .filter-btn {
+            background: transparent; color: var(--text-light); border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 25px; border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color); border-color: var(--primary-color); color: #fff;
+            box-shadow: 0 5px 15px rgba(226, 135, 67, 0.3);
         }
 
-        /* Contact Info Cards */
-        .contact-info-wrap { display: flex; flex-direction: column; gap: 30px; }
-        .info-card {
-            background: var(--card-bg); padding: 35px 30px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.03); transition: var(--transition);
-            display: flex; align-items: flex-start; gap: 20px;
-        }
-        .info-card:hover { transform: translateX(10px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        .info-card i { font-size: 2rem; color: var(--primary-color); }
-        .info-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--text-light); font-family: 'Poppins', sans-serif; font-weight: 500;}
-        .info-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
-
-        /* Contact Form */
-        .contact-form-wrap {
-            background: var(--section-bg); padding: 50px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .contact-form-wrap h2 { font-size: 2.5rem; margin-bottom: 15px; color: var(--text-light); }
-        .contact-form-wrap > p { color: var(--text-muted); margin-bottom: 35px; }
+        /* === FULL MENU SECTION === */
+        .menu-section { padding: 0 5% 120px; background-color: var(--dark-bg); }
         
-        .form-row { display: flex; gap: 20px; margin-bottom: 20px; }
-        .form-group { flex: 1; }
-        .form-group input, .form-group textarea {
-            width: 100%; padding: 16px 20px; background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
-            color: var(--text-light); font-size: 1rem; font-family: 'Poppins', sans-serif;
-            transition: var(--transition); outline: none;
+        .menu-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 40px;
         }
-        .form-group input::placeholder, .form-group textarea::placeholder { color: #777; }
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--primary-color); background: rgba(255,255,255,0.06);
-            box-shadow: 0 0 15px rgba(226, 135, 67, 0.1);
+        
+        /* MENU CARDS */
+        .menu-card {
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            overflow: hidden;
+            transition: var(--transition); 
+            border: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            flex-direction: column;
         }
-        .form-group textarea { height: 160px; resize: none; }
+        .menu-card:hover { transform: translateY(-15px); border-color: rgba(226, 135, 67, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        
+        .card-img-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+        }
+        .card-img-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: var(--transition); 
+            filter: brightness(0.9); 
+        }
+        .menu-card:hover .card-img-container img { transform: scale(1.08); filter: brightness(1.1); }
+        
+        .food-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(5,5,5,0.85);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+        .food-type-badge.veg { border: 1px solid var(--success); }
+        .food-type-badge.non-veg { border: 1px solid var(--danger); }
 
-        /* === MAP SECTION === */
-        .map-section {
-            width: 100%; height: 500px; border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05); filter: grayscale(100%) invert(90%) contrast(120%);
+        .card-body { 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
         }
-        .map-section iframe { width: 100%; height: 100%; border: none; }
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 12px; 
+            gap: 10px;
+        }
+        .card-header h3 { 
+            font-size: 1.4rem; 
+            color: var(--text-light); 
+            margin: 0; 
+            line-height: 1.3;
+        }
+        .badge { 
+            font-size: 0.7rem; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            background: rgba(226, 135, 67, 0.15); 
+            color: var(--primary-color); 
+            text-transform: capitalize; 
+            white-space: nowrap;
+        }
+        .card-body p { 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+            margin-bottom: 25px; 
+            line-height: 1.6; 
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-footer { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: auto;
+        }
+        .price { 
+            font-size: 1.3rem; 
+            font-weight: 600; 
+            color: var(--primary-color); 
+            font-family: 'Playfair Display', serif; 
+        }
+        .order-btn {
+            background: var(--primary-color); color: #fff;
+            padding: 10px 20px; border-radius: 6px; transition: var(--transition); border: none;
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        }
+        .order-btn:hover { background: var(--secondary-color); color: #000; box-shadow: 0 5px 15px rgba(226, 135, 67, 0.4); }
 
         /* === FOOTER === */
-        footer { background-color: #020202; padding: 80px 5% 30px; }
+        footer { background-color: #020202; padding: 80px 5% 30px; border-top: 1px solid rgba(255,255,255,0.05); }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px; }
         .footer-col h3 { color: var(--text-light); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 500; }
         .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--primary-color); }
@@ -198,19 +260,31 @@
         .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
         .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
 
-        /* === RESPONSIVE === */
+        /* === MOBILE RESPONSIVE HAMBURGER STYLES === */
         .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-color); }
+        .mobile-only-link { display: none; }
+
         @media (max-width: 991px) {
-            .contact-section { grid-template-columns: 1fr; }
-            .info-card:hover { transform: translateY(-10px); }
-            .nav-links { display: none; }
-            .mobile-toggle { display: block; }
+            .nav-links { 
+                position: absolute; top: 100%; right: -100%; width: 260px; height: calc(100vh - 70px);
+                background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(20px);
+                flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 40px;
+                transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex;
+                border-left: 1px solid rgba(255,255,255,0.05); z-index: 999;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+            }
+            .nav-links.active { right: 0; }
+            .nav-links li { margin: 15px 0; width: 100%; text-align: center; }
+            
+            .mobile-only-link { display: block !important; margin-top: 10px; }
+            .desktop-only-icon { display: none !important; }
+            .mobile-toggle { display: block; z-index: 1001; }
         }
+
         @media (max-width: 768px) {
             .page-header h1 { font-size: 3rem; }
             .top-bar { display: none; }
-            .form-row { flex-direction: column; gap: 0; }
-            .contact-form-wrap { padding: 30px 20px; }
+            .menu-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
         }
     </style>
 </head>
@@ -230,102 +304,59 @@
 
     <nav>
         <a href="index.html" class="brand-logo">Home<span>Bite</span>.</a>
-        <ul class="nav-links">
+        
+        <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Us</a></li>
-            <li><a href="menu.html">Menu</a></li>
-            <li><a href="contact.html" class="active">Contact</a></li>
+            <li><a href="menu.html" class="active">Menu</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li class="mobile-only-link">
+                <a href="profile.html" style="color: var(--secondary-color); font-weight: 500;">
+                    <i class="fas fa-user" style="margin-right: 8px;"></i> My Profile
+                </a>
+            </li>
         </ul>
         
         <div class="nav-actions">
-            <a href="cart.html" class="nav-icon" title="Shopping Cart" style="display: flex; align-items: center; text-decoration: none;">
+            <a href="cart.html" class="nav-icon" title="Shopping Cart" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
                 <div class="cart-icon-wrapper">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-badge" id="cartBadgeQty">0</span>
                 </div>
-                <span class="cart-price-display">₹<span id="cartBadgePrice">0</span></span>
+                <span class="cart-price-display desktop-only-icon">₹<span id="cartBadgePrice">0</span></span>
             </a>
-            <a href="profile.html" class="nav-icon" title="User Profile" style="margin-left: 10px;">
+            
+            <a href="profile.html" class="nav-icon desktop-only-icon" title="User Profile" style="margin-left: 10px;">
                 <i class="fas fa-user"></i>
             </a>
-            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </nav>
 
     <header class="page-header">
         <div class="reveal">
-            <h1>Get In Touch</h1>
-            <p>We'd love to hear from you</p>
+            <h1>Culinary Masterpieces</h1>
+            <p>Explore Our Premium Selection</p>
         </div>
     </header>
 
-    <section class="contact-section">
+    <section class="menu-section">
         
-        <div class="contact-info-wrap reveal">
-            <div class="info-card">
-                <i class="fas fa-map-marked-alt"></i>
-                <div>
-                    <h3>Our Location</h3>
-                    <p>123 Culinary Street, Near Frazer Road<br>Patna, Bihar 800001, India</p>
-                </div>
-            </div>
-            
-            <div class="info-card">
-                <i class="fas fa-envelope-open-text"></i>
-                <div>
-                    <h3>Email Us</h3>
-                    <p>sonam@homebite.com<br>support@homebite.com</p>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <i class="fas fa-phone-volume"></i>
-                <div>
-                    <h3>Call Us</h3>
-                    <p>+91 98765 43210<br>+91 91234 56789</p>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <i class="fas fa-clock"></i>
-                <div>
-                    <h3>Opening Hours</h3>
-                    <p>Mon - Sun: 11:00 AM - 11:00 PM<br>Delivery available till Midnight</p>
-                </div>
-            </div>
+        <div class="menu-filters reveal">
+            <button class="filter-btn active">All Items</button>
+            <button class="filter-btn">Starters</button>
+            <button class="filter-btn">Main Course</button>
+            <button class="filter-btn">Desserts</button>
+            <button class="filter-btn">Beverages</button>
         </div>
 
-        <div class="contact-form-wrap reveal">
-            <h2>Send a Message</h2>
-            <p>Have a question about our menu, delivery, or want to book a corporate event? Drop us a line below.</p>
-            
-            <form id="contactForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <input type="text" id="name" placeholder="Your Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" placeholder="Your Email" required>
-                    </div>
-                </div>
-                
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <input type="text" id="subject" placeholder="Subject" required>
-                </div>
-                
-                <div class="form-group" style="margin-bottom: 30px;">
-                    <textarea id="message" placeholder="Your Message..." required></textarea>
-                </div>
-                
-                <button type="submit" class="btn-main" id="submitBtn" style="width: 100%;">Send Message <i class="fas fa-paper-plane" style="margin-left: 8px;"></i></button>
-            </form>
+        <div class="menu-grid">
+            <p style="color: var(--primary-color); text-align: center; width: 100%;">Fetching premium menu...</p>
         </div>
-
     </section>
-
-    <div class="map-section reveal">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115132.86107248386!2d85.06064098906596!3d25.608175570535287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed5844f0bb6903%3A0x57ad3fac8ab568cf!2sPatna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
 
     <footer id="footer">
         <div class="footer-container">
@@ -377,11 +408,39 @@
             </div>
         </div>
         <div class="footer-bottom reveal">
-            <p>© 2026 HomeBite. Crafted with passion. All Rights Reserved.</p>
+            <p>&copy; 2026 HomeBite. Crafted with passion. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
+        // ==========================================
+        // === MOBILE HAMBURGER MENU LOGIC ===
+        // ==========================================
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            const icon = mobileToggle.querySelector('i');
+            if(navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu panel when clicked
+        const navItems = document.querySelectorAll('.nav-links a');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileToggle.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            });
+        });
+
         // ==========================================
         // === 3D AMBIENT & MAGIC CURSOR CANVAS ===
         // ==========================================
@@ -516,79 +575,149 @@
         animate();
 
 
-        // ==========================================
-        // === PAGE LOGIC & CART SYNC ===
-        // ==========================================
+        let allMenuItems = [];
+        const API_URL = 'https://homebite-admin.onrender.com/api/menu'; 
+
         document.addEventListener("DOMContentLoaded", function() {
-            
-            // --- SCROLL ANIMATION ---
-            const reveals = document.querySelectorAll(".reveal");
-            const revealOnScroll = () => {
-                for (let i = 0; i < reveals.length; i++) {
-                    const windowHeight = window.innerHeight;
-                    const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 100;
-
-                    if (elementTop < windowHeight - elementVisible) {
-                        reveals[i].classList.add("active");
-                    }
-                }
-            };
-            window.addEventListener("scroll", revealOnScroll);
-            revealOnScroll(); // Trigger on load
-
-            // --- CART BADGE SYNC ---
-            updateCartUI();
-
-            // --- FORM SUBMISSION LOGIC ---
-            const contactForm = document.getElementById("contactForm");
-            if (contactForm) {
-                contactForm.addEventListener("submit", async function(e) {
-                    e.preventDefault(); // Form reload rokna
-
-                    const submitBtn = document.getElementById("submitBtn");
-                    const originalBtnText = submitBtn.innerHTML;
-                    
-                    // Button UI update for loading state
-                    submitBtn.innerHTML = "Sending... <i class='fas fa-spinner fa-spin' style='margin-left: 8px;'></i>";
-                    submitBtn.disabled = true;
-
-                    const contactData = {
-                        name: document.getElementById("name").value,
-                        email: document.getElementById("email").value,
-                        subject: document.getElementById("subject").value,
-                        message: document.getElementById("message").value
-                    };
-
-                    try {
-                        const response = await fetch("https://homebite-aecl.onrender.com/api/contact", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(contactData)
-                        });
-
-                        const result = await response.json();
-
-                        if (response.ok) {
-                            alert("Thank you! " + result.message);
-                            contactForm.reset(); // Form clear
-                        } else {
-                            alert("Error: " + (result.message || "Something went wrong."));
-                        }
-                    } catch (error) {
-                        console.error("Error:", error);
-                        alert("Connection error! Please make sure the server is running and your internet is working.");
-                    } finally {
-                        submitBtn.innerHTML = originalBtnText;
-                        submitBtn.disabled = false;
-                    }
-                });
-            }
+            fetchLiveMenu();
+            setupFilters();
+            updateCartUI(); 
         });
 
-        // Function to dynamically update the cart badge and price from Local Storage
+        async function fetchLiveMenu() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                allMenuItems = Array.isArray(data) ? data : (data.data || []);
+                const inStockItems = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
+                
+                renderMenuCards(inStockItems);
+            } catch (error) {
+                console.error("Error fetching live menu:", error);
+                const menuGrid = document.querySelector('.menu-grid');
+                if (menuGrid) {
+                    menuGrid.innerHTML = `<p style="color: var(--danger); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Live menu load karne me dikkat aa rahi hai. Kripya baad me try karein!</p>`;
+                }
+            }
+        }
+
+        // ==========================================
+        // UI RENDER AND HALF/FULL SELECTOR LOGIC
+        // ==========================================
+        function renderMenuCards(items) {
+            const menuGrid = document.querySelector('.menu-grid');
+            if (!menuGrid) return;
+
+            if (items.length === 0) {
+                menuGrid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Filhal is category me koi dish available nahi hai.</p>`;
+                return;
+            }
+
+            menuGrid.innerHTML = items.map(item => {
+                let priceHTML = '';
+                let actionHTML = '';
+                const itemId = item._id || item.id;
+                
+                // POPPINS font and Single vs Multi check
+                if (item.priceModel === 'single' || !item.priceModel) {
+                    priceHTML = `<span class="price" style="font-family: 'Poppins', sans-serif;">₹${item.price}</span>`;
+                    actionHTML = `<button class="order-btn" onclick="addToCart('${itemId}', 'single')">Add to Cart</button>`;
+                } else {
+                    priceHTML = `<span class="price" style="font-family: 'Poppins', sans-serif; font-size: 1.1rem;">₹${item.priceHalf} / ₹${item.priceFull}</span>`;
+                    // YAHAN DROP DOWN (Half/Full) ADD KIYA GAYA HAI INLINE CSS KE SATH
+                    actionHTML = `
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <select id="size-${itemId}" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; outline: none; cursor: pointer;">
+                                <option value="half" style="background: #151515; color: #fff;">Half</option>
+                                <option value="full" style="background: #151515; color: #fff;">Full</option>
+                            </select>
+                            <button class="order-btn" onclick="addToCart('${itemId}', 'multi')" style="padding: 10px 15px;">Add</button>
+                        </div>
+                    `;
+                }
+
+                const isVeg = item.foodType === 'Veg';
+                const badgeClass = isVeg ? 'veg' : 'non-veg';
+                const badgeIcon = isVeg ? '🟢' : '🔴';
+
+                return `
+                    <div class="menu-card reveal active">
+                        <div class="card-img-container">
+                            <img src="${item.image}" alt="${item.name}">
+                            <span class="food-type-badge ${badgeClass}">
+                                ${badgeIcon} ${item.foodType}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-header">
+                                <h3>${item.name}</h3>
+                                <span class="badge">${item.category}</span>
+                            </div>
+                            <p>${item.desc || 'Premium home-cooked delicacy prepared fresh with elite ingredients.'}</p>
+                            <div class="card-footer">
+                                ${priceHTML}
+                                ${actionHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            initScrollReveal();
+        }
+
+        // ==========================================
+        // ADD TO CART FUNCTION (HANDLE BOTH SINGLE/MULTI)
+        // ==========================================
+        function addToCart(itemId, type) {
+            const product = allMenuItems.find(p => (p._id === itemId || p.id === itemId));
+            if (!product) return;
+            
+            let cart = JSON.parse(localStorage.getItem('homebite_cart')) || [];
+            
+            let cartItemId = itemId;
+            let itemPrice = product.price || 0;
+            let itemTitle = product.name;
+
+            // Agar Half/Full wala product hai toh selection check karo
+            if (type === 'multi') {
+                const sizeSelector = document.getElementById(`size-${itemId}`);
+                const selectedSize = sizeSelector.value; // 'half' ya 'full'
+                
+                cartItemId = `${itemId}-${selectedSize}`; // Unique ID banaya (e.g. 123-half)
+                
+                if (selectedSize === 'half') {
+                    itemPrice = product.priceHalf;
+                    itemTitle = `${product.name} (Half)`;
+                } else {
+                    itemPrice = product.priceFull;
+                    itemTitle = `${product.name} (Full)`;
+                }
+            } else {
+                itemPrice = product.price || product.priceFull || 0;
+            }
+
+            // Check karo item already cart me hai ya nahi
+            const existingItem = cart.find(item => item.id === cartItemId);
+
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({
+                    id: cartItemId,
+                    title: itemTitle,
+                    price: Number(itemPrice),
+                    img: product.image || '',
+                    qty: 1
+                });
+            }
+            
+            localStorage.setItem('homebite_cart', JSON.stringify(cart));
+            updateCartUI(); 
+        }
+
+        // === NAVBAR KI LIVE PRICE AUR QUANTITY UPDATE KARNE KA LOGIC ===
         function updateCartUI() {
             let cart = JSON.parse(localStorage.getItem('homebite_cart')) || [];
             let totalQty = 0;
@@ -604,6 +733,49 @@
             
             if (badgeQty) badgeQty.innerText = totalQty;
             if (badgePrice) badgePrice.innerText = totalPrice.toFixed(2);
+        }
+
+        // Live Dynamic Filtering
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filterValue = this.innerText.trim().toLowerCase();
+                    const activeMenu = allMenuItems.filter(item => item.inStock === true || item.inStock === undefined);
+
+                    if (filterValue === 'all items' || filterValue === 'our menu') {
+                        renderMenuCards(activeMenu);
+                    } else if (filterValue === 'veg') {
+                        renderMenuCards(activeMenu.filter(item => item.foodType === 'Veg'));
+                    } else if (filterValue === 'non-veg') {
+                        renderMenuCards(activeMenu.filter(item => item.foodType === 'Non-Veg'));
+                    } else {
+                        renderMenuCards(activeMenu.filter(item => item.category.toLowerCase() === filterValue));
+                    }
+                });
+            });
+        }
+
+        // Premium Scroll Fade-in Animation Engine
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            const revealOnScroll = () => {
+                for (let i = 0; i < reveals.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementVisible = 80;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveals[i].classList.add("active");
+                    }
+                }
+            };
+            window.removeEventListener("scroll", revealOnScroll);
+            window.addEventListener("scroll", revealOnScroll);
+            setTimeout(revealOnScroll, 50); 
         }
     </script>
 </body>
