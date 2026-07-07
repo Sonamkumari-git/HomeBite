@@ -99,11 +99,14 @@
         .nav-actions { display: flex; align-items: center; gap: 20px; }
         .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
         .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
+        
+        .cart-icon-wrapper { position: relative; display: inline-flex; align-items: center; }
         .cart-badge {
             position: absolute; top: -6px; right: -8px; background-color: var(--primary-color);
             color: #fff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px;
             display: flex; justify-content: center; align-items: center; border-radius: 50%;
         }
+        .cart-price-display { font-size: 0.95rem; font-weight: 600; color: var(--primary-color); margin-left: 12px; }
 
         /* === PAGE HEADER === */
         .page-header {
@@ -257,12 +260,27 @@
         .highlight-email { color: var(--text-light); font-weight: 500; border-bottom: 1px dashed var(--primary-color); padding-bottom: 2px; }
         .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #666; }
 
-        /* === RESPONSIVE === */
+        /* === MOBILE RESPONSIVE HAMBURGER STYLES === */
         .mobile-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-color); }
+        .mobile-only-link { display: none; }
+
         @media (max-width: 991px) {
-            .nav-links { display: none; }
-            .mobile-toggle { display: block; }
+            .nav-links { 
+                position: absolute; top: 100%; right: -100%; width: 260px; height: calc(100vh - 70px);
+                background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(20px);
+                flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 40px;
+                transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex;
+                border-left: 1px solid rgba(255,255,255,0.05); z-index: 999;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+            }
+            .nav-links.active { right: 0; }
+            .nav-links li { margin: 15px 0; width: 100%; text-align: center; }
+            
+            .mobile-only-link { display: block !important; margin-top: 10px; }
+            .desktop-only-icon { display: none !important; }
+            .mobile-toggle { display: block; z-index: 1001; }
         }
+
         @media (max-width: 768px) {
             .page-header h1 { font-size: 3rem; }
             .top-bar { display: none; }
@@ -286,25 +304,35 @@
 
     <nav>
         <a href="index.html" class="brand-logo">Home<span>Bite</span>.</a>
-        <ul class="nav-links">
-            <li><a href="/home">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/menu" class="active">Menu</a></li>
-            <li><a href="/contact">Contact</a></li>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="menu.html" class="active">Menu</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li class="mobile-only-link">
+                <a href="profile.html" style="color: var(--secondary-color); font-weight: 500;">
+                    <i class="fas fa-user" style="margin-right: 8px;"></i> My Profile
+                </a>
+            </li>
         </ul>
         
         <div class="nav-actions">
             <a href="cart.html" class="nav-icon" title="Shopping Cart" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-                <div style="position: relative;">
+                <div class="cart-icon-wrapper">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-badge" id="cartBadgeQty">0</span>
                 </div>
-                <span style="font-size: 0.95rem; font-weight: 600; color: var(--primary-color); margin-left: 5px;">₹<span id="cartBadgePrice">0</span></span>
+                <span class="cart-price-display desktop-only-icon">₹<span id="cartBadgePrice">0</span></span>
             </a>
-            <a href="profile.html" class="nav-icon" title="User Profile" style="margin-left: 10px;">
+            
+            <a href="profile.html" class="nav-icon desktop-only-icon" title="User Profile" style="margin-left: 10px;">
                 <i class="fas fa-user"></i>
             </a>
-            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </nav>
 
@@ -385,6 +413,34 @@
     </footer>
 
     <script>
+        // ==========================================
+        // === MOBILE HAMBURGER MENU LOGIC ===
+        // ==========================================
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            const icon = mobileToggle.querySelector('i');
+            if(navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu panel when clicked
+        const navItems = document.querySelectorAll('.nav-links a');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileToggle.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            });
+        });
+
         // ==========================================
         // === 3D AMBIENT & MAGIC CURSOR CANVAS ===
         // ==========================================
