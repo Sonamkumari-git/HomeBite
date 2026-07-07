@@ -6,7 +6,6 @@
     <title>Contact Us | HomeBite Premium</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -30,6 +29,17 @@
             color: var(--text-light);
             overflow-x: hidden;
             scroll-behavior: smooth;
+        }
+
+        /* PREMIUM MAGIC CURSOR & AMBIENT CANVAS */
+        #magic-cursor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; 
+            z-index: 9999;
         }
 
         h1, h2, h3, h4, .brand-logo { font-family: 'Playfair Display', serif; }
@@ -89,11 +99,15 @@
         .nav-actions { display: flex; align-items: center; gap: 20px; }
         .nav-icon { color: var(--text-light); font-size: 1.25rem; transition: var(--transition); position: relative; }
         .nav-icon:hover { color: var(--primary-color); transform: translateY(-2px); }
+        
+        /* Updated Cart Badge Style */
+        .cart-icon-wrapper { position: relative; display: inline-flex; align-items: center; }
         .cart-badge {
-            position: absolute; top: -6px; right: -8px; background-color: var(--primary-color);
-            color: #fff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px;
+            position: absolute; top: -8px; right: -10px; background-color: var(--primary-color);
+            color: #fff; font-size: 0.65rem; font-weight: 700; width: 18px; height: 18px;
             display: flex; justify-content: center; align-items: center; border-radius: 50%;
         }
+        .cart-price-display { font-size: 0.95rem; font-weight: 600; color: var(--primary-color); margin-left: 12px; }
 
         /* === BUTTON STYLES === */
         .btn-main {
@@ -202,6 +216,8 @@
 </head>
 <body>
 
+    <canvas id="magic-cursor-canvas"></canvas>
+
     <div class="top-bar">
         <div>
             <span><i class="fas fa-envelope"></i> sonam@homebite.com</span>
@@ -215,18 +231,21 @@
     <nav>
         <a href="index.html" class="brand-logo">Home<span>Bite</span>.</a>
         <ul class="nav-links">
-            <li><a href="/home">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/menu">Menu</a></li>
-            <li><a href="/contact" class="active">Contact</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
         </ul>
         
         <div class="nav-actions">
-            <a href="/cart" class="nav-icon" title="Shopping Cart">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-badge">2</span>
+            <a href="cart.html" class="nav-icon" title="Shopping Cart" style="display: flex; align-items: center; text-decoration: none;">
+                <div class="cart-icon-wrapper">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadgeQty">0</span>
+                </div>
+                <span class="cart-price-display">₹<span id="cartBadgePrice">0</span></span>
             </a>
-            <a href="/profile" class="nav-icon" title="User Profile">
+            <a href="profile.html" class="nav-icon" title="User Profile" style="margin-left: 10px;">
                 <i class="fas fa-user"></i>
             </a>
             <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
@@ -363,10 +382,147 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Scroll Animation Logic
-            const reveals = document.querySelectorAll(".reveal");
+        // ==========================================
+        // === 3D AMBIENT & MAGIC CURSOR CANVAS ===
+        // ==========================================
+        const canvas = document.getElementById('magic-cursor-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
+        const colors = ['#e28743', '#f4c150', '#ffedd3']; 
+        
+        let cursorParticlesArray = [];
+        let ambientParticlesArray = [];
+
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ambientParticlesArray.forEach(p => p.reset(true));
+        });
+
+        const mouse = { x: null, y: null }
+        
+        // 1. MOUSE CURSOR PARTICLES
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+            // Cursor trail
+            for (let i = 0; i < 2; i++) {
+                cursorParticlesArray.push(new CursorParticle());
+            }
+            if (Math.random() > 0.4) {
+                cursorParticlesArray.push(new CursorParticle(true)); // Extra random spark
+            }
+        });
+
+        class CursorParticle {
+            constructor(isRandom = false) {
+                this.x = isRandom ? mouse.x + (Math.random() - 0.5) * 20 : mouse.x;
+                this.y = isRandom ? mouse.y + (Math.random() - 0.5) * 20 : mouse.y;
+                // Thicker dense look
+                this.size = Math.random() * 8 + 4; 
+                this.speedX = Math.random() * 2 - 1; 
+                this.speedY = Math.random() * -2 - 0.5; 
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.life = 1; 
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size -= 0.08; 
+                this.life -= 0.02; 
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(this.life, 0);
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // 2. AMBIENT 3D FLOATING BUBBLES
+        class AmbientParticle {
+            constructor() {
+                this.reset(true);
+            }
+            reset(randomY = false) {
+                this.x = Math.random() * canvas.width;
+                this.y = randomY ? Math.random() * canvas.height : canvas.height + Math.random() * 100;
+                
+                this.size = Math.random() * 4 + 1.5; 
+                this.speedY = (Math.random() * 0.8 + 0.3) * (this.size / 2); 
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.angle = Math.random() * Math.PI * 2;
+                this.angleSpeed = Math.random() * 0.02;
+
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = (this.size / 5) * 0.5 + 0.1; 
+            }
+            update() {
+                this.y -= this.speedY; 
+                this.x += Math.sin(this.angle) * 0.8 + this.speedX; 
+                this.angle += this.angleSpeed;
+
+                if (this.y < 0 - this.size) {
+                    this.reset(false);
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = this.size * 3;
+                ctx.shadowColor = this.color;
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0; 
+            }
+        }
+
+        // Initialize 60 ambient particles running all over the site
+        for(let i = 0; i < 60; i++) {
+            ambientParticlesArray.push(new AmbientParticle());
+        }
+
+        // 3. MAIN ANIMATION LOOP
+        function handleParticles() {
+            for (let i = 0; i < ambientParticlesArray.length; i++) {
+                ambientParticlesArray[i].update();
+                ambientParticlesArray[i].draw();
+            }
+
+            for (let i = 0; i < cursorParticlesArray.length; i++) {
+                cursorParticlesArray[i].update();
+                cursorParticlesArray[i].draw();
+                
+                if (cursorParticlesArray[i].size <= 0.3 || cursorParticlesArray[i].life <= 0) {
+                    cursorParticlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // ==========================================
+        // === PAGE LOGIC & CART SYNC ===
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // --- SCROLL ANIMATION ---
+            const reveals = document.querySelectorAll(".reveal");
             const revealOnScroll = () => {
                 for (let i = 0; i < reveals.length; i++) {
                     const windowHeight = window.innerHeight;
@@ -378,16 +534,17 @@
                     }
                 }
             };
-
             window.addEventListener("scroll", revealOnScroll);
             revealOnScroll(); // Trigger on load
 
-            // === NAYA CODE: Form Submission Backend Logic ===
+            // --- CART BADGE SYNC ---
+            updateCartUI();
+
+            // --- FORM SUBMISSION LOGIC ---
             const contactForm = document.getElementById("contactForm");
-            
             if (contactForm) {
                 contactForm.addEventListener("submit", async function(e) {
-                    e.preventDefault(); // Page reload hone se rokega
+                    e.preventDefault(); // Form reload rokna
 
                     const submitBtn = document.getElementById("submitBtn");
                     const originalBtnText = submitBtn.innerHTML;
@@ -396,7 +553,6 @@
                     submitBtn.innerHTML = "Sending... <i class='fas fa-spinner fa-spin' style='margin-left: 8px;'></i>";
                     submitBtn.disabled = true;
 
-                    // Form inputs se data nikalna
                     const contactData = {
                         name: document.getElementById("name").value,
                         email: document.getElementById("email").value,
@@ -405,7 +561,6 @@
                     };
 
                     try {
-                        // Render Server par POST request bhejna
                         const response = await fetch("https://homebite-aecl.onrender.com/api/contact", {
                             method: "POST",
                             headers: {
@@ -418,7 +573,7 @@
 
                         if (response.ok) {
                             alert("Thank you! " + result.message);
-                            contactForm.reset(); // Form clear karna
+                            contactForm.reset(); // Form clear
                         } else {
                             alert("Error: " + (result.message || "Something went wrong."));
                         }
@@ -426,13 +581,30 @@
                         console.error("Error:", error);
                         alert("Connection error! Please make sure the server is running and your internet is working.");
                     } finally {
-                        // Button UI wapas normal karna
                         submitBtn.innerHTML = originalBtnText;
                         submitBtn.disabled = false;
                     }
                 });
             }
         });
+
+        // Function to dynamically update the cart badge and price from Local Storage
+        function updateCartUI() {
+            let cart = JSON.parse(localStorage.getItem('homebite_cart')) || [];
+            let totalQty = 0;
+            let totalPrice = 0;
+            
+            cart.forEach(item => {
+                totalQty += item.qty;
+                totalPrice += (item.price * item.qty);
+            });
+            
+            const badgeQty = document.getElementById('cartBadgeQty');
+            const badgePrice = document.getElementById('cartBadgePrice');
+            
+            if (badgeQty) badgeQty.innerText = totalQty;
+            if (badgePrice) badgePrice.innerText = totalPrice.toFixed(2);
+        }
     </script>
 </body>
 </html>
