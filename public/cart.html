@@ -533,9 +533,9 @@
     // Server API URL
     const SERVER_URL = 'https://homebite-aecl.onrender.com';
 
-    // 🔥 CASHFREE SDK INITIALIZATION
+    // 🔥 CASHFREE SDK INITIALIZATION (Production Mode)
     const cashfree = Cashfree({
-        mode: "sandbox", 
+        mode: "production", 
     });
 
     // LOCALSTORAGE KEY
@@ -644,7 +644,7 @@
         document.getElementById('totalVal').innerText = `₹${totalAmount.toFixed(2)}`;
     }
 
-    // 🔥 CASHFREE INTEGRATED CHECKOUT
+    // 🔥 CASHFREE INTEGRATED CHECKOUT (Updated user info logic)
     async function processOrderCheckout() {
         if(cartItems.length === 0) return;
 
@@ -668,10 +668,11 @@
         const taxAmount = subtotal * 0.05;
         const totalAmount = subtotal + deliveryFee + taxAmount;
 
+        // Automatically taking real user info. Fallbacks added just in case fields are empty.
         const orderPayload = {
-            customerName: currentUserData ? currentUserData.fullName : "Guest User",
-            customerPhone: currentUserData ? (currentUserData.phoneNumber || "9693814964") : "9693814964",
-            address: currentUserData ? (currentUserData.address || "Address not provided") : "Address not provided",
+            customerName: currentUserData && currentUserData.fullName ? currentUserData.fullName : "HomeBite Customer",
+            customerPhone: currentUserData && currentUserData.phoneNumber ? currentUserData.phoneNumber : "9999999999",
+            address: currentUserData && currentUserData.address ? currentUserData.address : "Address not provided",
             items: cartItems.map(item => ({
                 name: item.title || item.name,
                 qty: item.qty || item.quantity || 1,
