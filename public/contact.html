@@ -32,7 +32,7 @@
             scroll-behavior: smooth;
         }
 
-        /* === PREMIUM MAGIC CURSOR & AMBIENT CANVAS === */
+        /* === PREMIUM MAGIC CURSOR & AMBIENT CANVAS (FIXED) === */
         #magic-cursor-canvas {
             position: fixed;
             top: 0;
@@ -575,6 +575,7 @@
             constructor(isRandom = false) {
                 this.x = isRandom ? mouse.x + (Math.random() - 0.5) * 20 : mouse.x;
                 this.y = isRandom ? mouse.y + (Math.random() - 0.5) * 20 : mouse.y;
+                // Thicker dense look
                 this.size = Math.random() * 8 + 4; 
                 this.speedX = Math.random() * 2 - 1; 
                 this.speedY = Math.random() * -2 - 0.5; 
