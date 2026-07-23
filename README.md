@@ -1,6 +1,6 @@
 # 🍕 HomeBite - Premium Food Delivery Platform
 
-A full-stack food ordering web application designed to connect users with premium home-chef networks. HomeBite allows customers to browse menus, place orders, and manage deliveries while providing restaurant operators with comprehensive order management tools.
+A full-stack food ordering web application designed to connect users with premium home-chef networks. HomeBite allows customers to browse menus, place orders, and manage deliveries while providing [...]
 
 ---
 
@@ -11,6 +11,7 @@ A full-stack food ordering web application designed to connect users with premiu
 - [Installation](#-installation)
 - [Configuration](#-configuration)
 - [Running the Application](#-running-the-application)
+- [Live Demo (Deployed)](#live-demo-deployed)
 - [API Endpoints](#-api-endpoints)
 - [Frontend Pages](#-frontend-pages)
 - [Database Models](#-database-models)
@@ -94,7 +95,7 @@ HomeBite/
 │   │   ├── authRoutes.js         # Authentication endpoints
 │   │   ├── orderRoutes.js        # Order management endpoints
 │   │   ├── userRoutes.js         # User profile endpoints
-│   │   └── contactRoutes.js      # Contact form endpoints
+│   │   │   └── contactRoutes.js  # Contact form endpoints
 │   └── .env                      # Environment variables (not in repo)
 ├── public/
 │   ├── index.html                # Login & Registration page
@@ -197,6 +198,10 @@ npm start
 The application will be available at:
 - **Frontend**: `http://localhost:5000`
 - **API Base URL**: `http://localhost:5000/api`
+
+### Live Demo (Deployed)
+- The application is deployed on Render and is accessible at: https://homebite-aecl.onrender.com
+- Status: The deployment on Render is live and functioning correctly.
 
 ---
 
