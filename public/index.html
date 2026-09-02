@@ -426,7 +426,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert('Account successfully created! Ab aap login kar sakte hain.');
+                    alert('Account successfully created!.');
                     e.target.reset(); // Form clear kar do
                     
                     // Image preview ko reset karein
@@ -440,7 +440,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Server se connect nahi ho paya! Kripya check karein server on hai ya nahi.');
+                alert('Server error! Try again.');
             }
         });
 
