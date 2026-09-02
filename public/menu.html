@@ -597,7 +597,7 @@
                 console.error("Error fetching live menu:", error);
                 const menuGrid = document.querySelector('.menu-grid');
                 if (menuGrid) {
-                    menuGrid.innerHTML = `<p style="color: var(--danger); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Live menu load karne me dikkat aa rahi hai. Kripya baad me try karein!</p>`;
+                    menuGrid.innerHTML = `<p style="color: var(--danger); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Seems some problem in loading menu, Retry!</p>`;
                 }
             }
         }
@@ -610,7 +610,7 @@
             if (!menuGrid) return;
 
             if (items.length === 0) {
-                menuGrid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">Filhal is category me koi dish available nahi hai.</p>`;
+                menuGrid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%; font-family: 'Poppins', sans-serif;">No dish available.</p>`;
                 return;
             }
 
