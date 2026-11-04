@@ -27,7 +27,7 @@ const updateUserProfile = async (req, res) => {
         if (user) {
             user.fullName = req.body.fullName || user.fullName;
             user.email = req.body.email || user.email;
-            user.phoneNumber = req.body.phoneNumber || user.phoneNumber; // 🔥 NAYA ADD KIYA HAI
+            user.phoneNumber = req.body.phoneNumber || user.phoneNumber; 
             user.address = req.body.address || user.address;
 
             const updatedUser = await user.save();
@@ -36,7 +36,7 @@ const updateUserProfile = async (req, res) => {
                 _id: updatedUser._id,
                 fullName: updatedUser.fullName,
                 email: updatedUser.email,
-                phoneNumber: updatedUser.phoneNumber, // 🔥 NAYA ADD KIYA HAI
+                phoneNumber: updatedUser.phoneNumber, 
                 address: updatedUser.address,
                 profileImage: updatedUser.profileImage 
             });
