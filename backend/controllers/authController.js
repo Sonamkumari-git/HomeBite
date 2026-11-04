@@ -14,8 +14,7 @@ const generateToken = (id) => {
 // ==========================================
 const registerUser = async (req, res) => {
     try {
-        // 🔥 AB REQ.BODY UNDEFINED NAHI AAYEGA!
-        // HTML form se jo naam bheje the, wahi use kar rahe hain
+        
         const { fullName, email, phone, address, password } = req.body;
 
         // Validation
@@ -35,7 +34,7 @@ const registerUser = async (req, res) => {
 
         let profileImageUrl = "";
 
-        // 🔥 AGAR USER NE PROFILE PICTURE BHI UPLOAD KI HAI TOH CLOUDINARY PE BHEJO
+       
         if (req.file) {
             let streamUpload = (req) => {
                 return new Promise((resolve, reject) => {
@@ -57,7 +56,7 @@ const registerUser = async (req, res) => {
         const user = await User.create({
             fullName: fullName,
             email: email,
-            phoneNumber: phone, // HTML se 'phone' aaya, DB me 'phoneNumber' save hoga
+            phoneNumber: phone, 
             address: address,
             password: hashedPassword,
             profileImage: profileImageUrl // Cloudinary image link
@@ -81,7 +80,7 @@ const registerUser = async (req, res) => {
 };
 
 // ==========================================
-// LOGIN USER CONTROLLER (Waise hi rahega)
+// LOGIN USER CONTROLLER 
 // ==========================================
 const loginUser = async (req, res) => {
     try {
