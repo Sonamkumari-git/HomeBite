@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
-// Middleware import karein (Aapka JWT auth middleware)
+
 const { protect } = require('../middleware/authMiddleware'); 
 
-// Controller se saare functions import karein
+
 const { 
     getUserProfile, 
     updateUserProfile, 
@@ -13,8 +13,7 @@ const {
     uploadProfilePic
 } = require('../controllers/userController');
 
-// --- Multer Configuration ---
-// Memory storage use kar rahe hain taaki image direct buffer ke through Cloudinary pe chali jaye, disk pe save na ho.
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
