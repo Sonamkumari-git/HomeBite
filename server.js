@@ -3,39 +3,39 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path'); 
 
-// 1. Dotenv ko batana ki .env file 'backend' folder ke andar hai
+
 dotenv.config({ path: './backend/.env' });
 
-// 2. Paths update kar diye gaye hain
+
 const connectDB = require('./backend/config/db');
 const authRoutes = require('./backend/routes/authRoutes');
 const contactRoutes = require('./backend/routes/contactRoutes');
 const userRoutes = require('./backend/routes/userRoutes'); 
 
-// 🔥 UPDATE: Yahan orderRoutes ko import kiya hai checkout fix karne ke liye
+
 const orderRoutes = require('./backend/routes/orderRoutes');
 
-// MongoDB se connect karna
+
 connectDB();
 
 const app = express();
 
-// Middlewares
+
 app.use(cors()); 
 app.use(express.json()); 
 
-// Frontend ki files ab 'public' folder se load hongi
+
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
-// Routes (Yahan route match ho jayega)
+
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes); 
 app.use('/api/users', userRoutes); 
 
-// 🔥 UPDATE: Yahan orderRoutes ko /api/orders path par connect kar diya hai
+
 app.use('/api/orders', orderRoutes); 
 
-// Jab koi localhost:5000 par aayega, toh public folder ka index.html khulega
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
