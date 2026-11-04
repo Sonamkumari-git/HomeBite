@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please add an email'],
         unique: true
     },
-    phoneNumber: { // 🔥 YEH NAYA FIELD HAI
+    phoneNumber: { 
         type: String,
         required: [true, 'Please add a phone number']
     },
