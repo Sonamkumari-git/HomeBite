@@ -7,7 +7,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Yeh check karne ke liye ki variables sahi se load ho rahe hain ya nahi
+
 console.log("Cloudinary Configured with Environment Variables!");
 
 module.exports = cloudinary;
